@@ -4507,6 +4507,504 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("r-language", e); }
       break;
 
+    // ============ MORE AI & AUTOMATION ============
+    case "langsmith":
+      try { execSync(`langsmith ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("langsmith", e); }
+      break;
+    case "llamaindex": case "llama-index":
+      try { execSync(`llamaindex ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("llamaindex", e); }
+      break;
+    case "guidance":
+      try { execSync(`guidance ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("guidance", e); }
+      break;
+    case "instructor":
+      try { execSync(`instructor ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("instructor", e); }
+      break;
+    case "litellm":
+      try { execSync(`litellm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("litellm", e); }
+      break;
+    case "txtai":
+      try { execSync(`txtai ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("txtai", e); }
+      break;
+    case "llm":
+      try { execSync(`llm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("llm", e); }
+      break;
+    case "ollama":
+      try { execSync(`ollama ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ollama", e); }
+      break;
+    case "localai": case "local-ai":
+      try { execSync(`localai ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("localai", e); }
+      break;
+    case "lm-studio": case "lmstudio":
+      try { execSync(`lm-studio ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("lm-studio", e); }
+      break;
+    case "text-generation-webui": case "webui":
+      try { execSync(`text-generation-webui ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("text-generation-webui", e); }
+      break;
+    case "koboldcpp":
+      try { execSync(`koboldcpp ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("koboldcpp", e); }
+      break;
+    case "silicon-diffusion": case "silicon":
+      try { execSync(`silicon ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("silicon-diffusion", e); }
+      break;
+    case "automatic1111": case "sd-webui":
+      try { execSync(`automatic1111 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("automatic1111", e); }
+      break;
+    case "comfyui":
+      try { execSync(`comfy ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("comfyui", e); }
+      break;
+    case "invokeai":
+      try { execSync(`invokeai ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("invokeai", e); }
+      break;
+    case "a1111-sd-webui": case "stable-diffusion-webui":
+      try { execSync(`sd-webui ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("stable-diffusion-webui", e); }
+      break;
+
+    // ============ NO-CODE & LOW-CODE ============
+    case "n8n":
+      try { execSync(`n8n ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("n8n", e); }
+      break;
+    case "make-com": case "make":
+      try { execSync(`make ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("make-com", e); }
+      break;
+    case "zapier":
+      try { execSync(`zapier ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("zapier", e); }
+      break;
+    case "pipedream":
+      try { execSync(`pipedream ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pipedream", e); }
+      break;
+    case "integromat": case "make":
+      try { execSync(`make ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("integromat", e); }
+      break;
+    case "power-automate": case "ms-flow":
+      try { execSync(`flow ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("power-automate", e); }
+      break;
+    case "appsheet":
+      try { execSync(`appsheet ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("appsheet", e); }
+      break;
+    case "bubble":
+      try { execSync(`bubble ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("bubble", e); }
+      break;
+    case "glide":
+      try { execSync(`glide ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("glide", e); }
+      break;
+    case "softr":
+      try { execSync(`softr ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("softr", e); }
+      break;
+    case "stack":
+      try { execSync(`stack ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("stack", e); }
+      break;
+
+    // ============ RASPBERRY PI & IOT ============
+    case "pi-blinka": case "blinka":
+      try { execSync(`blinka ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("blinka", e); }
+      break;
+    case "gpiozero":
+      try { execSync(`gpiozero ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("gpiozero", e); }
+      break;
+    case "pigpio":
+      try { execSync(`pigpiod ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pigpio", e); }
+      break;
+    case "wiringpi":
+      try { execSync(`gpio ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("wiringpi", e); }
+      break;
+    case "homeassistant-cli": case "hass-cli":
+      try { execSync(`hass-cli ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("homeassistant-cli", e); }
+      break;
+    case "mosquitto":
+      try { execSync(`mosquitto ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mosquitto", e); }
+      break;
+    case "node-red":
+      try { execSync(`node-red ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("node-red", e); }
+      break;
+    case "openhab":
+      try { execSync(`openhab ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("openhab", e); }
+      break;
+
+    // ============ GRAPHQL & API TOOLS ============
+    case "apollo-server":
+      try { execSync(`apollo ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("apollo-server", e); }
+      break;
+    case "urql":
+      try { execSync(`urql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("urql", e); }
+      break;
+    case "graphql-yoga":
+      try { execSync(`graphql-yoga ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("graphql-yoga", e); }
+      break;
+    case "mercurius":
+      try { execSync(`mercurius ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mercurius", e); }
+      break;
+
+    // ============ SERVERS & HTTP ============
+    case "http-server":
+      try { execSync(`http-server ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("http-server", e); }
+      break;
+    case "serve":
+      try { execSync(`serve ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("serve", e); }
+      break;
+    case "live-server":
+      try { execSync(`live-server ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("live-server", e); }
+      break;
+    case "pm2":
+      try { execSync(`pm2 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pm2", e); }
+      break;
+    case "forever":
+      try { execSync(`forever ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("forever", e); }
+      break;
+    case "nodemon":
+      try { execSync(`nodemon ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nodemon", e); }
+      break;
+    case "httpd": case "apache2":
+      try { execSync(`apache2 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("httpd", e); }
+      break;
+    case "lighttpd":
+      try { execSync(`lighttpd ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("lighttpd", e); }
+      break;
+
+    // ============ REMOTE DESKTOP ============
+    case "xrdp":
+      try { execSync(`xrdp ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("xrdp", e); }
+      break;
+    case "x11vnc":
+      try { execSync(`x11vnc ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("x11vnc", e); }
+      break;
+    case "remmina":
+      try { execSync(`remmina ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("remmina", e); }
+      break;
+    case "vncviewer":
+      try { execSync(`vncviewer ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vncviewer", e); }
+      break;
+    case "anydesk":
+      try { execSync(`anydesk ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("anydesk", e); }
+      break;
+    case "teamviewer":
+      try { execSync(`teamviewer ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("teamviewer", e); }
+      break;
+    case "parsec":
+      try { execSync(`parsec ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("parsec", e); }
+      break;
+
+    // ============ NETWORK TOOLS ============
+    case "netstat":
+      try { execSync(`netstat ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("netstat", e); }
+      break;
+    case "ss":
+      try { execSync(`ss ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ss", e); }
+      break;
+    case "tcpdump":
+      try { execSync(`tcpdump ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("tcpdump", e); }
+      break;
+    case "wireshark":
+      try { execSync(`wireshark ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("wireshark", e); }
+      break;
+    case "nmap":
+      try { execSync(`nmap ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nmap", e); }
+      break;
+    case "masscan":
+      try { execSync(`masscan ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("masscan", e); }
+      break;
+    case "nikto":
+      try { execSync(`nikto ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nikto", e); }
+      break;
+    case "dirb":
+      try { execSync(`dirb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("dirb", e); }
+      break;
+    case "gobuster":
+      try { execSync(`gobuster ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("gobuster", e); }
+      break;
+    case "hydra":
+      try { execSync(`hydra ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("hydra", e); }
+      break;
+    case "john":
+      try { execSync(`john ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("john", e); }
+      break;
+    case "hashcat":
+      try { execSync(`hashcat ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("hashcat", e); }
+      break;
+    case "aircrack-ng":
+      try { execSync(`aircrack-ng ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("aircrack-ng", e); }
+      break;
+    case "ettercap":
+      try { execSync(`ettercap ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ettercap", e); }
+      break;
+
+    // ============ PENTESTING ============
+    case "metasploit": case "msf":
+      try { execSync(`msfconsole ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("metasploit", e); }
+      break;
+    case "burp-suite": case "burp":
+      try { execSync(`burp ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("burp-suite", e); }
+      break;
+    case "owasp-zap": case "zap":
+      try { execSync(`zap ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("owasp-zap", e); }
+      break;
+    case "sqlmap":
+      try { execSync(`sqlmap ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sqlmap", e); }
+      break;
+    case "xsser":
+      try { execSync(`xsser ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("xsser", e); }
+      break;
+    case "beef":
+      try { execSync(`beef ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("beef", e); }
+      break;
+
+    // ============ STEGANOGRAPHY ============
+    case "steghide":
+      try { execSync(`steghide ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("steghide", e); }
+      break;
+    case "zsteg":
+      try { execSync(`zsteg ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("zsteg", e); }
+      break;
+    case "binwalk":
+      try { execSync(`binwalk ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("binwalk", e); }
+      break;
+    case "foremost":
+      try { execSync(`foremost ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("foremost", e); }
+      break;
+
+    // ============ FORENSICS ============
+    case "autopsy":
+      try { execSync(`autopsy ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("autopsy", e); }
+      break;
+    case "sleuthkit": case "tsk":
+      try { execSync(`fls ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sleuthkit", e); }
+      break;
+    case "volatility":
+      try { execSync(`volatility ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("volatility", e); }
+      break;
+
+    // ============ REVERSE ENGINEERING ============
+    case "ghidra":
+      try { execSync(`ghidra ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ghidra", e); }
+      break;
+    case "ida": case "ida-pro":
+      try { execSync(`ida ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ida", e); }
+      break;
+    case "radare2": case "r2":
+      try { execSync(`r2 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("radare2", e); }
+      break;
+    case "objdump":
+      try { execSync(`objdump ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("objdump", e); }
+      break;
+    case "hexdump": case "xxd":
+      try { execSync(`xxd ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("hexdump", e); }
+      break;
+    case "strings":
+      try { execSync(`strings ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("strings", e); }
+      break;
+
+    // ============ BINARY ANALYSIS ============
+    case "file":
+      try { execSync(`file ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("file", e); }
+      break;
+    case "readelf":
+      try { execSync(`readelf ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("readelf", e); }
+      break;
+    case "nm":
+      try { execSync(`nm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nm", e); }
+      break;
+    case "ldd":
+      try { execSync(`ldd ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ldd", e); }
+      break;
+    case "strace":
+      try { execSync(`strace ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("strace", e); }
+      break;
+    case "ltrace":
+      try { execSync(`ltrace ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ltrace", e); }
+      break;
+    case "gdb":
+      try { execSync(`gdb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("gdb", e); }
+      break;
+    case "lldb":
+      try { execSync(`lldb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("lldb", e); }
+      break;
+    case "valgrind":
+      try { execSync(`valgrind ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("valgrind", e); }
+      break;
+
+    // ============ HOMELAB & SELF-HOSTED ============
+    case "portainer":
+      try { execSync(`portainer ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("portainer", e); }
+      break;
+    case "watchtower":
+      try { execSync(`watchtower ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("watchtower", e); }
+      break;
+    case "duplicati":
+      try { execSync(`duplicati ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("duplicati", e); }
+      break;
+    case "vaultwarden": case "bitwarden-rs":
+      try { execSync(`vaultwarden ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vaultwarden", e); }
+      break;
+    case "adguard":
+      try { execSync(`adguard ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("adguard", e); }
+      break;
+    case "pi-hole":
+      try { execSync(`pihole ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pi-hole", e); }
+      break;
+    case "wireguard":
+      try { execSync(`wireguard ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("wireguard", e); }
+      break;
+    case "openvpn":
+      try { execSync(`openvpn ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("openvpn", e); }
+      break;
+    case "tailscale":
+      try { execSync(`tailscale ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("tailscale", e); }
+      break;
+    case "headscale":
+      try { execSync(`headscale ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("headscale", e); }
+      break;
+
+    // ============ MEDIA TOOLS ============
+    case "ffmpeg":
+      try { execSync(`ffmpeg ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ffmpeg", e); }
+      break;
+    case "imagemagick": case "convert":
+      try { execSync(`convert ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("imagemagick", e); }
+      break;
+    case "imagemagick7": case "magick":
+      try { execSync(`magick ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("magick", e); }
+      break;
+    case "sharp":
+      try { execSync(`sharp ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sharp", e); }
+      break;
+    case "squoosh":
+      try { execSync(`squoosh ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("squoosh", e); }
+      break;
+    case "pandoc":
+      try { execSync(`pandoc ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pandoc", e); }
+      break;
+    case "calibre":
+      try { execSync(`calibre ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("calibre", e); }
+      break;
+
+    // ============ ACCESSIBILITY ============
+    case "a11y": case "axe":
+      try { execSync(`axe ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("a11y", e); }
+      break;
+    case "lighthouse":
+      try { execSync(`lighthouse ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("lighthouse", e); }
+      break;
+    case "wave":
+      try { execSync(`wave ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("wave", e); }
+      break;
+
     default: 
       console.log(chalk.red(`✗ Unknown: ${cmd}`)); 
       console.log(chalk.gray("Type 'help' or '!cmd' for shell"));

@@ -1,19 +1,6 @@
-entrypoint = "main.py"
-modules = ["bun-1.1", "nodejs-20", "python-3.11"]
-
-[nix]
-channel = "stable-25_05"
-packages = ["go", "opencode"]
-
-[unitTest]
-language = "python3"
-
-[gitHubImport]
-requiredFiles = [".replit", "replit.nix"]
-
-[deployment]
-run = ["python3", "main.py"]
-deploymentTarget = "cloudrun"
-
+modules = ["nodejs-20"]
 [agent]
 expertMode = true
+
+[objectStorage]
+defaultBucketID = "replit-objstore-c6876802-4522-43f2-b9ca-1c7d2e209c5a"

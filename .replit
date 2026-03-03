@@ -1,6 +1,9 @@
-modules = ["nodejs-20"]
+modules = ["nodejs-20", "python-3.11"]
 [agent]
 expertMode = true
 
 [objectStorage]
 defaultBucketID = "replit-objstore-c6876802-4522-43f2-b9ca-1c7d2e209c5a"
+
+[nix]
+packages = ["alacritty", "kitty"]

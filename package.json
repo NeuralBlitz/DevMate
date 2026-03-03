@@ -1,5 +1,20 @@
 {
+  "name": "devmate",
+  "version": "3.0.0",
+  "type": "module",
+  "bin": {
+    "devmate": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "dev": "bun run src/index.ts",
+    "start": "bun run src/index.ts",
+    "install-cli": "bun build src/index.ts --outdir dist --target bun && chmod +x dist/index.js && npm link"
+  },
   "dependencies": {
-    "chalk": "^5.6.2"
+    "chalk": "^5.6.2",
+    "cli-table3": "^0.6.5",
+    "asciichart": "^1.5.25",
+    "marked": "^15.0.0"
   }
 }

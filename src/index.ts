@@ -139,6 +139,60 @@ function getInstallHint(cmd: string): string {
   return hints[cmd] || `Install ${cmd} for your OS`;
 }
 
+const Table = require('cli-table3');
+const asciichart = require('asciichart');
+const { marked } = require('marked');
+
+function tableRender(headers: string[], rows: string[][], options: { headColor?: string } = {}) {
+  const headColor = options.headColor || 'cyan';
+  const table = new Table({ head: headers.map(h => chalk[headColor](h)) });
+  rows.forEach(row => table.push(row));
+  console.log(table.toString());
+}
+
+function treeRender(dir: string, prefix = '', maxDepth = 3, currentDepth = 0): string {
+  if (currentDepth >= maxDepth) return '';
+  let output = '';
+  try {
+    const entries = readdirSync(dir).filter(e => !e.startsWith('.') && e !== 'node_modules');
+    entries.forEach((entry, i) => {
+      const fullPath = join(dir, entry);
+      const isLast = i === entries.length - 1;
+      const stat = statSync(fullPath);
+      const icon = stat.isDirectory() ? chalk.blue('📁') : '📄';
+      const size = stat.isFile() ? `  ${(stat.size / 1024).toFixed(1)}KB` : chalk.gray('(dir)');
+      output += `${prefix}${isLast ? '└── ' : '├── '}${icon} ${entry}${size}\n`;
+      if (stat.isDirectory()) {
+        output += treeRender(fullPath, prefix + (isLast ? '    ' : '│   '), maxDepth, currentDepth + 1);
+      }
+    });
+  } catch {}
+  return output;
+}
+
+function chartRender(data: number[], options: { title?: string; height?: number; color?: string } = {}) {
+  const height = options.height || 12;
+  const color = options.color || 'green';
+  const config = {
+    colors: [asciichart[color]],
+    height: height
+  };
+  if (options.title) console.log(chalk.cyan(options.title));
+  console.log(asciichart.plot(data, config));
+}
+
+function mdRender(markdown: string) {
+  const html = marked.parse(markdown) as string;
+  console.log(chalk.gray(html.replace(/<[^>]+>/g, '')));
+}
+
+function progressBar(current: number, total: number, width = 30) {
+  const percent = Math.round((current / total) * 100);
+  const filled = Math.round((width * current) / total);
+  const bar = '█'.repeat(filled) + '░'.repeat(width - filled);
+  return `[${bar}] ${percent}%`;
+}
+
 const rl = readline.createInterface({
   input: process.stdin, output: process.stdout, 
   prompt: chalk.gray("devmate ")
@@ -150,6 +204,7 @@ const COMPLETIONS = [
   "git","status","branches","graph","diff","log","commit","push","pull",
   "checkout","merge","rebase","stash","fetch","rebase","reset","restore",
   "ask","ai","opencode-ai","chatgpt","claude",
+  "table","tree","chart","md","markdown","progress","jsonfmt",
   "npm","yarn","pnpm","bun","npx","node",
   "pip","pipx","pip3","poetry","pipenv","conda","python","python3",
   "go","cargo","rustc","rustup",
@@ -604,6 +659,16 @@ ${chalk.bold.red("════════════════════�
   7z                 7-Zip
   md5sum/sha256sum  Checksums
   base64            Encode/decode
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("📊 RICH OUTPUT FORMATTING")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  table <h> <r>     Render table (table \"Name,Age\" \"John,25|Jane,30\")
+  tree <dir> [d]   Directory tree (default depth 3)
+  chart <data>     Render ASCII chart (chart \"10,20,30\" --title Sales)
+  md <file>        Render markdown file
+  progress <c> <t> Progress bar (progress 50 100)
+  jsonfmt <file>   Pretty print JSON
 
 ${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
 ${chalk.bold.blue("🎮 GAMES & FUN")}
@@ -2070,8 +2135,12 @@ async function handleCommand(input: string): Promise<boolean> {
       else try { execSync(`mv "${args[0]}" "${args[1]}"`); success("Moved"); }
       catch (e: any) { handleError("mv", e); } break;
       
-    case "tree": try { console.log(execSync(`tree -L ${args[1] || 2} "${args[0] || "."}"`, { encoding: "utf-8" })); }
-      catch { handleError("tree", {message: "not found"}, "sudo apt install tree"); } break;
+    case "tree": {
+      const tPath = args[0] || '.';
+      const tDepth = parseInt(args[1]) || 3;
+      console.log(chalk.cyan(`📁 ${resolve(tPath)}`) + '\n' + treeRender(resolve(tPath), '', tDepth));
+      break;
+    }
       
     case "grep": case "rg": case "find": case "which": case "locate": case "fd":
       try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
@@ -2125,7 +2194,68 @@ async function handleCommand(input: string): Promise<boolean> {
         });
       } catch (e: any) { handleError("opencode", e, "Install opencode"); prompt(); }
       return true;
-      
+
+    case "table": {
+      if (!args[0]) {
+        console.log(chalk.yellow("Usage: table <headers> <rows>"));
+        console.log(chalk.gray("  table Name,Age City 'John,25|Jane,30'"));
+        break;
+      }
+      try {
+        const headers = args[0].split(',');
+        const rowData = args[1]?.split('|').map(r => r.split(',')) || [];
+        tableRender(headers, rowData);
+      } catch (e: any) { err("Invalid table format"); }
+      break;
+    }
+
+    case "chart": {
+      if (!args[0]) {
+        console.log(chalk.yellow("Usage: chart <data> [options]"));
+        console.log(chalk.gray("  chart 10,20,15,30 --title Sales --color green"));
+        break;
+      }
+      try {
+        const data = args[0].split(',').map(Number);
+        const titleIdx = args.indexOf('--title');
+        const colorIdx = args.indexOf('--color');
+        chartRender(data, {
+          title: titleIdx > -1 ? args[titleIdx + 1] : undefined,
+          color: colorIdx > -1 ? args[colorIdx + 1] : 'green'
+        });
+      } catch (e: any) { err("Invalid chart data"); }
+      break;
+    }
+
+    case "md": 
+    case "markdown": {
+      if (!args[0]) { err("Usage: md <file>"); break; }
+      try {
+        const content = readFileSync(args[0], 'utf-8');
+        mdRender(content);
+      } catch (e: any) { handleError("md", e, "File not found"); }
+      break;
+    }
+
+    case "progress": {
+      if (!args[0] || !args[1]) {
+        console.log(chalk.yellow("Usage: progress <current> <total>"));
+        console.log(chalk.gray("  progress 50 100"));
+        break;
+      }
+      console.log(progressBar(parseInt(args[0]), parseInt(args[1])));
+      break;
+    }
+
+    case "jsonfmt": {
+      if (!args[0]) { err("Usage: jsonfmt <file>"); break; }
+      try {
+        const content = readFileSync(args[0], 'utf-8');
+        console.log(JSON.stringify(JSON.parse(content), null, 2));
+      } catch (e: any) { handleError("jsonfmt", e, "Invalid JSON"); }
+      break;
+    }
+
     case "npm": case "yarn": case "pnpm": case "bun": case "npx":
     case "pip": case "pip3": case "pipx": case "poetry": case "pipenv": case "conda":
     case "go": case "cargo": case "rustc":

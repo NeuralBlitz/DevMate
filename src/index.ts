@@ -969,13 +969,1019 @@ ${chalk.bold.red("════════════════════�
   k                kubectl
 
 ${chalk.gray("══════════════════════════════════════════════════════════════════════════")}
-${chalk.gray("💡 Tips: !<cmd> for shell, Tab autocomplete, ↑↓ history")}
+${chalk.gray("💡 Tips: !<cmd> for shell, Tab autocomplete, 'cheatsheet' for 700+ commands")}
 ${chalk.gray("══════════════════════════════════════════════════════════════════════════")}
 `;
 }
 
 function getVersion() {
   return "3.0.0";
+}
+
+function extendedHelp() {
+  return `
+${chalk.bold.cyan("╔══════════════════════════════════════════════════════════════════════════╗")}
+${chalk.bold.cyan("║")}  ${chalk.bold.white("DevMate v3.0 - OMNI-SHELL")} ${chalk.gray("- EXTENDED COMMAND LIST")}            ${chalk.bold.cyan("║")}
+${chalk.bold.cyan("║")}  ${chalk.gray("700+ Commands for Every Use Case")}                                   ${chalk.bold.cyan("║")}
+${chalk.bold.cyan("╚══════════════════════════════════════════════════════════════════════════╝")}
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("📁 FILE OPERATIONS")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  ls [opts] [dir]      List files (ls, ll, la, l, llh, lt, lS, lR)
+  cd <dir>             Change directory (cd, cd-, cd~, pushd)
+  pwd                  Print working directory (pwd, pwdi, pwdL)
+  cat <file>           View file (cat, tac, head, tail, less, more)
+  mkdir <dir>          Create directory (mkdir, mkdirp, md)
+  rm <file>            Remove (rm, rmdir, rimraf, unlink, del)
+  cp <src> <dest>      Copy (cp, copy, cpi, rsync)
+  mv <src> <dest>      Move (mv, move, mi, ren)
+  ln <src> <link>      Symlink (ln, ln -s, link, symlink)
+  touch <file>         Create empty file (touch, toucha, mkfile)
+  chmod <perms> <f>    Change permissions (chmod, chown, chgrp)
+  find <path> <opts>   Find files (find, fd, fdfind, locate, mlocate)
+  grep <pat> [files]   Search (grep, ag, rg, ack, ugrep, git grep)
+  tree [dir]           Directory tree (tree, exa --tree, lsd --tree)
+  wc <file>            Word count (wc, wc -l, wc -w, wc -c)
+  du <dir>             Disk usage (du, dust, ncdu, diskus)
+  df -h                Disk free (df, pydf, di)
+  stat <file>          File details (stat, statx, file, identify)
+  diff <f1> <f2>       Compare files (diff, diff3, sdiff, vimdiff)
+  sort <file>          Sort lines (sort, shuf, uniq, sort -r)
+  cut <file>           Cut columns (cut, awk, sed, colrm)
+  tee <file>           Read from stdin (tee, sponge, script)
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🔍 SEARCH & NAVIGATION")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  which <cmd>          Find command (which, whereis, type, command -v)
+  whereis <cmd>       Locate binary/source (whereis, apropos, man -k)
+  fzf [path]          Fuzzy finder (fzf, fzf --preview, sk)
+  rg <pat>            Ripgrep (rg, rg -l, rg -n, rg -v, rg -w)
+  ag <pat>            Silver searcher (ag, ag -l, ag -g, ag -i)
+  fd <name>           Find files (fd, fdfind, find -name)
+  locate <name>       Locate files (locate, updatedb, mlocate)
+  history             Command history (history, fc, r, !$, !!)
+  alias               List aliases (alias, unalias, type)
+  compgen             Completion candidates (compgen -a, compgen -c)
+
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.red("🔴 GIT & VERSION CONTROL")}
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+  git <cmd>           Git SCM (git, gh, glab, gitk, tig)
+  git init            Initialize repo (git init, git init --bare)
+  git clone <url>    Clone repository (git clone, gh repo clone)
+  git add <files>    Stage files (git add, git add -A, git add -p)
+  git commit <msg>   Commit changes (git commit, git commit -m, git commit -am)
+  git push            Push to remote (git push, gp, git push -u)
+  git pull            Pull from remote (git pull, gl, git pull --rebase)
+  git fetch           Fetch changes (git fetch, git fetch --all)
+  git status          Show status (git status, gst, gs, git status -s)
+  git log             Commit history (git log, glog, git log --oneline)
+  git diff            Show changes (git diff, gd, git diff --staged)
+  git branch          List branches (git branch, br, git branch -a)
+  git checkout        Switch branch (git checkout, gco, git switch)
+  git merge           Merge branches (git merge, git merge --no-ff)
+  git rebase          Rebase (git rebase, git rebase -i, grb)
+  git stash           Stash changes (git stash, gstash, git stash pop)
+  git reset           Reset HEAD (git reset, git reset --hard, git reset --soft)
+  git revert          Revert commit (git revert, git revert -n)
+  git cherry-pick    Cherry-pick (git cherry-pick, gcp)
+  git tag             Tag commit (git tag, git tag -a, git push --tags)
+  git submodule       Submodules (git submodule, git submodule update)
+  git worktree       Worktrees (git worktree, git worktree add)
+  gh <cmd>           GitHub CLI (gh, gh repo, gh pr, gh issue, gh run)
+  glab <cmd>         GitLab CLI (glab, glab mr, glab issue)
+  gitk                Git GUI (gitk, git gui, gitg)
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("🐳 DOCKER & CONTAINERS")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  docker <cmd>        Container runtime (docker, dockerd, podman, containerd)
+  docker ps           List containers (docker ps, docker ps -a, dps, dpa)
+  docker images       List images (docker images, di, docker images -a)
+  docker run <img>    Run container (docker run, docker run -d, dcr)
+  docker exec <id>    Execute in container (docker exec -it, dex, de)
+  docker logs <id>    Container logs (docker logs, dlog, docker logs -f)
+  docker build <path> Build image (docker build, docker build -t)
+  docker pull <img>   Pull image (docker pull, docker pull -a)
+  docker push <img>  Push image (docker push, docker push -a)
+  docker stop <id>   Stop container (docker stop, docker kill)
+  docker rm <id>      Remove container (docker rm, docker rm -f)
+  docker rmi <img>    Remove image (docker rmi, docker rmi -f)
+  docker network      Networks (docker network ls, docker network inspect)
+  docker volume       Volumes (docker volume ls, docker volume create)
+  docker-compose      Compose (docker-compose, docker compose, dcp)
+  docker swarm        Swarm (docker swarm init, docker stack deploy)
+  kubectl <cmd>       K8s CLI (kubectl, k, kubectx, kubens)
+  k9s                 Terminal K8s (k9s, k9s -c, k9s --readonly)
+  kind                K8s in Docker (kind, kind create cluster)
+  minikube            Local K8s (minikube, minikube start, minikube dashboard)
+  helm                K8s charts (helm, helm install, helm upgrade)
+  kustomize           K8s config (kustomize, kubectl apply -k)
+  skaffold            K8s dev (skaffold, skaffold dev, skaffold debug)
+  nerdctl             Containerd CLI (nerdctl, nerdctl ps, nerdctl build)
+  crictl              CRI tools (crictl, crictl ps, crictl logs)
+  podman              Podman (podman, podman build, podman run)
+  buildah             Buildah (buildah, buildah bud, buildah from)
+  skopeo              Skopeo (skopeo, skopeo copy, skopeo inspect)
+  crane               Crane (crane, crane pull, crane push)
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("☁️ CLOUD & DEVOPS")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  aws <svc>           AWS CLI (aws, awscli, awless, eksctl)
+  gcloud <cmd>       GCP CLI (gcloud, gsutil, bq, gcloud init)
+  azure <cmd>        Azure CLI (az, azure-cli, azurerm)
+  terraform <cmd>    IaC (terraform, tf, terragrunt, tfsec)
+  ansible <cmd>      Config mgmt (ansible, ansible-playbook, ansible-vault)
+  pulumi <cmd>       IaC (pulumi, puluictl, tf2pulumi)
+  serverless         Serverless (serverless, sls, serverless deploy)
+  awscli <cmd>       AWS v2 (aws, aws-vault, awsume)
+  cdk <cmd>          CloudFormation (cdk, cdk init, cdk deploy)
+  SAM <cmd>          SAM CLI (sam, sam build, sam deploy)
+  doctl              DigitalOcean (doctl, doctl compute)
+  linode-cli         Linode (linode-cli, linode-cli nodebalancers)
+  flyctl             Fly.io (flyctl, fly launch, fly deploy)
+  wrangler           Cloudflare (wrangler, wrangler publish)
+  netlify <cmd>      Netlify (netlify, netlify deploy, ntl)
+  vercel <cmd>       Vercel (vercel, vercel deploy, vc)
+  terraforming       AWS tf (terraforming, terraforming aws)
+  terragrunt <cmd>   Terragrunt (terragrunt, tg, terragrunt apply)
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("🤖 AI & MACHINE LEARNING")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  openai <prompt>    OpenAI (openai, openai api, openai fine-tune)
+  Claude <prompt>   Anthropic Claude (claude, claude-cli, anthropic)
+  Gemini <prompt>   Google Gemini (gemini, bard, aistudio)
+  Ollama <model>    Local LLMs (ollama, ollama run, llama.cpp)
+  huggingface       HuggingFace (huggingface-cli, huggingface_hub)
+  langchain         LangChain (langchain, langserve)
+  pytorch           PyTorch (python -m torch, pt, torch)
+  tensorflow        TensorFlow (python -m tensorflow, tf, tf-agents)
+  keras             Keras (python -m keras, keras)
+  scikit-learn      SciKit (python -m sklearn, sklearn)
+  jupyter           Jupyter (jupyter, jupyter-lab, notebook)
+  colab             Google Colab (colab, colaboratory)
+  mlflow            MLflow (mlflow, mlflow server, mlflow ui)
+  wandb             Weights & Biases (wandb, wandb login)
+  fastai            FastAI (fastai, fastai.launch)
+  transformers      HF Transf. (transformers, huggingface_hub)
+  pandas            Data analysis (pandas, pd, python -m pandas)
+  numpy             NumPy (numpy, np, python -m numpy)
+  scipy             SciPy (scipy, python -m scipy)
+  matplotlib        Plotting (matplotlib, plt, python -m matplotlib)
+  seaborn           Seaborn (seaborn, python -m seaborn)
+  plotly            Plotly (plotly, python -m plotly)
+  r                  R language (R, Rscript, rstudio)
+  rstudio           RStudio (rstudio, rstudio-server)
+  julia             Julia (julia, julia -e, jupyter)
+  octave            Octave (octave, octave-cli)
+  spark             Apache Spark (spark-submit, pyspark, spark-shell)
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("🐍 PYTHON ECOSYSTEM")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  python             Python (python, python3, python3.11, python3.12)
+  pip <cmd>          Package installer (pip, pip3, pipx)
+  pip install <pkg>  Install package (pip install, pipi, pip install -e)
+  pip list           List packages (pip list, pip freeze, pip check)
+  pipenv             Pipenv (pipenv, pipenv install, pipenv shell)
+  poetry             Poetry (poetry, poetry add, poetry install)
+  conda              Conda (conda, conda install, mamba)
+  pyenv              Python versions (pyenv, pyenv install, pyenv global)
+  virtualenv         Virtual envs (virtualenv, python -m venv)
+  pipx               CLI tools (pipx, pipx install, pipx run)
+  pyproject          PyProject (python -m pyproject, maturin)
+  setuptools         Setuptools (python -m setuptools, build)
+  twine              PyPI upload (twine, twine upload, flit)
+  pytest             Testing (pytest, py.test, pytest -v)
+  tox                Testing (tox, tox -e)
+  mypy               Type checking (mypy, python -m mypy)
+  black              Formatting (black, python -m black)
+  flake8             Linting (flake8, python -m flake8)
+  pylint             Linting (pylint, python -m pylint)
+  ruff               Linting (ruff, ruff check, ruff format)
+  isort              Import sort (isort, python -m isort)
+  coverage           Coverage (coverage, coverage html)
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🐙 JAVASCRIPT & TYPESCRIPT")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  npm <cmd>           Package manager (npm, npx, nvm)
+  node <file>         Node.js (node, node -e, node --watch)
+  nvm                 Node version (nvm, nvm use, nvm install)
+  npx <pkg>           Run packages (npx, npx -y, npx tsc)
+  yarn <cmd>          Yarn (yarn, yarn add, yarndlx)
+  pnpm <cmd>          PNPM (pnpm, pnpm add, pnpm dlx)
+  bun                 Bun runtime (bun, bun install, bun run)
+  deno                Deno (deno, deno run, deno bundle)
+  ts-node             TypeScript (ts-node, tsx, tsx watch)
+  tsc                 TypeScript compiler (tsc, tsc --watch, tsc --noEmit)
+  esbuild             Bundler (esbuild, esbuild bundle)
+  vite                Vite (vite, vite build, vite preview)
+  webpack             Webpack (webpack, webpack-cli, webpack-dev-server)
+  parcel              Parcel (parcel, parcel build)
+  rollup              Rollup (rollup, rollup -c)
+  astro               Astro (astro, astro dev, astro build)
+  next                Next.js (next, next dev, next build)
+  nuxt                Nuxt.js (nuxt, nuxt dev, nuxt build)
+  svelte              Svelte (svelte, svelte-kit, vite-plugin-svelte)
+  remix               Remix (remix, remix dev, remix build)
+  qwik                Qwik (qwik, qwik dev, qwik build)
+  solid               SolidJS (solid, solid-start, vinxi)
+  react               React (create-react-app, vite, next)
+  vue                 Vue.js (vue, vue create, nuxt)
+  angular             Angular (ng, ng new, ng build)
+  nest                NestJS (nest, nest new, nest generate)
+  electron            Electron (electron, electron-forge)
+  NW.js               NW.js (nw, nwjs)
+  tauri               Tauri (tauri, tauri dev, tauri build)
+
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.red("🦀 RUST ECOSYSTEM")}
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+  cargo <cmd>         Package manager (cargo, cargo install)
+  rustc               Compiler (rustc, rustc --edition)
+  rustup              Toolchain (rustup, rustup default, rustup update)
+  rustc --version     Rust version (rustc, rustc -V, rustc --print)
+  clippy              Linter (cargo clippy, clippy-driver)
+  rustfmt             Formatter (rustfmt, cargo fmt)
+  cargo build         Build (cargo build, cargo b, cargo build --release)
+  cargo test          Tests (cargo test, cargo t, cargo test --lib)
+  cargo run           Run (cargo run, cargo r, cargo run --example)
+  cargo doc           Docs (cargo doc, cargo doc --open)
+  cargo add <dep>     Add dependency (cargo add, cargo remove)
+  cargo new <name>    New project (cargo new, cargo init)
+  cargo check         Check (cargo check, cargo clippy)
+  cargo publish       Publish (cargo publish, cargo package)
+  cargo tree          Dependency tree (cargo tree, cargo tree -i)
+  cargo update        Update deps (cargo update, cargo update -p)
+  wasm-pack           WASM (wasm-pack, wasm-pack build)
+  cargo-criterion     Benchmarking (cargo criterion, cargo bench)
+  cargo-make          Task runner (cargo-make, maker)
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("🅰️ GO ECOSYSTEM")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  go <cmd>            Go (go, go run, go build)
+  go mod <cmd>       Modules (go mod init, go mod tidy, go mod download)
+  go get <pkg>       Get packages (go get, go install)
+  go test             Tests (go test, go test -v, go test -cover)
+  go build            Build (go build, go build -o)
+  go run <file>       Run (go run, go run .)
+  gofmt              Format (gofmt, gofmt -w, gofmt -d)
+  golint             Linter (golint, golint ./...)
+  go vet              Checker (go vet, go vet ./...)
+  staticcheck        Static analysis (staticcheck, go-staticcheck)
+  goreleaser        Release (goreleaser, goreleaser release)
+  delve              Debugger (dlv, dlv debug)
+  gops               Go process (gops, gops stats)
+  go-modiff          Diff tool (go-modiff, go-modiff -v)
+  richgo             Rich test output (richgo, richgo test)
+  gocritic           Critique (gocritic, gocritic check)
+  stringer           String gen (stringer, go generate)
+  mockgen            Mocking (mockgen, go install github.com/mockery)
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("☕ JAVA & JVM")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  java <file>         Java (java, java -jar, openjdk)
+  javac <file>       Compile (javac, java -c)
+  gradle <task>      Gradle (gradle, gradlew, gradle wrapper)
+  mvn <goal>         Maven (mvn, mvnw, mvn clean install)
+  scala              Scala (scala, scala-cli, amm)
+  kotlin <file>      Kotlin (kotlin, kotlinc, kscript)
+  groovy              Groovy (groovy, groovysh, groovy -e)
+  clojure            Clojure (clojure, clj, leiningen)
+  jshell             JShell (jshell, jshell --class-path)
+  jbang              JBang (jbang, jbang init, jbang run)
+  ant                Ant (ant, ant -f)
+  sbt                Scala Build (sbt, sbt compile)
+  kotlinc            KotlinC (kotlinc, kotlinc -script)
+  jar                 JAR (jar, jar cf, jar xf)
+  jcmd               JCMD (jcmd, jcmd -l)
+  jmap                Heap dump (jmap, jmap -heap)
+  jstack             Thread dump (jstack, jstack -l)
+  jconsole           JConsole (jconsole, jvisualvm)
+  lombok             Lombok (lombok, lombok delombok)
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("📱 MOBILE DEVELOPMENT")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  flutter <cmd>      Flutter (flutter, flutter create, flutter run)
+  dart <file>        Dart (dart, dart run, dart compile)
+  fvm                Flutter versions (fvm, fvm install, fvm use)
+  xcodebuild         Xcode build (xcodebuild, xcode-select)
+  fastlane           CI/CD (fastlane, fastlane ios, fastlane android)
+  ionic              Ionic (ionic, ionic start, ionic build)
+  capacitor          Capacitor (capacitor, capacitor add, capacitor sync)
+  cordova            Cordova (cordova, cordova create, cordova build)
+  expo               Expo (expo, expo start, expo run:ios)
+  react-native       RN (react-native, react-native init)
+  native-run         Native run (native-run, native-run android)
+  xcrun              Xcode run (xcrun, xcrun simctl)
+  androidsdk         Android SDK (sdkmanager, adb, avdmanager)
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("💬 MESSAGING & COMMUNICATION")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  telegram           Telegram (telegram-cli, tdcli, telegram-bot)
+  discord            Discord (discord, discord.js, discord.py)
+  slack              Slack (slack, slack-cli, Incoming Webhooks)
+  whatsapp           WhatsApp (whatsapp-web.js, venom-bot)
+  signal             Signal (signal-cli, signal-proxy)
+  irc                IRC (irssi, hexchat, weechat, epic)
+  matrix             Matrix (element, matrix-commander)
+  zulip              Zulip (zulip, zulip-cli)
+  keybase            KeyBase (keybase, keybase chat)
+  rocket             Rocket.Chat (rocket, rocket-cli)
+  mattermost         Mattermost (mattermost, mmctl)
+  teams              MS Teams (teams, msteams-cli)
+  zoom               Zoom (zoom, zoomuscli)
+  discord-webhook   Discord webhook (discord, send-discord)
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🔐 SECURITY & PENETRATION TESTING")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  nmap <target>      Network scanner (nmap, nmap -sV, zenmap)
+  metasploit         Metasploit (msfconsole, msfvenom, msfdb)
+  hydra              Password cracker (hydra, hydra -L, hydra -P)
+  john               John (john, john --wordlist)
+  hashcat            Hashcat (hashcat, hashcat -m, hashcat -a)
+  aircrack-ng        WiFi (aircrack-ng, airmon-ng, airodump-ng)
+  wireshark          Packet analyzer (wireshark, tshark, dumpcap)
+  nikto              Web scanner (nikto, nikto -h)
+  sqlmap             SQL injection (sqlmap, sqlmap -u)
+  burp               Burp Suite (burpsuite, burp-rest-proxy)
+  zap                OWASP ZAP (zaproxy, zap-cli)
+  netcat             Netcat (nc, ncat, socat)
+  tcpdump            Packet capture (tcpdump, tcpdump -i)
+  ettercap           Ettercap (ettercap, ettercap -T)
+  responder          LLMNR (responder, python3 Responder.py)
+  crackmapexec       CME (crackmapexec, cme)
+  BloodHound         AD analysis (bloodhound, python3 bloodhound.py)
+  empire             C2 (empire, python3 empire.py)
+  cobalt-strike      Cobalt Strike (cobalt-strike, ./teamserver)
+  nuclei             Vulnerability scanner (nuclei, nuclei -t)
+  zaproxy            ZAP (zaproxy, zap-baseline)
+
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.red("🕵️ FORENSICS & INCIDENT RESPONSE")}
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+  autopsy            Autopsy (autopsy, autopsy -h)
+  volatility         Volatility (volatility, volatility3)
+  sleuthkit          SleuthKit (tsk_gettimes, icat, fls)
+  binwalk            Binwalk (binwalk, binwalk -e)
+  foremost           Foremost (foremost, foremost -v)
+  strings            Strings (strings, strings -n)
+  exiftool           EXIF (exiftool, exiftool -r)
+  steghide           Steghide (steghide, steghide extract)
+  xxd                Hex dump (xxd, xxd -r, hexdump)
+  radare2            R2 (r2, radare2, rizin)
+  ghidra             Ghidra (ghidra, analyzeHeadless)
+  ida                IDA Pro (ida64, idat64)
+  cutter             Cutter (cutter, cutter -r)
+  volatility3        Vol3 (volatility3, python3 -m volatility3)
+  grep               Log grep (grep, grep -E, rg)
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("🗄️ DATABASES")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  psql               PostgreSQL (psql, pg_isready, pg_dump)
+  mysql              MySQL (mysql, mysqldump, mysql_install_db)
+  mongosh            MongoDB (mongosh, mongo, mongod)
+  redis-cli          Redis (redis-cli, redis-server, redis-cli ping)
+  sqlite3            SQLite (sqlite3, sqlitebrowser)
+  psql -c <cmd>     Run command (psql -c, psql -f)
+  mongod             Mongo daemon (mongod, mongod --dbpath)
+  redis-server       Redis daemon (redis-server, redis-server --daemonize)
+  pg_dump            Backup (pg_dump, pg_dumpall, pg_restore)
+  mysqldump          Backup (mysqldump, mysqldump --single-transaction)
+  couchdb            CouchDB (couchdb, couchjs)
+  influx             InfluxDB (influx, influxd)
+  cockroach          CockroachDB (cockroach, cockroach sql)
+  neo4j              Neo4j (neo4j, cypher-shell)
+  orientdb           OrientDB (orientdb, console.sh)
+  timescaledb        TimescaleDB (timescaledb, psql)
+  pulsar             Pulsar (pulsar, pulsar-admin)
+  clickhouse         ClickHouse (clickhouse, clickhouse-client)
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("📡 APIs & WEB SERVICES")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  curl <url>         HTTP client (curl, curl -X, httpie)
+  httpie             HTTPie (http, httpie, ht)
+  wget <url>         Download (wget, wget -r, curl -O)
+  postman            Postman (postman, newman)
+  insomnia           Insomnia (insomnia, insomnia-cli)
+  swagger            Swagger (swagger, swagger-codegen)
+  http <method>      HTTP (httpie, h)
+  ab                 Apache Bench (ab, ab -n, ab -c)
+  wrk                WRK (wrk, wrk -t, wrk -c)
+  hey                Hey (hey, hey -n)
+  k6                 K6 load test (k6, k6 run, k6 archive)
+  locust             Locust (locust, locust -f)
+  httpx              HTTPX (httpx, python -m httpx)
+  http-server        HTTP server (http-server, serve, python -m http.server)
+  insomnia           Insomnia (insomnia, insomnia export)
+  jq                 JSON processor (jq, jq '.', python -m json.tool)
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("🔗 BLOCKCHAIN & WEB3")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  solana             Solana (solana, solana-keygen, solana-program)
+  ethereum           Ethereum (geth, parity, eth)
+  ethers             ethers.js (ethers, npx ethers)
+  web3               Web3.js (web3, web3.js)
+  hardhat            Hardhat (hardhat, npx hardhat)
+  truffle            Truffle (truffle, truffle compile)
+  wagmi              Wagmi (wagmi, viem)
+  etherscan          Etherscan (etherscan, eth-tx-scanner)
+  ethers             ethers-v5/6 (ethers, @ethersproject)
+  web3j              Web3j (web3j, web3j CLI)
+  candide            Candide (candide, od)
+  starknet           StarkNet (starknet, starknet-compile)
+  aztec              Aztec (aztec, aztec-up)
+  polygon            Polygon (polygon, matic)
+  arbitrum           Arbitrum (arbitrum, arb)
+  optimism           Optimism (optimism, op-node)
+  near               NEAR (near, near-cli)
+  cosmos             Cosmos (cosmos, gaiad)
+  terra              Terra (terra, terrad)
+  avalanche          Avalanche (avalanche, avax)
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("🏠 HOME AUTOMATION & IOT")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  homeassistant     Home Assistant (hass, homeassistant, ha)
+  homekit           HomeKit (homekit, hap-server)
+  google-home       Google Home (google-home, ghass)
+  alexa             Alexa (alexa, alexa-cli)
+  zigbee2mqtt       Zigbee2MQTT (zigbee2mqtt, mqtt)
+  mqtt              MQTT (mosquitto, mqtt-cli, mqtt.js)
+  mosquitto         MQTT broker (mosquitto, mosquitto_sub)
+  node-red          Node-RED (node-red, node-red-admin)
+  esphome           ESPHome (esphome, esphome config)
+  tasmota           Tasmota (tasmota, sonoff)
+  zigbee            Zigbee (zigbee2mqtt, zha-network)
+  zwave             Z-Wave (openzwave, zwavejs2mqtt)
+  philips-hue       Hue (philips-hue-cli, hue-cli)
+  ikea-trådfri     IKEA (tradfri, ikea-tradfri)
+  Tuya              Tuya (tuya-cli, localtuya)
+  Shelly            Shelly (shelly, shelly-cli)
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🤖 ROBOTICS & ROS")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  roscore            ROS core (roscore, roscore)
+  roslaunch          Launch (roslaunch, roslaunch file.launch)
+  rosrun             Run (rosrun, rosrun pkg node)
+  rosservice         Services (rosservice, rosservice list)
+  rostopic           Topics (rostopic, rostopic echo)
+  rosnode            Nodes (rosnode, rosnode list)
+  rosparam           Params (rosparam, rosparam set)
+  catkin_make       Catkin (catkin_make, catkin build)
+  colcon             Colcon (colcon, colcon build)
+  arduino            Arduino (arduino, arduino-cli)
+  platformio         PlatformIO (platformio, pio)
+  micropython        MicroPython (micropython, mpremote)
+  esp-idf            ESP-IDF (esp-idf, idf.py)
+  esptool            ESPTool (esptool, esptool.py)
+  stm32cubeprog      STM32 (STM32CubeProgrammer, st-flash)
+  ros2               ROS2 (ros2, ros2 daemon, ros2 pkg)
+
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.red("🎨 MEDIA & DESIGN")}
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+  ffmpeg             Video/audio (ffmpeg, ffprobe, ffplay)
+  imagemagick        ImageMagick (convert, identify, mogrify)
+  gimp               GIMP (gimp, gimp-2.99)
+  inkscape           Inkscape (inkscape, inkscape --export)
+  blender            Blender (blender, blender -b)
+  krita               Krita (krita, krita.exe)
+  scribus            Scribus (scribus, scribus -no-svg)
+  darktable          Darktable (darktable, darktable-cli)
+  rawtherapee       RawTherapee (rawtherapee, rt)
+  handbrake         HandBrake (handbrake, handbrake-cli)
+  imagemagick        Image tools (magick, identify, compare)
+  sox                Audio (sox, sox effect)
+  audacity           Audacity (audacity, audacity.exe)
+  lmms               LMMS (lmms, lmms studio)
+  hydrogen           Hydrogen (hydrogen, hydrogen.bin)
+  openfx             OpenFX (ofr, ofx)
+  obs                OBS (obs-cli, obs-ffmpeg)
+  vlc                VLC (vlc, cvlc, vlc-wrapper)
+  youtube-dl         YouTube (yt-dlp, youtube-dl)
+  streamlink         Streamlink (streamlink, streamlink-cli)
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("📊 DATA ENGINEERING")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  spark              Spark (spark-submit, pyspark, spark-shell)
+  airflow            Airflow (airflow, airflow dags)
+  dagster            Dagster (dagster, dagit)
+  kafka              Kafka (kafka-topics, kafka-console-producer)
+  flink              Flink (flink, flink run)
+  beam               Beam (beam, beam-runner)
+  databricks         Databricks (databricks, dbconnect)
+  dbt                DBT (dbt, dbt run, dbt test)
+  dbtable            DBTable (dbtable, python -m dbtable)
+  trino              Trino (trino, trino-cli)
+  presto             Presto (presto, presto-cli)
+  hive               Hive (hive, beeline)
+  sqoop              Sqoop (sqoop, sqoop-import)
+  flume              Flume (flume-ng, flume-env)
+  nifi               NiFi (nifi, nifi.sh)
+  kafka-connect      Kafka Connect (kafka-connect, connect-distributed)
+  debezium           Debezium (debezium, connect-distributed)
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("📈 MONITORING & OBSERVABILITY")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  prometheus         Prometheus (prometheus, promtool)
+  grafana            Grafana (grafana, grafana-cli)
+  alertmanager       Alertmanager (alertmanager, amtool)
+  thanos             Thanos (thanos, thanos query)
+  loki               Loki (loki, logcli)
+  elastic            Elasticsearch (elasticsearch, es)
+  kibana             Kibana (kibana, kibana-keystore)
+  jaeger             Jaeger (jaeger, jaeger-all-in-one)
+  zipkin             Zipkin (zipkin, zipkin-all-in-one)
+  tempo              Grafana Tempo (tempo, tempo-query)
+  cortex             Cortex (cortex, cortextool)
+  thanos             Thanos (thanos, thanos receive)
+  telegraf           Telegraf (telegraf, telegraf --test)
+  fluentd            Fluentd (fluentd, fluent-bit)
+  sentry             Sentry (sentry-cli, sentry-python)
+  newrelic          New Relic (newrelic, newrelic-admin)
+  datadog            Datadog (datadog, ddtrace)
+  honeycomb          Honeycomb (honeycomb, honeycomb-cli)
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("🛠️ SYSTEM ADMINISTRATION")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  systemctl         Systemd (systemctl, systemd, init)
+  service           SysV init (service, chkconfig, update-rc.d)
+  journalctl        Logs (journalctl, journalctl -u, journalctl -f)
+  ps                Processes (ps, ps aux, pgrep, pkill)
+  top                Top (top, htop, atop, bt)
+  htop              Interactive (htop, htop -d)
+  sar               Sysstat (sar, sadf, iostat)
+  iotop             I/O top (iotop, iotop -o)
+  iftop             Net top (iftop, nethogs)
+  netstat           Netstat (netstat, ss, lsof)
+  iptables          Firewall (iptables, iptables -L, ufw)
+  firewalld         Firewall (firewalld, firewall-cmd)
+  nft               Nftables (nft, nft list rules)
+  ip                IP (ip, ip addr, ip link)
+  route             Routing (route, ip route)
+  dig               DNS (dig, nslookup, host)
+  ping              Ping (ping, ping6, fping, hping3)
+  traceroute        Trace (traceroute, tracepath, mtr)
+  nmap              Port scan (nmap, nmap -sT, zenmap)
+  ssh               SSH (ssh, ssh-keygen, scp, sftp)
+  scp               Secure copy (scp, rsync, scp -r)
+  sftp              SFTP (sftp, lftp, ncftp)
+  tmux              Terminal multiplexer (tmux, tmuxinator)
+  screen            Screen (screen, screen -r)
+  byobu             Byobu (byobu, byobu-tmux)
+  sudo              Sudo (sudo, sudo -i, sudo -s)
+  useradd           Users (useradd, usermod, userdel, groups)
+  crontab           Cron (crontab, crontab -e, cron)
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("📦 PACKAGE MANAGERS")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  apt               Debian/Ubuntu (apt, apt-get, apt-cache)
+  dnf               Fedora/RHEL (dnf, dnf search, dnf install)
+  pacman            Arch Linux (pacman, pacman -S, yay, aur)
+  brew              Homebrew (brew, brew install, brew cask)
+  snap              Snap (snap, snap install, snapd)
+  flatpak           Flatpak (flatpak, flatpak install, flatpak run)
+  choco             Chocolatey (choco, choco install)
+  scoop             Windows (scoop, scoop install, scoop bucket)
+  winget            Windows (winget, winget install)
+  pipx              pipx (pipx, pipx install, pipx run)
+  gem               Ruby gems (gem, gem install, bundler)
+  cargo             Rust (cargo, cargo install, cargo search)
+  crates            crates.io (cargo search, crates CLI)
+  composer          PHP (composer, composer require)
+  pub               Dart (pub, pub get, flutter pub)
+  swift             Swift (swift, swiftc, swift package)
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🎮 GAMING & EMULATION")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  steam              Steam (steam, steamcmd)
+  lutris            Linux gaming (lutris, lutris -i)
+  retroarch         RetroArch (retroarch, ra)
+  dolphin           Dolphin (dolphin-emu, dolphin)
+  pcsx2             PCSX2 (pcsx2, pcsx2-qt)
+  cemu              Cemu (cemu, cemuhook)
+  yuzu              Yuzu (yuzu, yuzu-emu)
+  ryujinx           Ryujinx (ryujinx, ryujinx-amd)
+  rpcs3             RPCS3 (rpcs3, rpcs3-gtk)
+  mame              MAME (mame, mame64)
+  dosbox            DOSBox (dosbox, dosbox-x)
+  scummvm           ScummVM (scummvm, scummvm -g)
+  openemu           OpenEmu (openemu, openemu --help)
+  boxes             Boxes (boxes, boxes -d)
+  qemu              QEMU (qemu, qemu-system-x86_64)
+  virt-manager      Virt-Manager (virt-manager, virsh)
+
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.red("🔧 BUILD TOOLS & COMPILERS")}
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+  make <target>      Make (make, makefile, cmake)
+  cmake             CMake (cmake, cmake --build)
+  meson             Meson (meson, meson setup, ninja)
+  ninja             Ninja (ninja, ninja -t)
+  bazel             Bazel (bazel, bazel build)
+  scons             Scons (scons, scons -Q)
+  gnumake           GNU Make (gmake, make)
+  xcodebuild        Xcode (xcodebuild, xcodebuild -scheme)
+  msbuild           MSBuild (msbuild, dotnet build)
+  rake              Rake (rake, rake -T)
+  grunt             Grunt (grunt, grunt --help)
+  gulp              Gulp (gulp, gulp --tasks)
+  webpack           Webpack (webpack, webpack-cli)
+  esbuild            ESBuild (esbuild, esbuild app.js)
+  vite              Vite (vite, vite build)
+  snowpack          Snowpack (snowpack, snowpack build)
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("🎵 AUDIO & MUSIC")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  spotify            Spotify (spotify, spotifyd, spotify-tui)
+  mpd               Music Player Daemon (mpd, mpc, ncmpcpp)
+  cmus              C* Music Shell (cmus, cmus-remote)
+  mopidy            Mopidy (mopidy, mopidy-iris)
+  audacious         Audacious (audacious, audacious -e)
+  vlc               VLC (vlc, cvlc, vlc -I rc)
+  ffplay            FFplay (ffplay, ffplay -nodisp)
+  sox               SoX (sox, sox effect)
+  lame              LAME (lame, lame --preset)
+  flac              FLAC (flac, metaflac)
+  faac              FAAC (faac, faad)
+  opus              Opus (opusenc, opusdec)
+  jackd             JACK (jackd, jack_*)
+  carla             Carla (carla, carla-plugin)
+  hydrogen          Hydrogen (hydrogen, hydrogen.bin)
+  ardour            Ardour (ardour, ardour7)
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("🎬 VIDEO & STREAMING")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  ffmpeg             FFmpeg (ffmpeg, ffprobe, ffplay)
+  obs                OBS Studio (obs, obs-cli, obs-ffmpeg)
+  vlc                VLC (vlc, cvlc, vlm)
+  handbrake         HandBrake (handbrake, handbrake-cli)
+  mpv                MPV (mpv, mpv --no-video)
+  youtube-dl        yt-dlp (yt-dlp, youtube-dl)
+  streamlink         Streamlink (streamlink, streamlink-cli)
+  ffmpeg -i <in>    Convert (ffmpeg -i, ffmpeg -c:v)
+  ffmpeg -i <in> -ss Seek (ffmpeg -ss, ffmpeg -t)
+  ffmpeg -i <in> -r  FPS (ffmpeg -r, ffmpeg -filter:v)
+  ffmpeg -i <in> -s  Scale (ffmpeg -s, ffmpeg -vf scale)
+  ffmpeg -i <in> -b  Bitrate (ffmpeg -b:v, -b:a)
+  ffmpeg -i <in> -c:v Codec (ffmpeg -c:v libx264)
+  ffmpeg -i <in> -crf CRF (ffmpeg -crf, -preset)
+  ffmpeg -i <in> -filter_complex Filtergraph (ffmpeg -filter_complex)
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("📝 TEXT & DOCUMENTATION")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  pandoc             Doc converter (pandoc, pandoc -t, -s)
+  latex              LaTeX (latex, pdflatex, xelatex)
+  texlive           TeX Live (texlive, tlmgr)
+  markdown          Markdown (markdown, markdown_py)
+  mkdocs            MkDocs (mkdocs, mkdocs build)
+  jekyll            Jekyll (jekyll, bundle exec jekyll)
+  hugo              Hugo (hugo, hugo server)
+  docusaurus        Docusaurus (docusaurus, docusaurus build)
+  sphinx            Sphinx (sphinx-build, sphinx-quickstart)
+  asciidoc          AsciiDoc (asciidoctor, asciidoc)
+  retext            ReText (retext, retext-edit)
+  typora            Typora (typora, typora --help)
+  notion            Notion (notion, notion-cli)
+  obsidian          Obsidian (obsidian, obsidian-import)
+  vscode            VS Code (code, code --install-extension)
+  vim                Vim (vim, vimtutor, nvim)
+  nano               Nano (nano, nano -c)
+  emacs             Emacs (emacs, emacs -nw)
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("💾 BACKUP & SYNC")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  rsync <src> <dest>  Sync (rsync, rsync -avz, rsync -e ssh)
+  rclone             Cloud sync (rclone, rclone copy, rclone mount)
+  borg              Borg (borgmatic, borg, borg create)
+  restic            Restic (restic, restic backup, restic restore)
+  duplicati         Duplicati (duplicati, duplicati-cli)
+  duplicity         Duplicity (duplicity, duplicity incr)
+  tar               Archive (tar, tar -cvf, tar -xvf)
+  zip               Zip (zip, zip -r, unzip)
+  7z                7-Zip (7z, 7z a, 7z x)
+  gzip              Gzip (gzip, gunzip, zcat)
+  xz                XZ (xz, unxz, xzcat)
+  bzip2             Bzip2 (bzip2, bunzip2, bzcat)
+  rar                RAR (rar, unrar, winrar)
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🌍 REMOTE DESKTOP & ACCESS")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  ssh                SSH (ssh, ssh-keygen, ssh-copy-id)
+  rdesktop          RDP (rdesktop, xfreerdp, remmina)
+  vnc                VNC (vncserver, vncviewer, tigervnc)
+  xfreerdp          FreeRDP (xfreerdp, xfreerdp /u /p)
+  x2goclient        X2Go (x2goclient, x2goserver)
+  nomachine         NoMachine (nomachine, nxserver)
+  teamviewer        TeamViewer (teamviewer, teamviewer-cli)
+  anydesk           AnyDesk (anydesk, anydesk-cli)
+  chrome-rdp        Chrome RDP (chrome-remote-desktop)
+  parsec            Parsec (parsec, parsecd)
+  moonlight         Moonlight (moonlight, moonlight-embedded)
+  sunshine          Sunshine (sunshine, sunshine-app)
+
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.red("🔐 CRYPTOGRAPHY & ENCRYPTION")}
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+  gpg                GPG (gpg, gpg2, gpg-agent)
+  openssl            OpenSSL (openssl, openssl enc, openssl req)
+  ssh-keygen        SSH keys (ssh-keygen, ssh-copy-id)
+  keybase            KeyBase (keybase, kbpgp)
+  age                Age (age, age-keygen)
+  sops               SOPS (sops, sops -e, sops -d)
+  vault              Vault (vault, vault agent, vault server)
+  bitwarden         Bitwarden (bw, bitwarden-cli)
+  1password         1Password (op, 1password-cli)
+  keepassxc         KeePass (keepassxc, keepassxc-cli)
+  minisign          Minisign (minisign, minisign -S)
+  signify           Signify (signify-openbsd)
+  cfssl             CFSSL (cfssl, cfssljson)
+  step              Step (step, step certificate)
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("☁️ GCP & FIREBASE")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  gcloud init        GCP init (gcloud init, gcloud auth)
+  gcloud compute    Compute (gcloud compute, gc compute)
+  gsutil            GCS (gsutil, gsutil -m, gsutil rsync)
+  bq                BigQuery (bq query, bq mk)
+  firebase          Firebase (firebase, firebase init)
+  firebase deploy   Deploy (firebase deploy, firebase hosting)
+  flutter           Flutter (flutter, flutter create)
+  google-auth       Auth (gcloud auth, gcloud auth application-default)
+  cbt               Cloud Bigtable (cbt, cbt createtable)
+  cdc               CDC (gcloud dataflow, cdc)
+  datastore         Datastore (gcloud datastore)
+  spanner           Cloud Spanner (gcloud spanner)
+  firestore         Firestore (gcloud firestore)
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("🖥️ HARDWARE & SYSTEM INFO")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  lscpu              CPU info (lscpu, lstopo)
+  lsblk              Block devices (lsblk, blkid)
+  lsusb              USB devices (lsusb, lsusb -t)
+  lspci              PCI devices (lspci, lspci -v)
+  dmidecode          DMI (dmidecode, -t processor, -t memory)
+  inxi               System info (inxi, inxi -Fz)
+  neofetch           Neofetch (neofetch, neofetch --ascii)
+  hwinfo             HW info (hwinfo, hwinfo --short)
+  lshw               List HW (lshw, lshw -short)
+  sensors            Sensors (sensors, sensors-detect)
+  smartctl           SMART (smartctl, smartctl -a)
+  nvme               NVMe (nvme, nvme list)
+  lsscsi             SCSI (lsscsi, lsscsi -v)
+  procinfo           Proc info (procinfo, -f)
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("📊 CI/CD PIPELINES")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  jenkins            Jenkins (jenkins, jenkins-cli)
+  gitlab-ci          GitLab CI (gitlab-runner, gitlab-ci)
+  github-actions     GitHub Actions (gh, gh run)
+  circleci           CircleCI (circleci, circleci build)
+  travis             Travis CI (travis, travis-ci)
+  bitbucket-pipe    Bitbucket (bitbucket-pipe, bb)
+  drone              Drone CI (drone, drone-cli)
+  argo-cd            Argo CD (argocd, argocd app)
+  argo-workflows    Argo (argo, argo submit)
+  tekton             Tekton (tekton, tkn)
+  jenkins-x          Jenkins X (jx, jx3)
+  spinnaker          Spinnaker (spin, halyard)
+  Azure-Pipelines   Azure (azure-pipelines, az pipelines)
+  codebuild          AWS CodeBuild (codebuild, aws codebuild)
+  codeartifact       AWS CodeArtifact (codeartifact, aws codeartifact)
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("🔧 UTILITIES & TOOLS")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  tldr               Simplified man (tldr, tldr -u)
+  bat                Bat (bat, batcat, bat --style)
+  exa                Modern ls (exa, exa -l, exa -T)
+  lsd                LSD (lsd, lsd -l, lsd --tree)
+  dog                DNS (dog, dog -v)
+  httpie             HTTP (httpie, http)
+  xh                 HTTP (xh, xh --curl)
+  curlie             Curlie (curlie, curlie -v)
+  borg               Borg (borg, borgmatic)
+  duf                Disk usage (duf, duf -hide)
+  dust               Dust (dust, dust -d)
+  ncdu               NCurses DU (ncdu, ncdu -r)
+  tldr               TLDR (tldr, tldr -u)
+  cheat              Cheat (cheat, cheat -l)
+  exiftool           EXIF (exiftool, exiftool -r)
+  jq                 JSON (jq, jq '.key')
+  yq                 YAML (yq, yq -y, yq -o json)
+  toml               TOML (tomlq, cargo-toml)
+  xsv                CSV (xsv, xsv slice, xsv search)
+  csvkit             CSVKit (csvkit, csvsql)
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🚀 LAUNCHERS & PRODUCTIVITY")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  alacritty          Alacritty (alacritty, alacritty -e)
+  kitty              Kitty (kitty, kitty +kitten)
+  iterm              iTerm2 (iterm2, iterm2-profile)
+  terminal           Terminal (terminal, gnome-terminal)
+  rofi               Rofi (rofi, rofi -show)
+  dmenu              Dmenu (dmenu, dmenu_run)
+  wofi               Wofi (wofi, wofi --show)
+  albert             Albert (albert, albert-launcher)
+  raycast            Raycast (raycast, raycast --help)
+  spotifyd           Spotifyd (spotifyd, spotifyd --config)
+  lemonbar           Lemonbar (lemonbar, polybar)
+  polybar            Polybar (polybar, polybar example)
+  yabai              Yabai (yabai, yabai -m)
+  khd                KHD (khd, khd -e)
+  autokey            AutoKey (autokey-gtk, autokey-qt)
+  hammerspoon        Hammerspoon (hammerspoon, hs)
+
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.red("💻 SHELLS & TERMINALS")}
+${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
+  bash               Bash (bash, bash -c, /bin/bash)
+  zsh                Zsh (zsh, zsh -c, oh-my-zsh)
+  fish               Fish (fish, fish -c, fisher)
+  powershell        PowerShell (pwsh, powershell)
+  sh                 POSIX sh (sh, dash, ash)
+  dash               Dash (dash, dash -c)
+  ksh                KornShell (ksh, ksh93)
+  tcsh               Tcsh (tcsh, csh)
+  elvish             Elvish (elvish, elvish -c)
+  xonsh              Xonsh (xonsh, xonsh -c)
+  nu                 Nushell (nu, nu -c)
+  ion                Ion (ion, ion -c)
+  oil                Oil (oil, oil -c)
+  rc                 RC (rc, rc -c)
+
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.blue("🔌 NETWORK TOOLS")}
+${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
+  netstat            Network stats (netstat, netstat -tulpn)
+  ss                 Socket stats (ss, ss -tunapl)
+  ip                 IP command (ip, ip addr, ip link)
+  dig                Dig (dig, dig +short)
+  nslookup           NSLookup (nslookup, host)
+  host               Host (host, host -t)
+  whois              Whois (whois, whois -h)
+  ifconfig           Ifconfig (ifconfig, ifconfig -a)
+  iwconfig          Wireless (iwconfig, iw list)
+  ethtool           Ethernet (ethtool, ethtool -i)
+  nmap              Port scanner (nmap, nmap -sV)
+  netcat            Netcat (nc, nc -l, nc -v)
+  socat             SOCAT (socat, socat -)
+  ngrep             Ngrep (ngrep, ngrep -i)
+  tcpdump           Tcpdump (tcpdump, tcpdump -i)
+  wireshark         Wireshark (wireshark, tshark)
+  mitmproxy         MITMProxy (mitmproxy, mitmdump)
+  bettercap         BetterCAP (bettercap, bettercap -iface)
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("📡 CONTAINER ORCHESTRATION")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  kubernetes         K8s (kubectl, kubeadm, kubelet)
+  helm               Helm (helm, helm install, helm repo)
+  kustomize          Kustomize (kustomize, kubectl -k)
+  istio              Istio (istioctl, istio operator)
+  linkerd            Linkerd (linkerd, linkerd2)
+  consul             Consul (consul, consul agent)
+  etcd               Etcd (etcd, etcdctl)
+  nomad              Nomad (nomad, nomad agent)
+  swarm              Docker Swarm (docker swarm, docker stack)
+  rancher            Rancher (rancher, rancher-compose)
+  openshift          OpenShift (oc, odo)
+  k3s                K3s (k3s, k3s server)
+  k3d                K3d (k3d, k3d cluster)
+  k0s                K0s (k0s, k0s controller)
+  microk8s           MicroK8s (microk8s, microk8s enable)
+  kubespray          Kubespray (ansible-playbook)
+  kubeadm            KubeAdm (kubeadm, kubeadm init)
+  kubectx            Kube Context (kubectx, kubectx -)
+  kubens             Kube Namespace (kubens, kubens -)
+  stern              Stern (stern, stern -n kube-system)
+  k9s                K9s (k9s, k9s --help)
+  lens               Lens (lens, lens-cli)
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("🧪 TESTING FRAMEWORKS")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  jest               Jest (jest, npx jest)
+  vitest             Vitest (vitest, npx vitest)
+  mocha              Mocha (mocha, npx mocha)
+  jasmine            Jasmine (jasmine, npx jasmine)
+  pytest             PyTest (pytest, python -m pytest)
+  unittest           Unittest (python -m unittest)
+  nose2              Nose2 (nose2, python -m nose2)
+  rspec              RSpec (rspec, bundle exec rspec)
+  minitest          Minitest (minitest, rake test)
+  go test            Go test (go test, go test -v)
+  go bench           Go bench (go test -bench=.)
+  cargo test         Rust test (cargo test, cargo test --lib)
+  ctest              CTest (ctest, ctest -V)
+  catch2             Catch2 (catch2, ./tests)
+  gtest              GTest (gtest, make test)
+  cppunit            CppUnit (cppunit, cppunit-config)
+  phpunit            PHPUnit (phpunit, ./phpunit)
+  behat              Behat (behat, ./behat)
+  cypress            Cypress (cypress, npx cypress)
+  playwright         Playwright (playwright, npx playwright)
+  puppeteer         Puppeteer (puppeteer, puppeteer-cli)
+  selenium           Selenium (selenium, webdriver)
+  k6                 K6 (k6, k6 run)
+  gatling            Gatling (gatling, gatling.sh)
+  locust             Locust (locust, locust -f)
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("📋 ALIASES & SHORTCUTS")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  g                  git
+  gs                 git status
+  ga                 git add
+  gc                 git commit
+  gp                 git push
+  gl                 git pull
+  gd                 git diff
+  gst                git status
+  gco                git checkout
+  br                 git branch
+  d                  docker
+  dc                 docker compose
+  dps                docker ps
+  dpa                docker ps -a
+  di                 docker images
+  dex                docker exec -it
+  k                  kubectl
+  ka                 kubectl get all
+  kgp                kubectl get pods
+  kgs                kubectl get svc
+  ll                 ls -la
+  la                 ls -a
+  l                  ls -la
+  ..                 cd ..
+  ...                cd ../..
+  ~~                 cd ~
+  -                  cd -
+  h                  htop
+  t                  top
+  v                  vim
+  n                  nano
+  q                  exit
+  c                  clear
+  py                 python
+  py3                python3
+  pipi               pip install
+  npmi               npm install
+  npms               npm install -S
+  yai                yarn add
+  yad                yarn add -D
+  serve              http-server -p
+
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🎯 QUICK TIPS")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  cheatsheet        Show 700+ extended commands
+  !<cmd>             Run shell command directly
+  Tab                Auto-complete commands
+  ↑/↓                Command history navigation
+  Ctrl+C             Cancel current input
+  Ctrl+D             Exit shell (or logout)
+  Ctrl+L             Clear screen (like clear)
+  Ctrl+R             Reverse search history
+  Ctrl+A             Move to line start
+  Ctrl+E             Move to line end
+  Ctrl+U             Clear line before cursor
+  Ctrl+K             Clear line after cursor
+  Ctrl+W             Delete word before cursor
+
+${chalk.gray("══════════════════════════════════════════════════════════════════════════")}
+${chalk.gray("💡 Type 'help' for basic commands, 'cheatsheet' for this extended list")}
+${chalk.gray("══════════════════════════════════════════════════════════════════════════")}
+`;
 }
 
 async function handleCommand(input: string): Promise<boolean> {
@@ -1022,6 +2028,7 @@ async function handleCommand(input: string): Promise<boolean> {
 
   switch (cmd) {
     case "help": case "?": console.log(help()); break;
+    case "extended": case "cheatsheet": case "all": case "help-all": console.log(extendedHelp()); break;
     
     case "ls": case "ll": case "la": case "l": case "lt": case "llh":
       try { console.log(execSync(`ls ${cmd.includes("l") ? "-la" : ""} ${args[0] || "."}`, { encoding: "utf-8" })); }
@@ -1113,7 +2120,7 @@ async function handleCommand(input: string): Promise<boolean> {
       console.clear();
       info("🚀 Launching OpenCode AI...\n");
       try { 
-        spawn(OPENCODE_PATH, ["tui"], { stdio: "inherit", cwd: process.cwd() }).on("close", () => {
+        spawn(OPENCODE_PATH, [], { stdio: "inherit", cwd: process.cwd() }).on("close", () => {
           console.clear(); console.log(logo()); info("Returned to DevMate\n"); prompt();
         });
       } catch (e: any) { handleError("opencode", e, "Install opencode"); prompt(); }
@@ -1243,7 +2250,332 @@ async function handleCommand(input: string): Promise<boolean> {
         Object.entries(customCommands).forEach(([n, c]) => console.log(`  ${chalk.green(n)} -> ${c}`));
       }
       break;
-      
+    
+    case "htop": case "btop": case "bashtop": case "bpytop": case "glances": case "atop": case "btop":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e, `Install: apt install ${cmd}`); }
+      break;
+    case "lazygit":
+      try { execSync(`lazygit ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("lazygit", e, "Install: apt install lazygit"); }
+      break;
+    case "lazydocker":
+      try { execSync(`lazydocker ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("lazydocker", e, "Install: apt install lazydocker"); }
+      break;
+    case "yazi": case "lf": case "ranger": case "vifm":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
+    case "eza": case "exa":
+      try { execSync(`eza ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("eza", e, "Install: apt install eza"); }
+      break;
+    case "bat": case "batcat":
+      try { execSync(`bat ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("bat", e, "Install: apt install bat"); }
+      break;
+    case "fd": case "fdfind":
+      try { execSync(`fd ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("fd", e, "Install: apt install fd-find"); }
+      break;
+    case "ripgrep": case "rg":
+      try { execSync(`rg ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("rg", e, "Install: apt install ripgrep"); }
+      break;
+    case "delta": case "git-delta":
+      try { execSync(`delta ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("delta", e, "Install: cargo install delta"); }
+      break;
+    case "tldr":
+      try { execSync(`tldr ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("tldr", e, "Install: apt install tldr"); }
+      break;
+    case "cheat":
+      try { execSync(`cheat ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("cheat", e, "Install: pip install cheat"); }
+      break;
+    case "httpie": case "ht":
+      try { execSync(`http ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("httpie", e, "Install: pip install httpie"); }
+      break;
+    case "dog":
+      try { execSync(`dog ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("dog", e, "Install: cargo install dog"); }
+      break;
+    case "dust": case "duf": case "ncdu":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
+    case "zoxide": case "z":
+      try { execSync(`zoxide ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("zoxide", e, "Install: curl -sS https://get.oh-my.zsh | | sh"); }
+      break;
+    case "starship":
+      try { execSync(`starship ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("starship", e, "Install: curl -sS https://starship.rs/install.sh | sh"); }
+      break;
+    case "fzf":
+      try { execSync(`fzf ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("fzf", e, "Install: apt install fzf"); }
+      break;
+    case "fira-code": case "jetbrains": case "meslo": case "nerd-fonts":
+      console.log(chalk.cyan("Visit: https://www.nerdfonts.com/font-downloads"));
+      break;
+    case "k9s":
+      try { execSync(`k9s ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("k9s", e, "Install: brew install k9s"); }
+      break;
+    case "stern":
+      try { execSync(`stern ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("stern", e, "Install: brew install stern"); }
+      break;
+    case "kubectx": case "kubens":
+      try { execSync(`kubectx ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("kubectx", e, "Install: brew install kubectx"); }
+      break;
+    case "kustomize": case "kpt": case "helmfile":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
+    case "skaffold": case "tilt": case "devspace":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
+    case "postgres": case "psql":
+      try { execSync(`psql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("psql", e, "Install: apt install postgresql"); }
+      break;
+    case "mongosh": case "mongocli":
+      try { execSync(`mongosh ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mongosh", e, "Install: apt install mongodb-org-shell"); }
+      break;
+    case "redis-cli":
+      try { execSync(`redis-cli ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("redis-cli", e, "Install: apt install redis-tools"); }
+      break;
+    case "mysql":
+      try { execSync(`mysql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mysql", e, "Install: apt install mysql-client"); }
+      break;
+    case "sqlite3":
+      try { execSync(`sqlite3 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sqlite3", e, "Install: apt install sqlite3"); }
+      break;
+    case "influx": case "influxd":
+      try { execSync(`influx ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("influx", e); }
+      break;
+    case "timescaledb": case "timescale":
+      console.log(chalk.cyan("TimescaleDB: ") + "timescale.com");
+      break;
+    case "cockroach": case "cockroachdb":
+      try { execSync(`cockroach ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("cockroach", e); }
+      break;
+    case "pnpm":
+      try { execSync(`pnpm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pnpm", e, "Install: npm install -g pnpm"); }
+      break;
+    case "bun":
+      try { execSync(`bun ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("bun", e, "Install: curl -fsSL https://bun.sh/install | bash"); }
+      break;
+    case "deno":
+      try { execSync(`deno ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("deno", e, "Install: curl -fsSL https://deno.land/install.sh | sh"); }
+      break;
+    case "uv": case "ruff":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e, `Install: pip install ${cmd}`); }
+      break;
+    case "airbyte": case "fivetran":
+      console.log(chalk.cyan("Use web UI: ") + "airbyte.com");
+      break;
+    case "dbt":
+      try { execSync(`dbt ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("dbt", e, "Install: pip install dbt"); }
+      break;
+    case "prisma":
+      try { execSync(`prisma ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("prisma", e, "Install: npm install -g prisma"); }
+      break;
+    case "hasura":
+      try { execSync(`hasura ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("hasura", e); }
+      break;
+    case "apollostudio": case "apollo":
+      console.log(chalk.cyan("Apollo GraphOS: ") + "apollographql.com");
+      break;
+    case "serverless": case "sls":
+      try { execSync(`serverless ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("serverless", e, "Install: npm install -g serverless"); }
+      break;
+    case "sam": case "cdk":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
+    case "amplify":
+      try { execSync(`amplify ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("amplify", e, "Install: npm install -g @aws-amplify/cli"); }
+      break;
+    case "cloudflare": case "cf":
+      try { execSync(`cloudflare ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("cloudflare", e, "Install: npm install -g cloudflare"); }
+      break;
+    case "fly": case "flyctl":
+      try { execSync(`flyctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("flyctl", e, "Install: curl -L https://fly.io/install.sh | sh"); }
+      break;
+    case "railway": case "render": case "vercel": case "netlify":
+      console.log(chalk.cyan(`Use web UI: `) + `${cmd}.com`);
+      break;
+    case "supabase":
+      try { execSync(`supabase ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("supabase", e, "Install: npm install -g supabase"); }
+      break;
+    case "appwrite":
+      try { execSync(`appwrite ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("appwrite", e); }
+      break;
+    case "n8n": case "buffalo": case "strapi": case "keystone":
+      console.log(chalk.cyan(`Use: `) + `npx create-${cmd}-app`);
+      break;
+    case "refine": case "refine-dev":
+      try { execSync(`refine ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("refine", e); }
+      break;
+    case "payload": case "payloadcms":
+      try { execSync(`payload ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("payload", e); }
+      break;
+    case "directus":
+      try { execSync(`directus ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("directus", e); }
+      break;
+    case "forest": case "forestadmin":
+      console.log(chalk.cyan("Use: ") + "forestadmin.com");
+      break;
+    case "budibase": case "nocodb": case "rowy":
+      console.log(chalk.cyan(`Use web UI or: `) + `npx ${cmd}`);
+      break;
+    case "cal.com": case "schedule": case "calendso":
+      console.log(chalk.cyan("Cal.com: ") + "cal.com");
+      break;
+    case "shadcn": case "shadcn-ui":
+      console.log(chalk.cyan("Use: ") + "npx shadcn-ui@latest init");
+      break;
+    case "radix": case "headlessui": case "chakra": case "mantine": case "shoelace":
+      console.log(chalk.cyan(`Use: npm install @${cmd}/ui`));
+      break;
+    case "tanstack": case "react-query": case "rtk-query":
+      console.log(chalk.cyan(`Use: npm install @tanstack/${cmd.replace("react-query", "query").replace("rtk-query", "query")}`));
+      break;
+    case "zustand": case "jotai": case "recoil": case "valtio": case "xstate":
+      console.log(chalk.cyan(`Use: npm install ${cmd}`));
+      break;
+    case "trpc": case "graphql-yoga": case "nexus": case "typegraphql":
+      console.log(chalk.cyan(`Use: npm install ${cmd}`));
+      break;
+    case "prismajs": case "graphql-playground": case "graphiql":
+      console.log(chalk.cyan(`Use: npm install ${cmd}`));
+      break;
+    case "urql": case "apollo-client": case "relay":
+      console.log(chalk.cyan(`Use: npm install ${cmd}`));
+      break;
+    case "remix": case "remix-run":
+      try { execSync(`npx create-remix@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("remix", e); }
+      break;
+    case "next": case "nextjs":
+      try { execSync(`npx create-next-app@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("next", e); }
+      break;
+    case "nuxt": case "nuxtjs":
+      try { execSync(`nuxi init ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nuxt", e); }
+      break;
+    case "sveltekit": case "svelte":
+      try { execSync(`npm create svelte@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("svelte", e); }
+      break;
+    case "astro":
+      try { execSync(`npm create astro@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("astro", e); }
+      break;
+    case "qwik": case "qwikcity":
+      try { execSync(`npm create qwik@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("qwik", e); }
+      break;
+    case "solidstart": case "solid":
+      try { execSync(`npx degit solidjs/templates/ts ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("solid", e); }
+      break;
+    case "fresh": case "deno":
+      try { execSync(`deno run -A -r https://fresh.deno.dev ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("fresh", e); }
+      break;
+    case "redwood": case "redwoodjs":
+      try { execSync(`npx create-redwood-app@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("redwood", e); }
+      break;
+    case "blitz": case "blitzjs":
+      try { execSync(`npm install -g blitz && blitz new ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("blitz", e); }
+      break;
+    case "nexus": case "graphql-nexus":
+      console.log(chalk.cyan("Use: npm install nexus graphql"));
+      break;
+    case "urql": case "urql-core":
+      console.log(chalk.cyan("Use: npm install @urql/svelte"));
+      break;
+    case "vike": case "vite-plugin-ssr":
+      try { execSync(`npm create vike@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vike", e); }
+      break;
+    case "solid-start":
+      console.log(chalk.cyan("Use: npm create solid"));
+      break;
+    case "vite-node": case "vite-ts":
+      try { execSync(`npm create vite@latest ${args.join(" ")} -- --template ${cmd === "vite-node" ? "node-ts" : "vue-ts"}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vite", e); }
+      break;
+    case "nest":
+      try { execSync(`npm i -g @nestjs/cli && nest new ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nest", e); }
+      break;
+    case "adonis": case "adonisjs":
+      try { execSync(`npm i -g @adonisjs/cli && adonis new ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("adonis", e); }
+      break;
+    case "feathers": case "hapi": case "loopback":
+      console.log(chalk.cyan(`Use: npm install ${cmd}`));
+      break;
+    case "fastify":
+      try { execSync(`npm init fastify ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("fastify", e); }
+      break;
+    case "express": case "expressjs":
+      try { execSync(`npx express-generator ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("express", e); }
+      break;
+    case "koa":
+      try { execSync(`npx koa-generator ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("koa", e); }
+      break;
+    case "strapi":
+      try { execSync(`npx create-strapi-app@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("strapi", e); }
+      break;
+    case "keystone":
+      try { execSync(`npm create keystone-app@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("keystone", e); }
+      break;
+    case "blitz":
+      try { execSync(`npm install -g blitz && blitz new ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("blitz", e); }
+      break;
+
     case "snippet":
       if (!args[0]) {
         console.log(chalk.cyan("Snippets:"));
@@ -5003,6 +6335,774 @@ async function handleCommand(input: string): Promise<boolean> {
     case "wave":
       try { execSync(`wave ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
       catch (e: any) { handleError("wave", e); }
+      break;
+
+    // ======= EXTENSIVE NEW COMMANDS =======
+    // Cloud Platforms
+    case "digitalocean": case "doctl":
+      try { execSync(`doctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("doctl", e, "Install: brew install doctl"); }
+      break;
+    case "linode": case "linode-cli":
+      try { execSync(`linode-cli ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("linode", e, "Install: pip install linode-cli"); }
+      break;
+    case "vultr":
+      try { execSync(`vultr ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vultr", e); }
+      break;
+    case "ovhcloud": case "ovh":
+      console.log(chalk.cyan("OVHcloud: ") + "ovh.com manager");
+      break;
+    case "scaleway":
+      console.log(chalk.cyan("Scaleway: ") + "console.scaleway.com");
+      break;
+    case "upcloud":
+      console.log(chalk.cyan("UpCloud: ") + "upcloud.com");
+      break;
+    case "heterodb": case "hetero":
+      console.log(chalk.cyan("HeteroDB: ") + "heterodb.com");
+      break;
+
+    // More DevOps
+    case "terraform-compliance": case "tfc":
+      try { execSync(`terraform-compliance ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("terraform-compliance", e, "pip install terraform-compliance"); }
+      break;
+    case "terragrunt":
+      try { execSync(`terragrunt ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("terragrunt", e, "brew install terragrunt"); }
+      break;
+    case "sentinel": case "terraform-sentinel":
+      console.log(chalk.cyan("Terraform Sentinel: ") + "hashicorp.com/docs/sentinel");
+      break;
+    case "packer":
+      try { execSync(`packer ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("packer", e, "brew install packer"); }
+      break;
+    case "vagrant":
+      try { execSync(`vagrant ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vagrant", e, "brew install vagrant"); }
+      break;
+    case "consul":
+      try { execSync(`consul ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("consul", e); }
+      break;
+    case "vault":
+      try { execSync(`vault ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vault", e, "brew install vault"); }
+      break;
+    case "nomad":
+      try { execSync(`nomad ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nomad", e); }
+      break;
+    case "waypoint":
+      try { execSync(`waypoint ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("waypoint", e); }
+      break;
+    case "fabrict": case "fabric":
+      try { execSync(`fabric ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("fabric", e, "pip install fabric"); }
+      break;
+    case "capistrano":
+      try { execSync(`cap ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("capistrano", e, "gem install capistrano"); }
+      break;
+    case "mina":
+      try { execSync(`mina ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mina", e, "gem install mina"); }
+      break;
+    case "rocketeer":
+      console.log(chalk.cyan("Rocketeer: ") + "rocketeer.ch");
+      break;
+
+    // CI/CD More
+    case "gitlab-runner":
+      try { execSync(`gitlab-runner ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("gitlab-runner", e); }
+      break;
+    case "drone":
+      try { execSync(`drone ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("drone", e); }
+      break;
+    case "concourse":
+      try { execSync(`fly ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("concourse", e); }
+      break;
+    case "spinnaker":
+      console.log(chalk.cyan("Spinnaker: ") + "spinnaker.io");
+      break;
+    case "tekton":
+      try { execSync(`tkn ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("tekton", e, "brew install tektoncd-cli"); }
+      break;
+    case "argocd":
+      try { execSync(`argocd ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("argocd", e, "brew install argocd"); }
+      break;
+    case "flux":
+      try { execSync(`flux ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("flux", e, "brew install fluxcd"); }
+      break;
+    case "jenkins-x": case "jx":
+      try { execSync(`jx ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("jenkins-x", e); }
+      break;
+
+    // More Languages
+    case "kotlin":
+      try { execSync(`kotlin ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("kotlin", e, "brew install kotlin"); }
+      break;
+    case "scalac": case "scala":
+      try { execSync(`scala ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("scala", e, "brew install scala"); }
+      break;
+    case "groovysh": case "groovy":
+      try { execSync(`groovysh ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("groovy", e); }
+      break;
+    case "clojure": case "clj":
+      try { execSync(`clojure ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("clojure", e, "brew install clojure"); }
+      break;
+    case "leiningen": case "lein":
+      try { execSync(`lein ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("leiningen", e); }
+      break;
+    case "nbash": case "nushell": case "nu":
+      try { execSync(`nu ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nushell", e, "brew install nushell"); }
+      break;
+    case "elixir": case "iex":
+      try { execSync(`iex ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("elixir", e, "brew install elixir"); }
+      break;
+    case "mix":
+      try { execSync(`mix ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mix", e); }
+      break;
+    case "phoenix": case "mix phx":
+      try { execSync(`mix phx ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("phoenix", e); }
+      break;
+    case "erlang": case "erl":
+      try { execSync(`erl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("erlang", e, "brew install erlang"); }
+      break;
+    case "haskell": case "ghci": case "cabal": case "stack":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
+    case "ocaml": case "opam":
+      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
+    case "fsharp": case "fsi":
+      try { execSync(`dotnet fsi ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("fsharp", e); }
+      break;
+    case "racket": case "rkt":
+      try { execSync(`racket ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("racket", e); }
+      break;
+    case "lua": case "luajit":
+      try { execSync(`lua ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("lua", e, "brew install lua"); }
+      break;
+    case "lua-language-server": case "sumneko":
+      console.log(chalk.cyan("Lua Language Server: ") + "github.com/sumneko/lua-language-server");
+      break;
+    case "nim": case "nimble":
+      try { execSync(`nim ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nim", e); }
+      break;
+    case "crystal":
+      try { execSync(`crystal ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("crystal", e); }
+      break;
+    case "v": case "vlang":
+      try { execSync(`v ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vlang", e); }
+      break;
+    case "zig":
+      try { execSync(`zig ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("zig", e); }
+      break;
+    case "nix": case "nix-shell":
+      try { execSync(`nix ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nix", e); }
+      break;
+    case "flakehub": case "flakes":
+      console.log(chalk.cyan("FlakeHub: ") + "flakehub.com");
+      break;
+    case "direnv":
+      try { execSync(`direnv ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("direnv", e, "brew install direnv"); }
+      break;
+    case "asdf":
+      try { execSync(`asdf ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("asdf", e, "brew install asdf"); }
+      break;
+    case "sdkman":
+      console.log(chalk.cyan("SDKMAN: ") + "sdkman.io");
+      break;
+    case "jenv":
+      console.log(chalk.cyan("jEnv: ") + "jenv.github.io");
+      break;
+    case "rbenv": case "rvm": case "chruby":
+      console.log(chalk.cyan("Ruby Version Manager: ") + "rvm.io / rbenv.github.io");
+      break;
+    case "phpenv": case "phpbrew":
+      console.log(chalk.cyan("PHP Version Manager: ") + "phpbrew.github.io");
+      break;
+
+    // More Web Frameworks
+    case "sails": case "sailsjs":
+      try { execSync(`npm install -g sails && sails new ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sails", e); }
+      break;
+    case "loopback": case "lb4":
+      try { execSync(`npm install -g @loopback/cli && lb4 app ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("loopback", e); }
+      break;
+    case "sveltekit":
+      try { execSync(`npm create svelte@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sveltekit", e); }
+      break;
+    case "nuxt3": case "nuxt":
+      try { execSync(`npx nuxi@latest init ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nuxt", e); }
+      break;
+    case "nextjs": case "next-app":
+      try { execSync(`npx create-next-app@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nextjs", e); }
+      break;
+    case "remix-run":
+      try { execSync(`npx create-remix@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("remix", e); }
+      break;
+    case "gatsby":
+      try { execSync(`npx gatsby new ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("gatsby", e); }
+      break;
+    case "eleventy": case "11ty":
+      try { execSync(`npx @11ty/eleventy ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("eleventy", e); }
+      break;
+    case "hugo":
+      try { execSync(`hugo new site ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("hugo", e, "brew install hugo"); }
+      break;
+    case "jekyll":
+      try { execSync(`bundle exec jekyll new ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("jekyll", e); }
+      break;
+    case "docusaurus":
+      try { execSync(`npx create-docusaurus@latest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("docusaurus", e); }
+      break;
+    case "vuepress":
+      try { execSync(`npx vuepress dev ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vuepress", e); }
+      break;
+    case "vitepress":
+      try { execSync(`npx vitepress init ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("vitepress", e); }
+      break;
+    case "storybook":
+      try { execSync(`npx storybook@latest init ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("storybook", e); }
+      break;
+    case "vue-storefront": case "vsf":
+      console.log(chalk.cyan("Vue Storefront: ") + "vuestorefront.io");
+      break;
+    case "nuxt-commerce":
+      console.log(chalk.cyan("Nuxt Commerce: ") + "commerce.nuxt.com");
+      break;
+
+    // More Backend Frameworks
+    case "spring-boot": case "spring":
+      console.log(chalk.cyan("Spring Boot: ") + "start.spring.io");
+      break;
+    case "quarkus":
+      try { execSync(`mvn io.quarkus.platform:quarkus-maven-plugin:create ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("quarkus", e); }
+      break;
+    case "micronaut":
+      console.log(chalk.cyan("Micronaut: ") + "micronaut.io/launch");
+      break;
+    case "helidon":
+      console.log(chalk.cyan("Helidon: ") + "helidon.io/starter");
+      break;
+    case "ktor":
+      try { execSync(`gradle wrapper && ./gradlew build ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ktor", e); }
+      break;
+    case "play":
+      console.log(chalk.cyan("Play Framework: ") + "playframework.com");
+      break;
+    case "lagom":
+      console.log(chalk.cyan("Lagom: ") + "lagomframework.com");
+      break;
+    case "vertx": case "verticle":
+      console.log(chalk.cyan("Vert.x: ") + "vertx.io");
+      break;
+    case "kTor": case "ktor":
+      try { execSync(`ktor ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ktor", e); }
+      break;
+    case "actix-web": case "actix":
+      console.log(chalk.cyan("Actix-web: ") + "actix.rs");
+      break;
+    case "axum":
+      console.log(chalk.cyan("Axum: ") + "tokio.rs/axum");
+      break;
+    case "warp":
+      console.log(chalk.cyan("Warp: ") + "seanmonstar.com/warp");
+      break;
+    case "rocket-rs": case "rocket":
+      console.log(chalk.cyan("Rocket: ") + "rocket.rs");
+      break;
+    case "iron":
+      console.log(chalk.cyan("Iron: ") + "ironframework.io");
+      break;
+    case "nickel-rs": case "nickel":
+      console.log(chalk.cyan("Nickel: ") + "nickel.rs");
+      break;
+
+    // More Mobile
+    case "react-native-cli":
+      try { execSync(`npx react-native@latest init ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("react-native", e); }
+      break;
+    case "expo-cli": case "expo":
+      try { execSync(`npx expo start ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("expo", e); }
+      break;
+    case "ionic-cli": case "ionic":
+      try { execSync(`ionic start ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ionic", e); }
+      break;
+    case "capcli": case "capacitor":
+      try { execSync(`npx cap ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("capacitor", e); }
+      break;
+    case "cordova-cli":
+      try { execSync(`cordova create ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("cordova", e); }
+      break;
+    case "nativescript":
+      try { execSync(`tns create ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nativescript", e); }
+      break;
+    case "flutter-create":
+      try { execSync(`flutter create ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("flutter", e); }
+      break;
+    case "dart-create":
+      try { execSync(`dart create ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("dart", e); }
+      break;
+    case "swift-create":
+      console.log(chalk.cyan("Swift: ") + "Use Xcode or swift package init");
+      break;
+    case "kotlin-create":
+      console.log(chalk.cyan("Kotlin: ") + "start.kotlinlang.org");
+      break;
+
+    // More Databases
+    case "postgres": case "postgresql":
+      try { execSync(`psql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("postgres", e, "brew install postgresql"); }
+      break;
+    case "mysql": case "mariadb":
+      try { execSync(`mysql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mysql", e, "brew install mysql"); }
+      break;
+    case "sqlite":
+      try { execSync(`sqlite3 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sqlite", e, "apt install sqlite3"); }
+      break;
+    case "mongodb": case "mongod":
+      try { execSync(`mongod ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mongodb", e, "brew install mongodb"); }
+      break;
+    case "redis-server":
+      try { execSync(`redis-server ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("redis", e, "brew install redis"); }
+      break;
+    case "cockroachdb": case "cockroach":
+      try { execSync(`cockroach ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("cockroachdb", e); }
+      break;
+    case "dynamodb-local":
+      console.log(chalk.cyan("DynamoDB Local: ") + "docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html");
+      break;
+    case "cassandra": case "cqlsh":
+      try { execSync(`cqlsh ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("cassandra", e); }
+      break;
+    case "scylladb": case "scylla":
+      console.log(chalk.cyan("ScyllaDB: ") + "scylladb.com");
+      break;
+    case "arangodb":
+      try { execSync(`arangodb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("arangodb", e); }
+      break;
+    case "rethinkdb":
+      try { execSync(`rethinkdb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("rethinkdb", e); }
+      break;
+    case "etcd":
+      try { execSync(`etcd ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("etcd", e); }
+      break;
+    case "zookeeper":
+      try { execSync(`zkServer ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("zookeeper", e); }
+      break;
+    case "hbase":
+      console.log(chalk.cyan("HBase: ") + "hbase.apache.org");
+      break;
+    case "cassandra": case "datastax":
+      console.log(chalk.cyan("DataStax: ") + "datastax.com");
+      break;
+    case "planetscale":
+      console.log(chalk.cyan("PlanetScale: ") + "planetscale.com");
+      break;
+    case "turso":
+      console.log(chalk.cyan("Turso: ") + "turso.tech");
+      break;
+    case "supabase-db":
+      console.log(chalk.cyan("Supabase: ") + "supabase.com");
+      break;
+    case "neon-tech": case "neon":
+      console.log(chalk.cyan("Neon: ") + "neon.tech");
+      break;
+    case "xata":
+      console.log(chalk.cyan("Xata: ") + "xata.io");
+      break;
+    case "convex":
+      console.log(chalk.cyan("Convex: ") + "convex.dev");
+      break;
+    case "fauna":
+      console.log(chalk.cyan("Fauna: ") + "fauna.com");
+      break;
+    case "realm":
+      console.log(chalk.cyan("Realm: ") + "realm.io");
+      break;
+    case "objectbox":
+      console.log(chalk.cyan("ObjectBox: ") + "objectbox.io");
+      break;
+    case "pocketbase":
+      try { execSync(`pocketbase ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pocketbase", e); }
+      break;
+    case "bumblebee": case "electric-sql":
+      console.log(chalk.cyan("ElectricSQL: ") + "electric-sql.com");
+      break;
+    case "prisma-client":
+      try { execSync(`npx prisma generate`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("prisma", e); }
+      break;
+    case "drizzle-orm":
+      console.log(chalk.cyan("Drizzle ORM: ") + "orm.drizzle.team");
+      break;
+    case "knex":
+      try { execSync(`npx knex ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("knex", e); }
+      break;
+    case "typeorm-cli":
+      try { execSync(`typeorm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("typeorm", e); }
+      break;
+    case "sequelize-cli":
+      try { execSync(`npx sequelize-cli ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sequelize", e); }
+      break;
+
+    // More Data & Analytics
+    case "spark": case "pyspark":
+      try { execSync(`spark-submit ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("spark", e); }
+      break;
+    case "flink":
+      try { execSync(`flink ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("flink", e); }
+      break;
+    case "kafka":
+      try { execSync(`kafka-topics ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("kafka", e); }
+      break;
+    case "airflow":
+      try { execSync(`airflow ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("airflow", e, "pip install apache-airflow"); }
+      break;
+    case " Prefect":
+      try { execSync(`prefect ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("prefect", e); }
+      break;
+    case "dagster":
+      try { execSync(`dagster ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("dagster", e); }
+      break;
+    case "meltano":
+      try { execSync(`meltano ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("meltano", e); }
+      break;
+    case "airbyte":
+      console.log(chalk.cyan("Airbyte: ") + "airbyte.com");
+      break;
+    case "fivetran":
+      console.log(chalk.cyan("Fivetran: ") + "fivetran.com");
+      break;
+    case "stitch":
+      console.log(chalk.cyan("Stitch: ") + "stitchdata.com");
+      break;
+    case "segment":
+      console.log(chalk.cyan("Segment: ") + "segment.com");
+      break;
+    case "snowflake":
+      try { execSync(`snowsql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("snowflake", e); }
+      break;
+    case "bigquery":
+      try { execSync(`bq ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("bigquery", e); }
+      break;
+    case "redshift":
+      console.log(chalk.cyan("Redshift: ") + "aws.amazon.com/redshift");
+      break;
+    case "trino": case "presto-query":
+      try { execSync(`trino ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("trino", e); }
+      break;
+    case "duckdb":
+      try { execSync(`duckdb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("duckdb", e); }
+      break;
+    case "clickhouse-client":
+      try { execSync(`clickhouse-client ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("clickhouse", e); }
+      break;
+    case "druid":
+      console.log(chalk.cyan("Apache Druid: ") + "druid.apache.org");
+      break;
+    case "pinot":
+      console.log(chalk.cyan("Apache Pinot: ") + "pinot.apache.org");
+      break;
+    case "kylin":
+      console.log(chalk.cyan("Apache Kylin: ") + "kylin.apache.org");
+      break;
+    case "impala":
+      console.log(chalk.cyan("Apache Impala: ") + "impala.apache.org");
+      break;
+    case "hive": case "beeline":
+      try { execSync(`hive ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("hive", e); }
+      break;
+    case "pig":
+      try { execSync(`pig ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pig", e); }
+      break;
+    case "sqoop":
+      try { execSync(`sqoop ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("sqoop", e); }
+      break;
+    case "flume":
+      try { execSync(`flume-ng ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("flume", e); }
+      break;
+    case "nifi": case "nifi-api":
+      try { execSync(`nifi ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("nifi", e); }
+      break;
+    case "streamsets":
+      console.log(chalk.cyan("StreamSets: ") + "streamsets.com");
+      break;
+    case "talend":
+      console.log(chalk.cyan("Talend: ") + "talend.com");
+      break;
+    case "informatica":
+      console.log(chalk.cyan("Informatica: ") + "informatica.com");
+      break;
+    case "pentaho":
+      console.log(chalk.cyan("Pentaho: ") + "pentaho.com");
+      break;
+
+    // More AI/ML
+    case "pytorch": case "torch":
+      try { execSync(`python -m torch ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("pytorch", e, "pip install torch"); }
+      break;
+    case "tensorflow": case "tf":
+      try { execSync(`python -m tensorflow ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("tensorflow", e, "pip install tensorflow"); }
+      break;
+    case "jax":
+      try { execSync(`python -c "import jax; print(jax.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("jax", e, "pip install jax"); }
+      break;
+    case "keras":
+      try { execSync(`python -c "import keras; print(keras.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("keras", e, "pip install keras"); }
+      break;
+    case "fastai":
+      try { execSync(`python -c "import fastai; print(fastai.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("fastai", e, "pip install fastai"); }
+      break;
+    case "transformers":
+      try { execSync(`python -c "import transformers; print(transformers.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("transformers", e, "pip install transformers"); }
+      break;
+    case "diffusers":
+      try { execSync(`python -c "import diffusers; print(diffusers.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("diffusers", e, "pip install diffusers"); }
+      break;
+    case "langchain":
+      try { execSync(`python -c "import langchain; print(langchain.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("langchain", e, "pip install langchain"); }
+      break;
+    case "llamaindex": case "llama-index":
+      try { execSync(`python -c "import llama_index; print(llama_index.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("llamaindex", e, "pip install llama-index"); }
+      break;
+    case "autogen":
+      try { execSync(`python -c "import autogen; print(autogen.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("autogen", e, "pip install pyautogen"); }
+      break;
+    case "crewai":
+      try { execSync(`python -c "import crewai; print(crewai.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("crewai", e, "pip install crewai"); }
+      break;
+    case "guidance":
+      try { execSync(`python -c "import guidance; print(guidance.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("guidance", e, "pip install guidance"); }
+      break;
+    case "inference-endpoint": case "inference":
+      console.log(chalk.cyan("HuggingFace Inference Endpoints: ") + "huggingface.co/inference-endpoints");
+      break;
+    case "gradio":
+      try { execSync(`python -c "import gradio; print(gradio.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("gradio", e, "pip install gradio"); }
+      break;
+    case "streamlit":
+      try { execSync(`streamlit ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("streamlit", e, "pip install streamlit"); }
+      break;
+    case "dash":
+      try { execSync(`python -c "import dash; print(dash.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("dash", e, "pip install dash"); }
+      break;
+    case "shiny":
+      try { execSync(`python -c "import shiny; print(shiny.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("shiny", e, "pip install shiny"); }
+      break;
+    case "voila":
+      try { execSync(`voila ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("voila", e, "pip install voila"); }
+      break;
+    case "panel":
+      try { execSync(`python -c "import panel; print(panel.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("panel", e, "pip install panel"); }
+      break;
+    case "pytorch-lightning": case "lightning":
+      try { execSync(`python -c "import lightning; print(lightning.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("lightning", e, "pip install lightning"); }
+      break;
+    case "pytorch-geometric": case "pyg":
+      try { execSync(`python -c "import torch_geometric; print(torch_geometric.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("pyg", e, "pip install torch-geometric"); }
+      break;
+    case "optuna":
+      try { execSync(`python -c "import optuna; print(optuna.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("optuna", e, "pip install optuna"); }
+      break;
+    case "ray": case "ray-tune":
+      try { execSync(`python -c "import ray; print(ray.__version__)"`, { encoding: "utf-8" }); }
+      catch (e: any) { handleError("ray", e, "pip install ray"); }
+      break;
+    case "weights-and-biases": case "wandb":
+      try { execSync(`wandb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("wandb", e, "pip install wandb"); }
+      break;
+    case "mlflow":
+      try { execSync(`mlflow ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mlflow", e, "pip install mlflow"); }
+      break;
+    case "comet-ml": case "comet":
+      try { execSync(`comet ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("comet", e); }
+      break;
+    case "neptune":
+      try { execSync(`neptune ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("neptune", e, "pip install neptune"); }
+      break;
+    case "aimstack": case "aim":
+      try { execSync(`aim ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("aim", e, "pip install aim"); }
+      break;
+    case "tensorboard":
+      try { execSync(`tensorboard ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("tensorboard", e, "pip install tensorboard"); }
+      break;
+    case "clearml": case "allegroai":
+      try { execSync(`clearml ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("clearml", e, "pip install clearml"); }
+      break;
+    case "guildai": case "guild":
+      try { execSync(`guild ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("guild", e, "pip install guildai"); }
+      break;
+    case "dvc":
+      try { execSync(`dvc ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("dvc", e, "pip install dvc"); }
+      break;
+    case "mlflow":
+      try { execSync(`mlflow ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mlflow", e, "pip install mlflow"); }
+      break;
+    case "kubeflow":
+      console.log(chalk.cyan("KubeFlow: ") + "kubeflow.org");
+      break;
+    case "seldon": case "seldon-core":
+      console.log(chalk.cyan("Seldon: ") + "seldon.io");
+      break;
+    case "bentoml":
+      try { execSync(`bentoml ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("bentoml", e, "pip install bentoml"); }
+      break;
+    case "cortex":
+      try { execSync(`cortex ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("cortex", e); }
+      break;
+    case "mosec":
+      try { execSync(`mosec ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("mosec", e); }
+      break;
+    case "text-generation-webui": case "oobabooga":
+      console.log(chalk.cyan("Text Generation WebUI: ") + "github.com/oobabooga/text-generation-webui");
+      break;
+    case "lm-studio": case "lmstudio":
+      console.log(chalk.cyan("LM Studio: ") + "lmstudio.ai");
+      break;
+    case "koboldcpp":
+      console.log(chalk.cyan("KoboldCPP: ") + "github.com/LostRuins/koboldcpp");
+      break;
+    case "llamafile":
+      console.log(chalk.cyan("Llamafile: ") + "github.com/Mozilla-Ocho/llamafile");
+      break;
+    case "gpt4all":
+      try { execSync(`gpt4all ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("gpt4all", e); }
+      break;
+    case "ollama": case "ollama-run":
+      try { execSync(`ollama ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      catch (e: any) { handleError("ollama", e, "brew install ollama"); }
+      break;
+    case "text-generation-webui": 
+      console.log(chalk.cyan("Run: ") + "python one_click.py");
       break;
 
     default: 

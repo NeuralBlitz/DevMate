@@ -4,16 +4,16 @@
 
 **Any Shell • Any Command • Any Platform • Any Device**
 
-DevMate is the most comprehensive CLI ever built - connecting 600+ tools, services, and platforms into one unified interface. From messaging apps to cloud infrastructure, from AI models to blockchain, from edge computing to serverless - it's all here.
+DevMate is the most comprehensive CLI ever built - connecting 700+ tools, services, and platforms into one unified interface. From messaging apps to cloud infrastructure, from AI models to blockchain, from edge computing to serverless, from security forensics to home automation - it's all here.
 
 ---
 
 ## ⭐ Features
 
-- **600+ Commands** across all platforms and services
+- **700+ Commands** across all platforms and services
 - **50+ Smart Aliases** for common operations
 - **Universal Messaging** - Send to Telegram, Discord, Slack, WhatsApp, and more
-- **AI/ML Platform Integration** - OpenAI, Claude, Gemini, HuggingFace, and 20+ more
+- **AI/ML Platform Integration** - OpenAI, Claude, Gemini, HuggingFace, Ollama, and 20+ more
 - **Google Ecosystem** - GCP, Firebase, Flutter, Vertex AI, Dart
 - **GitHub/GitLab Complete** - Actions, workflows, codespaces, releases
 - **Cloud Storage** - Dropbox, OneDrive, Google Drive, S3
@@ -28,6 +28,9 @@ DevMate is the most comprehensive CLI ever built - connecting 600+ tools, servic
 - **Data Engineering** - Airflow, DBT, Spark, Snowflake, BigQuery
 - **Machine Learning** - PyTorch, TensorFlow, HuggingFace Transformers
 - **CI/CD** - Jenkins, CircleCI, GitLab CI, ArgoCD
+- **No-Code/Low-Code** - n8n, Zapier, Make, Bubble
+- **IoT & Home Automation** - Home Assistant, Node-RED, MQTT
+- **Security & Forensics** - Metasploit, Burp Suite, Ghidra, Wireshark
 - **Custom Systems** - Commands, Snippets, Bookmarks, Sessions
 - **Tab Autocomplete** - 500+ completions
 
@@ -568,18 +571,29 @@ url-encode             # URL encode
 json-format            # Format JSON
 ```
 
-### ⚙️ System Info & Maintenance
+### 🚀 Modern CLI Tools
 ```
-sysinfo                 # System info
-htop                    # Process monitor
-btop                    # Btop
-glances                 # Glances
-neofetch               # Neofetch
-speedtest              # Speedtest
-docker-clean           # Clean Docker
-npm-clean              # Clean npm cache
-apt-clean              # Clean apt
-ncdu                   # NCurses du
+lazygit               # TUI Git client
+lazydocker            # TUI Docker client
+btop                  # Modern process viewer
+htop                  # Interactive process viewer
+glances               # Cross-platform monitoring
+eza                   # Modern ls replacement
+bat                   # Modern cat replacement
+fd                    # Modern find replacement
+ripgrep/rg            # Modern grep replacement
+fzf                   # Fuzzy finder
+zoxide                # Smart cd
+starship              # Cross-shell prompt
+tldr                  # Simplified man pages
+cheat                 # Cheat sheets
+delta                 # Git diff viewer
+dog                   # DNS client
+dust                  # Modern du
+duf                   # Modern df
+k9s                   # Kubernetes TUI
+stern                 # Kubernetes log viewer
+kubectx               # Kubernetes context switcher
 ```
 
 ---
@@ -714,14 +728,16 @@ devmate transformers download
 
 ## 📈 Stats
 
-- **4,500+ Lines** of TypeScript
-- **600+ Commands** across all categories
+- **5,000+ Lines** of TypeScript
+- **700+ Commands** across all categories
 - **50+ Smart Aliases**
 - **20+ Messaging Platforms**
 - **20+ AI/ML Providers**
 - **30+ Programming Languages**
 - **All Major Clouds** supported
 - **All Major DevOps Tools** supported
+- **Security & Forensics Tools**
+- **IoT & Home Automation**
 
 ---
 

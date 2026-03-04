@@ -1,20 +1,50 @@
 {
   "name": "devmate",
   "version": "3.0.0",
+  "description": "The Ultimate Cross-Platform CLI - Any Shell, Any Command, Any Platform",
+  "author": "DevMate Team",
+  "license": "MIT",
+  "homepage": "https://devmate.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devmate-cli/devmate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/devmate-cli/devmate/issues"
+  },
+  "keywords": [
+    "cli",
+    "terminal",
+    "developer-tools",
+    "productivity",
+    "docker",
+    "kubernetes",
+    "git",
+    "api",
+    "devops"
+  ],
   "type": "module",
   "bin": {
     "devmate": "./dist/index.js"
   },
+  "preferGlobal": true,
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target bun",
+    "build:standalone": "bun build src/index.ts --outdir dist --target bun --standalone",
     "dev": "bun run src/index.ts",
     "start": "bun run src/index.ts",
-    "install-cli": "bun build src/index.ts --outdir dist --target bun && chmod +x dist/index.js && npm link"
+    "install": "./install.sh",
+    "link": "bun build src/index.ts --outdir dist --target bun && chmod +x dist/index.js && npm link",
+    "test": "echo 'Run: echo \"help\" | bun run dev'",
+    "postpublish": "npm run build"
   },
   "dependencies": {
     "chalk": "^5.6.2",
     "cli-table3": "^0.6.5",
     "asciichart": "^1.5.25",
     "marked": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

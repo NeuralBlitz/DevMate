@@ -199,12 +199,58 @@ const rl = readline.createInterface({
 });
 
 const COMPLETIONS = [
-  "help","ls","cd","cat","pwd","mkdir","rm","touch","cp","mv","ln","tree",
+  // Core
+  "help","version","install","setup","doctor","diag","check",
+  "sysinfo","system-info","sys","ports","listening","refresh","reload",
+  "quick","actions","what","which",
+  // NPM
+  "npm-outdated","outdated","npm-audit","audit","npm-deps","deps","npm-scripts","scripts","npm-info","pkg-info","node-version","bun-version",
+  // Files
+  "find-files","ff","find-dirs","fd","recent","recent-files","size","big-files","disk-usage","count","line-count",
+  // Text/Utils
+  "uuid","guid","hash","checksum","base64-encode","b64e","base64-decode","b64d","url-encode","urle","url-decode","urld","random","rand","password","passgen",
+  "json-validate","json-valid","json-minify","json-min","json-path","jpath",
+  // Docker/K8s
+  "d","docker-ps","dps","dpa","docker-ps-all","di","docker-images","dstop","docker-stop-all","drm","docker-rm-all","drmi","dclean","docker-clean","dlogs","docker-logs","dex","docker-exec","dc","dcompose","docker-compose-cmd",
+  "k","kubectl-cmd","kgp","k8s-pods","kgs","k8s-svc","kgd","k8s-deploy","kga","k8s-all","kd","k8s-describe","kl","k8s-logs","kctx","k8s-contexts","kns","k8s-ns",
+  // Cloud
+  "aws-cmd","aws-s3-ls","s3ls","s3cp","s3-copy","s3sync","s3-sync","gcloud-cmd","az-cmd",
+  // Monitoring
+  "htop-cmd","top-cmd","btop-cmd","btop","glances-cmd","glances","iotop-cmd","iotop","iftop-cmd","iftop","ncdu-cmd","ncdu","strace-cmd","strace","lsof-cmd","lsof","ss-netstat","ss",
+  // Logs
+  "logs","journal","dmesg-cmd","dmesg",
+  // Process
+  "pkill-cmd","pkill","killall-cmd","killall","pids","all-pids",
+  // Network
+  "curl-headers","curl-h","curl-json","curl-j","wget-cmd","wget","ssh-cmd","ssh","scp-cmd","scp","rsync-cmd","rsync","dig-cmd","dig","nslookup-cmd","nslookup","ping-cmd","ping","mtr-cmd","mtr","nmap-cmd","nmap",
+  // Compression
+  "zip-cmd","zip","unzip-cmd","unzip","tar-cmd","tar","gzip-cmd","gzip",
+  // Media
+  "ffmpeg-cmd","ffmpeg","convert-cmd","convert","screenshot","scrot",
+  // Date/Time
+  "timestamp","ts","date-iso","dateiso","date-unix","dateunix","epoch","epoch-to-date","now","datetime","utc","utc-time",
+  // System
+  "cpuinfo","lscpu","meminfo","lsmem","lsblk","block-devices","lspci","pci-devices","lsusb","usb-devices","hostname-cmd","hostname","whoami-cmd","whoami","uptime-cmd","uptime","cal-cmd","cal",
+  // Users
+  "users-cmd","users-list","w-cmd","w-users","last-cmd","last",
+  // Services
+  "systemctl-cmd","systemctl","services","list-services","crontab-cmd","crontab","cron","cron-jobs",
+  // Package Managers
+  "apt-cmd","apt","apt-list","apt-packages","brew-cmd","brew","pip-cmd","pip","pip-list","pip-freeze","cargo-cmd","cargo","go-cmd","go",
+  // Basic
+  "ls","cd","cat","pwd","mkdir","rm","touch","cp","mv","ln","tree",
   "grep","find","which","locate","rg","fd","bat","exa","eza","lf","yazi",
   "git","status","branches","graph","diff","log","commit","push","pull",
   "checkout","merge","rebase","stash","fetch","rebase","reset","restore",
   "ask","ai","opencode-ai","chatgpt","claude",
   "table","tree","chart","md","markdown","progress","jsonfmt",
+  "git-status","git-branches","git-log","gitst","gitbr","gitlog",
+  "docker-ps","docker-images","docker-stop-all","docker-rm-all","dps","di","dstop","drm",
+  "k8s-pods","k8s-svc","k8s-nodes","kgp","kgs","kgn",
+  "api","http","curl-json","db-query","db",
+  "api-detect","api-scan","api-services","api-presets","api-service","api-preset",
+  "api-graphql","gql","api-history","apih","api-fav","api-save","api-favs","api-favorites","api-run","apir",
+  "s3-ls","s3-copy","s3cp","env-list","env-get","env-set","envls","secret-ls","secrets",
   "npm","yarn","pnpm","bun","npx","node",
   "pip","pipx","pip3","poetry","pipenv","conda","python","python3",
   "go","cargo","rustc","rustup",
@@ -613,65 +659,63 @@ ${chalk.bold.red("════════════════════�
 ${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
 ${chalk.bold.blue("📱 ANDROID & iOS")}
 ${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
-  pkg <cmd>         Termux (Android)
-  apk <cmd>         Alpine (iSH)
-
-${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
-${chalk.bold.magenta("🐳 CONTAINERS & ☸️ KUBERNETES")}
-${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
-  docker <cmd>      Docker CLI
-  podman <cmd>      Podman
-  kubectl <cmd>     Kubernetes CLI (k)
-  helm <cmd>        K8s package manager
-
-${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
-${chalk.bold.cyan("☁️ CLOUD & DEVOPS")}
-${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
-  aws <cmd>         AWS CLI
-  gcloud <cmd>      Google Cloud
-  az <cmd>          Azure CLI
-  terraform <cmd>   Terraform
-  ansible <cmd>     Ansible
-  vagrant <cmd>     Vagrant
-
-${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
-${chalk.bold.green("💻 SYSTEM & PROCESSES")}
-${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
-  ps                 List processes
-  top/htop          Task manager
-  kill <pid>        Kill process
-  free              Memory usage
-  df/du             Disk usage
+  progress 50 100    Progress bar
+  jsonfmt <file>    Pretty print JSON
 
 ${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
-${chalk.bold.yellow("🌐 NETWORKING")}
+${chalk.bold.yellow("🔧 GIT ENHANCEMENTS")}
 ${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
-  ping <host>       Ping host
-  curl/wget <url>  HTTP/Download
-  ssh <host>        SSH connect
-  dig <domain>      DNS lookup
+  git-status         Rich git status table
+  git-branches       Branches with upstream
+  git-log            Recent commits table
+  gitst/gitbr        Shortcuts
+
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.green("🐳 DOCKER & KUBERNETES")}
+${chalk.bold.green("══════════════════════════════════════════════════════════════════════════")}
+  docker-ps/dps      Running containers table
+  docker-images/di   Images table
+  docker-stop-all    Stop all containers
+  docker-rm-all      Remove all containers
+  k8s-pods/kgp      Kubernetes pods
+  k8s-svc/kgs       Kubernetes services  
+  k8s-nodes/kgn     Kubernetes nodes
+
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.cyan("🌐 SMART API CLIENT")}
+${chalk.bold.cyan("══════════════════════════════════════════════════════════════════════════")}
+  api <method> <url>   HTTP client with JSON output
+  api-detect           Scan for APIs in project
+  api-services         List service presets
+  api-service <svc>    Use preset API (github, stripe, etc)
+  api-graphql/gql     GraphQL client
+  api-history/apih    View request history
+  api-fav <n> <u>     Save API as favorite
+  api-favs            List favorites
+  api-run <name>      Run saved favorite
+
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.magenta("🗄️ DATABASE EXPLORER")}
+${chalk.bold.magenta("══════════════════════════════════════════════════════════════════════════")}
+  db <type> <query> Run SQL query
+  db postgres <q>   PostgreSQL query
+  db mysql <q>     MySQL query
+  db sqlite <q>    SQLite query
 
 ${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
-${chalk.bold.red("🗜️ ARCHIVES & 🔐 CRYPTO")}
+${chalk.bold.red("☁️ CLOUD STORAGE")}
 ${chalk.bold.red("══════════════════════════════════════════════════════════════════════════")}
-  tar -czf <f> <d>  Create tar.gz
-  zip/unzip         Zip files
-  7z                 7-Zip
-  md5sum/sha256sum  Checksums
-  base64            Encode/decode
+  s3-ls             List S3 buckets
+  s3-copy/s3cp      Copy to/from S3
 
-${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
-${chalk.bold.blue("📊 RICH OUTPUT FORMATTING")}
-${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
-  table <h> <r>     Render table (table \"Name,Age\" \"John,25|Jane,30\")
-  tree <dir> [d]   Directory tree (default depth 3)
-  chart <data>     Render ASCII chart (chart \"10,20,30\" --title Sales)
-  md <file>        Render markdown file
-  progress <c> <t> Progress bar (progress 50 100)
-  jsonfmt <file>   Pretty print JSON
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+${chalk.bold.yellow("🔐 ENV & SECRETS")}
+${chalk.bold.yellow("══════════════════════════════════════════════════════════════════════════")}
+  env-list/envls    List all env vars
+  env-get <key>     Get env var
+  env-set <key> <v> Set env var
+  secret-ls/secrets List secrets/vault
 
-${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
-${chalk.bold.blue("🎮 GAMES & FUN")}
 ${chalk.bold.blue("══════════════════════════════════════════════════════════════════════════")}
   fortune           Fortune cookie
   cowsay <text>    ASCII cow
@@ -2094,7 +2138,260 @@ async function handleCommand(input: string): Promise<boolean> {
   switch (cmd) {
     case "help": case "?": console.log(help()); break;
     case "extended": case "cheatsheet": case "all": case "help-all": console.log(extendedHelp()); break;
-    
+
+    case "install": case "setup": {
+      console.log(chalk.cyan(`
+╔══════════════════════════════════════════════════════════════╗
+║           DevMate Self-Installation                          ║
+╚══════════════════════════════════════════════════════════════╝
+`));
+      const checks = [
+        { name: "Bun", check: () => execSync("bun --version", { encoding: "utf-8" }) },
+        { name: "Node.js", check: () => execSync("node --version", { encoding: "utf-8" }) },
+        { name: "npm", check: () => execSync("npm --version", { encoding: "utf-8" }) },
+        { name: "curl", check: () => execSync("curl --version", { encoding: "utf-8" }) },
+      ];
+      
+      console.log(chalk.yellow("Checking dependencies...\n"));
+      let allOk = true;
+      for (const c of checks) {
+        try {
+          const ver = c.check().trim();
+          console.log(chalk.green("✓") + ` ${c.name}: ${ver}`);
+        } catch {
+          console.log(chalk.red("✗") + ` ${c.name}: not found`);
+          allOk = false;
+        }
+      }
+      
+      if (!allOk) {
+        console.log(chalk.yellow("\nMissing dependencies. Install with:"));
+        console.log(chalk.gray("  • Bun: curl -fsSL https://bun.sh/install | bash"));
+        console.log(chalk.gray("  • npm: comes with Node.js"));
+      } else {
+        console.log(chalk.green("\n✓ All dependencies installed!"));
+      }
+      
+      console.log(chalk.cyan("\nDevMate is ready to use."));
+      break;
+    }
+
+    case "doctor": case "diag": case "check": {
+      console.log(chalk.cyan(`
+╔══════════════════════════════════════════════════════════════╗
+║           DevMate Diagnostics                                ║
+╚══════════════════════════════════════════════════════════════╝
+`));
+      
+      console.log(chalk.yellow("Environment:"));
+      console.log(`  OS: ${process.platform}`);
+      console.log(`  Arch: ${process.arch}`);
+      console.log(`  Node: ${process.version}`);
+      console.log(`  CWD: ${process.cwd()}`);
+      console.log(`  Home: ${HOME}`);
+      console.log(`  Config: ${CONFIG_DIR}`);
+      
+      console.log(chalk.yellow("\nChecking tools..."));
+      const tools = ["git", "docker", "kubectl", "npm", "bun", "curl", "node"];
+      for (const t of tools) {
+        try {
+          const ver = execSync(`${t} --version 2>/dev/null | head -1`, { encoding: "utf-8" }).trim();
+          console.log(chalk.green("✓") + ` ${t}: ${ver.slice(0, 40)}`);
+        } catch {
+          console.log(chalk.gray("○") + ` ${t}: not installed`);
+        }
+      }
+      
+      console.log(chalk.yellow("\nConfig files:"));
+      const configs = ["custom_commands.json", "aliases.json", "snippets.json", "bookmarks.json"];
+      for (const c of configs) {
+        const f = join(CONFIG_DIR, c);
+        if (existsSync(f)) {
+          const data = loadJSON(f, {});
+          const count = Object.keys(data).length;
+          console.log(chalk.green("✓") + ` ${c}: ${count} items`);
+        } else {
+          console.log(chalk.gray("○") + ` ${c}: not created`);
+        }
+      }
+      
+      console.log(chalk.green("\n✓ Diagnostics complete"));
+      break;
+    }
+
+    case "sysinfo": case "system-info": case "sys": {
+      console.log(chalk.cyan(`
+╔══════════════════════════════════════════════════════════════╗
+║                   System Information                        ║
+╚══════════════════════════════════════════════════════════════╝
+`));
+      try {
+        const os = execSync("uname -a", { encoding: "utf-8" }).trim();
+        const uptime = execSync("uptime -p 2>/dev/null || uptime", { encoding: "utf-8" }).trim();
+        const mem = execSync("free -h", { encoding: "utf-8" }).trim();
+        const disk = execSync("df -h / | tail -1", { encoding: "utf-8" }).trim();
+        
+        console.log(chalk.yellow("OS:") + ` ${os}`);
+        console.log(chalk.yellow("Uptime:") + ` ${uptime}`);
+        console.log(chalk.yellow("\nMemory:"));
+        console.log(chalk.gray(mem));
+        console.log(chalk.yellow("\nDisk:"));
+        console.log(chalk.gray(disk));
+      } catch (e: any) {
+        err("Could not get system info");
+      }
+      break;
+    }
+
+    case "ports": case "listening": {
+      try {
+        const out = execSync("ss -tuln 2>/dev/null || netstat -tuln 2>/dev/null || echo 'No port info'", { encoding: "utf-8" });
+        const lines = out.trim().split("\n").slice(0, 15);
+        console.log(chalk.cyan("Listening Ports:"));
+        lines.forEach(l => console.log(chalk.gray(l)));
+      } catch { err("Could not list ports"); }
+      break;
+    }
+
+    case "refresh": case "reload": {
+      console.log(chalk.yellow("Rebuilding..."));
+      try {
+        execSync("bun run build", { cwd: process.cwd(), stdio: "inherit" });
+        success("Build complete!");
+      } catch { err("Build failed"); }
+      break;
+    }
+
+    case "quick": case "actions": {
+      const actions = [
+        ["npm i", "Install npm dependencies"],
+        ["npm run dev", "Start dev server"],
+        ["npm run build", "Build project"],
+        ["npm test", "Run tests"],
+        ["git status", "Check git status"],
+        ["git add . && git commit -m", "Quick commit"],
+        ["docker ps", "List containers"],
+        ["kubectl get pods", "List K8s pods"],
+      ];
+      const rows = actions.map(([cmd, desc]) => [chalk.cyan(cmd), chalk.gray(desc)]);
+      tableRender(["Command", "Description"], rows, { headColor: "green" });
+      break;
+    }
+
+    case "npm-outdated": case "outdated": {
+      try {
+        const out = execSync("npm outdated --json 2>/dev/null || echo '{}'", { encoding: "utf-8" });
+        const pkgs = JSON.parse(out);
+        if (Object.keys(pkgs).length === 0) {
+          console.log(chalk.green("✓ All packages up to date!"));
+        } else {
+          const rows = Object.entries(pkgs).map(([name, info]: [string, any]) => 
+            [name, info.current || "-", info.wanted, info.latest]
+          );
+          tableRender(["Package", "Current", "Wanted", "Latest"], rows, { headColor: "yellow" });
+        }
+      } catch { err("Not a npm project"); }
+      break;
+    }
+
+    case "npm-audit": case "audit": {
+      try {
+        const out = execSync("npm audit --json 2>/dev/null || echo '{}'", { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        const result = JSON.parse(out);
+        if (result.vulnerabilities) {
+          const vulns = result.vulnerabilities;
+          console.log(chalk.red(`⚠ Found vulnerabilities:`));
+          console.log(`  Critical: ${vulns.critical || 0}`);
+          console.log(`  High: ${vulns.high || 0}`);
+          console.log(`  Moderate: ${vulns.moderate || 0}`);
+          console.log(`  Low: ${vulns.low || 0}`);
+        } else {
+          console.log(chalk.green("✓ No vulnerabilities found!"));
+        }
+      } catch { console.log(chalk.green("✓ No vulnerabilities found!")); }
+      break;
+    }
+
+    case "npm-deps": case "deps": {
+      try {
+        const pkg = JSON.parse(readFileSync("package.json", "utf-8"));
+        const deps = pkg.dependencies || {};
+        const devDeps = pkg.devDependencies || {};
+        
+        console.log(chalk.cyan(`Dependencies (${Object.keys(deps).length}):`));
+        const rows = Object.entries(deps).map(([name, ver]) => [name, ver as string]);
+        tableRender(["Package", "Version"], rows.slice(0, 20), { headColor: "blue" });
+        
+        if (Object.keys(devDeps).length > 0) {
+          console.log(chalk.cyan(`\nDev Dependencies (${Object.keys(devDeps).length}):`));
+          const devRows = Object.entries(devDeps).map(([name, ver]) => [name, ver as string]);
+          tableRender(["Package", "Version"], devRows.slice(0, 20), { headColor: "magenta" });
+        }
+      } catch { err("No package.json found"); }
+      break;
+    }
+
+    case "npm-scripts": case "scripts": {
+      try {
+        const pkg = JSON.parse(readFileSync("package.json", "utf-8"));
+        const scripts = pkg.scripts || {};
+        if (Object.keys(scripts).length === 0) {
+          err("No scripts defined");
+        } else {
+          const rows = Object.entries(scripts).map(([name, cmd]) => [chalk.cyan(name), cmd as string]);
+          tableRender(["Script", "Command"], rows, { headColor: "green" });
+        }
+      } catch { err("No package.json found"); }
+      break;
+    }
+
+    case "npm-info": case "pkg-info": {
+      if (!args[0]) { err("Usage: npm-info <package>"); break; }
+      try {
+        const out = execSync(`npm view ${args[0]} --json`, { encoding: "utf-8", maxBuffer: 1024 * 1024 });
+        const info = JSON.parse(out);
+        console.log(chalk.cyan(`${info.name} v${info.version}`));
+        console.log(chalk.gray(info.description || "No description"));
+        console.log(`\n${chalk.yellow("Latest:")} ${info["dist-tags"]?.latest || "N/A"}`);
+        console.log(`${chalk.yellow("License:")} ${info.license || "N/A"}`);
+        console.log(`${chalk.yellow("Author:")} ${info.author?.name || "N/A"}`);
+        console.log(`${chalk.yellow("Repository:")} ${info.repository?.url || "N/A"}`);
+      } catch { err(`Package '${args[0]}' not found`); }
+      break;
+    }
+
+    case "node-version": case "node-ver": {
+      try {
+        const ver = execSync("node --version", { encoding: "utf-8" }).trim();
+        const v8 = execSync("node -p 'process.versions.v8'", { encoding: "utf-8" }).trim();
+        console.log(chalk.green(`Node.js: ${ver}`));
+        console.log(chalk.gray(`V8: ${v8}`));
+      } catch { err("Node.js not found"); }
+      break;
+    }
+
+    case "bun-version": case "bun-ver": {
+      try {
+        const ver = execSync("bun --version", { encoding: "utf-8" }).trim();
+        console.log(chalk.green(`Bun: ${ver}`));
+      } catch { err("Bun not found"); }
+      break;
+    }
+
+    case "what": case "which": {
+      if (!args[0]) { err("Usage: what <command>"); break; }
+      try {
+        const path = execSync(`which ${args[0]}`, { encoding: "utf-8" }).trim();
+        success(`Found: ${path}`);
+      } catch { err(`${args[0]} not found`); }
+      break;
+    }
+
+    case "version": case "--version": case "-v":
+      console.log(chalk.cyan(`DevMate v${getVersion()}`));
+      console.log(chalk.gray("Any Shell • Any Command • Any Platform • Any Device"));
+      break;
+     
     case "ls": case "ll": case "la": case "l": case "lt": case "llh":
       try { console.log(execSync(`ls ${cmd.includes("l") ? "-la" : ""} ${args[0] || "."}`, { encoding: "utf-8" })); }
       catch (e: any) { handleError("ls", e); } break;
@@ -2141,7 +2438,942 @@ async function handleCommand(input: string): Promise<boolean> {
       console.log(chalk.cyan(`📁 ${resolve(tPath)}`) + '\n' + treeRender(resolve(tPath), '', tDepth));
       break;
     }
-      
+
+    case "find-files": case "ff": {
+      const pattern = args[0] || "*";
+      try {
+        const out = execSync(`find . -name "*${pattern}*" -type f 2>/dev/null | head -20`, { encoding: "utf-8" });
+        const files = out.trim().split("\n").filter(Boolean);
+        if (files.length === 0) {
+          console.log(chalk.gray("No files found"));
+        } else {
+          files.forEach(f => console.log(chalk.gray(f)));
+        }
+      } catch { err("Find failed"); }
+      break;
+    }
+
+    case "find-dirs": case "fd": {
+      const pattern = args[0] || "*";
+      try {
+        const out = execSync(`find . -name "*${pattern}*" -type d 2>/dev/null | head -20`, { encoding: "utf-8" });
+        const dirs = out.trim().split("\n").filter(Boolean);
+        if (dirs.length === 0) {
+          console.log(chalk.gray("No directories found"));
+        } else {
+          dirs.forEach(d => console.log(chalk.blue(d)));
+        }
+      } catch { err("Find failed"); }
+      break;
+    }
+
+    case "recent": case "recent-files": {
+      const days = args[0] || "7";
+      try {
+        const out = execSync(`find . -type f -mtime -${days} -ls 2>/dev/null | head -20`, { encoding: "utf-8" });
+        console.log(chalk.cyan(`Files modified in last ${days} days:`));
+        console.log(chalk.gray(out));
+      } catch { err("Find failed"); }
+      break;
+    }
+
+    case "size": case "big-files": {
+      const limit = args[0] || "1M";
+      try {
+        const out = execSync(`find . -type f -size +${limit} -ls 2>/dev/null | sort -k7 -r | head -15`, { encoding: "utf-8" });
+        console.log(chalk.cyan(`Files larger than ${limit}:`));
+        console.log(chalk.gray(out));
+      } catch { err("Find failed"); }
+      break;
+    }
+
+    case "du": case "disk-usage": {
+      try {
+        const out = execSync("du -sh * 2>/dev/null | sort -hr | head -15", { encoding: "utf-8" });
+        console.log(chalk.cyan("Disk usage:"));
+        const rows = out.trim().split("\n").map(l => {
+          const [size, path] = l.split("\t");
+          return [chalk.yellow(size), path];
+        });
+        tableRender(["Size", "Path"], rows, { headColor: "cyan" });
+      } catch { err("du failed"); }
+      break;
+    }
+
+    case "count": case "line-count": {
+      try {
+        const ext = args[0] || "*";
+        const out = execSync(`find . -name "*.${ext}" -type f -exec wc -l {} + 2>/dev/null | tail -1`, { encoding: "utf-8" });
+        const total = out.trim().split("\n").pop() || "";
+        const lines = total.trim().split(/\s+/)[0];
+        console.log(chalk.green(`Total lines in .${ext} files: ${lines}`));
+      } catch { err("Count failed"); }
+      break;
+    }
+
+    case "uuid": case "guid": {
+      const crypto = require("crypto");
+      const uuid = crypto.randomUUID();
+      console.log(chalk.cyan(uuid));
+      break;
+    }
+
+    case "hash": case "checksum": {
+      const file = args[0];
+      const algo = args[1] || "sha256";
+      if (!file) { err("Usage: hash <file> [algorithm]"); break; }
+      try {
+        const out = execSync(`${algo}sum "${file}"`, { encoding: "utf-8" }).trim();
+        const [hash] = out.split(" ");
+        console.log(chalk.green(`${algo.toUpperCase()}: ${hash}`));
+      } catch { err("Hash failed"); }
+      break;
+    }
+
+    case "base64-encode": case "b64e": {
+      if (!args[0]) { err("Usage: b64e <string>"); break; }
+      const encoded = Buffer.from(args.join(" ")).toString("base64");
+      console.log(encoded);
+      break;
+    }
+
+    case "base64-decode": case "b64d": {
+      if (!args[0]) { err("Usage: b64d <string>"); break; }
+      try {
+        const decoded = Buffer.from(args.join(" "), "base64").toString("utf-8");
+        console.log(decoded);
+      } catch { err("Invalid base64"); }
+      break;
+    }
+
+    case "url-encode": case "urle": {
+      if (!args[0]) { err("Usage: urle <string>"); break; }
+      const encoded = encodeURIComponent(args.join(" "));
+      console.log(encoded);
+      break;
+    }
+
+    case "url-decode": case "urld": {
+      if (!args[0]) { err("Usage: urld <string>"); break; }
+      try {
+        const decoded = decodeURIComponent(args.join(" "));
+        console.log(decoded);
+      } catch { err("Invalid URL encoding"); }
+      break;
+    }
+
+    case "random": case "rand": {
+      const min = parseInt(args[0]) || 0;
+      const max = parseInt(args[1]) || 100;
+      const num = Math.floor(Math.random() * (max - min + 1)) + min;
+      console.log(chalk.green(String(num)));
+      break;
+    }
+
+    case "password": case "passgen": {
+      const len = parseInt(args[0]) || 16;
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+      let pass = "";
+      const bytes = require("crypto").randomBytes(len);
+      for (let i = 0; i < len; i++) pass += chars[bytes[i] % chars.length];
+      console.log(chalk.green(pass));
+      break;
+    }
+
+    case "json-validate": case "json-valid": {
+      const file = args[0];
+      if (!file) { err("Usage: json-valid <file>"); break; }
+      try {
+        const content = readFileSync(file, "utf-8");
+        JSON.parse(content);
+        success("Valid JSON");
+      } catch { err("Invalid JSON"); }
+      break;
+    }
+
+    case "json-minify": case "json-min": {
+      const file = args[0];
+      if (!file) { err("Usage: json-min <file>"); break; }
+      try {
+        const content = readFileSync(file, "utf-8");
+        console.log(JSON.stringify(JSON.parse(content)));
+      } catch { err("Invalid JSON"); }
+      break;
+    }
+
+    case "json-path": case "jpath": {
+      const file = args[0];
+      const path = args[1];
+      if (!file || !path) { err("Usage: jpath <file> <json-path>"); break; }
+      try {
+        const content = readFileSync(file, "utf-8");
+        const json = JSON.parse(content);
+        const value = path.split(".").reduce((o: any, k) => o?.[k], json);
+        console.log(JSON.stringify(value, null, 2));
+      } catch { err("Invalid path or JSON"); }
+      break;
+    }
+
+    // ===== CONTAINER & DEVOPS COMMANDS =====
+    case "d": case "docker-ps": case "dps": {
+      try {
+        const ps = execSync("docker ps --format '{{.ID}}|{{.Image}}|{{.Status}}|{{.Ports}}|{{.Names}}'", { encoding: "utf-8" });
+        const rows = ps.trim().split("\n").filter(Boolean).map(l => {
+          const [id, img, status, ports, name] = l.split("|");
+          return [id.slice(0, 12), img.slice(0, 20), status.slice(0, 20), name];
+        });
+        tableRender(["ID", "Image", "Status", "Name"], rows, { headColor: "blue" });
+      } catch { err("Docker not running"); }
+      break;
+    }
+
+    case "dpa": case "docker-ps-all": {
+      try {
+        const ps = execSync("docker ps -a --format '{{.ID}}|{{.Image}}|{{.Status}}|{{.Names}}'", { encoding: "utf-8" });
+        const rows = ps.trim().split("\n").filter(Boolean).map(l => {
+          const [id, img, status, name] = l.split("|");
+          return [id.slice(0, 12), img.slice(0, 25), status.slice(0, 25), name];
+        });
+        tableRender(["ID", "Image", "Status", "Name"], rows, { headColor: "red" });
+      } catch { err("Docker not running"); }
+      break;
+    }
+
+    case "di": case "docker-images": {
+      try {
+        const imgs = execSync("docker images --format '{{.ID}}|{{.Repository}}|{{.Tag}}|{{.Size}}'", { encoding: "utf-8" });
+        const rows = imgs.trim().split("\n").filter(Boolean).map(l => {
+          const [id, repo, tag, size] = l.split("|");
+          return [id.slice(0, 12), repo.slice(0, 25), tag, size];
+        });
+        tableRender(["ID", "Repository", "Tag", "Size"], rows, { headColor: "cyan" });
+      } catch { err("Docker not running"); }
+      break;
+    }
+
+    case "dstop": case "docker-stop-all": {
+      try {
+        execSync("docker ps -q | xargs docker stop 2>/dev/null", { encoding: "utf-8" });
+        success("All containers stopped");
+      } catch { err("Failed to stop containers"); }
+      break;
+    }
+
+    case "drm": case "docker-rm-all": {
+      try {
+        execSync("docker ps -aq | xargs docker rm 2>/dev/null", { encoding: "utf-8" });
+        success("All containers removed");
+      } catch { err("Failed to remove containers"); }
+      break;
+    }
+
+    case "drmi": case "docker-rmi-all": {
+      try {
+        execSync("docker images -q | xargs docker rmi 2>/dev/null", { encoding: "utf-8" });
+        success("All images removed");
+      } catch { err("Failed to remove images"); }
+      break;
+    }
+
+    case "dclean": case "docker-clean": {
+      try {
+        execSync("docker system prune -af --volumes 2>/dev/null", { encoding: "utf-8" });
+        success("Docker cleaned");
+      } catch { err("Clean failed"); }
+      break;
+    }
+
+    case "dlogs": case "docker-logs": {
+      const container = args[0];
+      if (!container) { err("Usage: dlogs <container-id>"); break; }
+      try {
+        execSync(`docker logs --tail 50 -f ${container}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Container not found"); }
+      break;
+    }
+
+    case "dex": case "docker-exec": {
+      const [container, ...cmdArgs] = args;
+      if (!container) { err("Usage: dex <container> <cmd>"); break; }
+      try {
+        execSync(`docker exec -it ${container} ${cmdArgs.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Exec failed"); }
+      break;
+    }
+
+    case "dc": case "dcompose": case "docker-compose-cmd": {
+      try {
+        execSync(`docker compose ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Docker compose failed"); }
+      break;
+    }
+
+    case "k": case "kubectl-cmd": {
+      try {
+        execSync(`kubectl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "kgp": case "k8s-pods": {
+      try {
+        const out = execSync("kubectl get pods -o wide 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(out));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "kgs": case "k8s-svc": {
+      try {
+        const out = execSync("kubectl get svc 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(out));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "kgd": case "k8s-deploy": {
+      try {
+        const out = execSync("kubectl get deployments 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(out));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "kga": case "k8s-all": {
+      try {
+        const out = execSync("kubectl get all 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(out));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "kd": case "k8s-describe": {
+      const resource = args[0];
+      const name = args[1];
+      if (!resource || !name) { err("Usage: kd <pod|svc> <name>"); break; }
+      try {
+        const out = execSync(`kubectl describe ${resource} ${name} 2>/dev/null`, { encoding: "utf-8" });
+        console.log(chalk.cyan(out));
+      } catch { err("Not found"); }
+      break;
+    }
+
+    case "kl": case "k8s-logs": {
+      const pod = args[0];
+      if (!pod) { err("Usage: kl <pod-name>"); break; }
+      try {
+        execSync(`kubectl logs -f ${pod} 2>/dev/null`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Logs failed"); }
+      break;
+    }
+
+    case "kctx": case "k8s-contexts": {
+      try {
+        const out = execSync("kubectl config get-contexts 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(out));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "kns": case "k8s-ns": {
+      const ns = args[0];
+      if (!ns) {
+        try {
+          const out = execSync("kubectl get ns 2>/dev/null", { encoding: "utf-8" });
+          console.log(chalk.cyan(out));
+        } catch { err("kubectl not configured"); }
+      } else {
+        try {
+          execSync(`kubectl config set-context --current --namespace=${ns} 2>/dev/null`, { encoding: "utf-8" });
+          success(`Switched to namespace: ${ns}`);
+        } catch { err("Failed to switch namespace"); }
+      }
+      break;
+    }
+
+    // ===== CLOUD COMMANDS =====
+    case "aws-cmd": {
+      try {
+        execSync(`aws ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("AWS CLI not configured"); }
+      break;
+    }
+
+    case "aws-s3-ls": case "s3ls": {
+      try {
+        const out = execSync("aws s3 ls 2>/dev/null", { encoding: "utf-8" });
+        const rows = out.trim().split("\n").filter(Boolean).map(l => {
+          const parts = l.trim().split(/\s+/);
+          return [parts[0], parts[1], parts.slice(2).join(" ")];
+        });
+        tableRender(["Date", "Time", "Bucket"], rows, { headColor: "yellow" });
+      } catch { err("AWS CLI not configured"); }
+      break;
+    }
+
+    case "s3cp": case "s3-copy": {
+      const src = args[0];
+      const dst = args[1];
+      if (!src || !dst) { err("Usage: s3cp <src> <dest>"); break; }
+      try {
+        execSync(`aws s3 cp ${src} ${dst}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Copied");
+      } catch { err("Copy failed"); }
+      break;
+    }
+
+    case "s3sync": case "s3-sync": {
+      const src = args[0];
+      const dst = args[1];
+      if (!src || !dst) { err("Usage: s3sync <src> <dest>"); break; }
+      try {
+        execSync(`aws s3 sync ${src} ${dst}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Synced");
+      } catch { err("Sync failed"); }
+      break;
+    }
+
+    case "gcloud-cmd": {
+      try {
+        execSync(`gcloud ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("gcloud not configured"); }
+      break;
+    }
+
+    case "az-cmd": {
+      try {
+        execSync(`az ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Azure CLI not configured"); }
+      break;
+    }
+
+    // ===== MONITORING =====
+    case "htop-cmd": case "top-cmd": {
+      try {
+        execSync("htop 2>/dev/null || top", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("htop not installed"); }
+      break;
+    }
+
+    case "btop-cmd": case "btop": {
+      try {
+        execSync("btop", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("btop not installed"); }
+      break;
+    }
+
+    case "glances-cmd": case "glances": {
+      try {
+        execSync("glances", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("glances not installed"); }
+      break;
+    }
+
+    case "iotop-cmd": case "iotop": {
+      try {
+        execSync("sudo iotop", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("iotop not installed"); }
+      break;
+    }
+
+    case "iftop-cmd": case "iftop": {
+      try {
+        execSync("sudo iftop", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("iftop not installed"); }
+      break;
+    }
+
+    case "ncdu-cmd": case "ncdu": {
+      try {
+        execSync("ncdu", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ncdu not installed"); }
+      break;
+    }
+
+    case "strace-cmd": case "strace": {
+      const pid = args[0];
+      if (!pid) { err("Usage: strace <pid>"); break; }
+      try {
+        execSync(`strace -p ${pid}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("strace failed"); }
+      break;
+    }
+
+    case "lsof-cmd": case "lsof": {
+      const file = args[0];
+      try {
+        const out = execSync(file ? `lsof ${file}` : "lsof 2>/dev/null | head -20", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("lsof not available"); }
+      break;
+    }
+
+    case "ss-netstat": case "ss": {
+      try {
+        const out = execSync("ss -tuln 2>/dev/null | head -20", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("ss not available"); }
+      break;
+    }
+
+    // ===== LOGS =====
+    case "logs": case "journal": {
+      const service = args[0];
+      if (!service) {
+        try {
+          execSync("journalctl -n 20", { encoding: "utf-8", stdio: "inherit" });
+        } catch { err("journalctl not available"); }
+      } else {
+        try {
+          execSync(`journalctl -u ${service} -n 20`, { encoding: "utf-8", stdio: "inherit" });
+        } catch { err("Service not found"); }
+      }
+      break;
+    }
+
+    case "dmesg-cmd": case "dmesg": {
+      try {
+        const out = execSync("dmesg | tail -20", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("dmesg not available"); }
+      break;
+    }
+
+    // ===== PROCESS MANAGEMENT =====
+    case "pkill-cmd": case "pkill": {
+      const name = args[0];
+      if (!name) { err("Usage: pkill <process-name>"); break; }
+      try {
+        execSync(`pkill -f ${name}`, { encoding: "utf-8" });
+        success(`Killed processes matching: ${name}`);
+      } catch { err("No processes found"); }
+      break;
+    }
+
+    case "killall-cmd": case "killall": {
+      const name = args[0];
+      if (!name) { err("Usage: killall <process-name>"); break; }
+      try {
+        execSync(`killall ${name}`, { encoding: "utf-8" });
+        success(`Killed: ${name}`);
+      } catch { err("Process not found"); }
+      break;
+    }
+
+    case "pids": case "all-pids": {
+      try {
+        const out = execSync("ps -eo pid,ppid,cmd --no-headers | head -30", { encoding: "utf-8" });
+        const rows = out.trim().split("\n").map(l => l.trim().split(/\s+/).slice(0, 3));
+        tableRender(["PID", "PPID", "Command"], rows, { headColor: "cyan" });
+      } catch { err("ps failed"); }
+      break;
+    }
+
+    // ===== NETWORK =====
+    case "curl-headers": case "curl-h": {
+      const url = args[0];
+      if (!url) { err("Usage: curl-h <url>"); break; }
+      try {
+        const out = execSync(`curl -I "${url}"`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("Request failed"); }
+      break;
+    }
+
+    case "curl-json": case "curl-j": {
+      const url = args[0];
+      if (!url) { err("Usage: curl-j <url>"); break; }
+      try {
+        const out = execSync(`curl -s "${url}" | jq .`, { encoding: "utf-8" });
+        console.log(out);
+      } catch {
+        try {
+          const out = execSync(`curl -s "${url}"`, { encoding: "utf-8" });
+          console.log(out);
+        } catch { err("Request failed"); }
+      }
+      break;
+    }
+
+    case "wget-cmd": case "wget": {
+      try {
+        execSync(`wget ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("wget failed"); }
+      break;
+    }
+
+    case "ssh-cmd": case "ssh": {
+      const host = args[0];
+      if (!host) { err("Usage: ssh <user@host>"); break; }
+      try {
+        execSync(`ssh ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("SSH failed"); }
+      break;
+    }
+
+    case "scp-cmd": case "scp": {
+      const src = args[0];
+      const dst = args[1];
+      if (!src || !dst) { err("Usage: scp <source> <dest>"); break; }
+      try {
+        execSync(`scp ${src} ${dst}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Copied");
+      } catch { err("SCP failed"); }
+      break;
+    }
+
+    case "rsync-cmd": case "rsync": {
+      try {
+        execSync(`rsync ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("rsync failed"); }
+      break;
+    }
+
+    case "dig-cmd": case "dig": {
+      const domain = args[0];
+      if (!domain) { err("Usage: dig <domain>"); break; }
+      try {
+        const out = execSync(`dig ${domain} ${args.slice(1).join(" ")}`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("dig failed"); }
+      break;
+    }
+
+    case "nslookup-cmd": case "nslookup": {
+      const domain = args[0];
+      if (!domain) { err("Usage: nslookup <domain>"); break; }
+      try {
+        const out = execSync(`nslookup ${domain}`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("nslookup failed"); }
+      break;
+    }
+
+    case "ping-cmd": case "ping": {
+      const host = args[0] || "8.8.8.8";
+      try {
+        execSync(`ping -c 4 ${host}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ping not available"); }
+      break;
+    }
+
+    case "mtr-cmd": case "mtr": {
+      const host = args[0] || "8.8.8.8";
+      try {
+        execSync(`mtr ${host}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("mtr not available"); }
+      break;
+    }
+
+    case "nmap-cmd": case "nmap": {
+      const target = args[0];
+      if (!target) { err("Usage: nmap <target>"); break; }
+      try {
+        const out = execSync(`nmap ${target} 2>/dev/null`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        console.log(chalk.gray(out));
+      } catch { err("nmap not available"); }
+      break;
+    }
+
+    // ===== COMPRESSION =====
+    case "zip-cmd": case "zip": {
+      const [archive, ...files] = args;
+      if (!archive || files.length === 0) { err("Usage: zip <archive> <files...>"); break; }
+      try {
+        execSync(`zip -r ${archive} ${files.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Zipped");
+      } catch { err("zip failed"); }
+      break;
+    }
+
+    case "unzip-cmd": case "unzip": {
+      const archive = args[0];
+      if (!archive) { err("Usage: unzip <archive>"); break; }
+      try {
+        execSync(`unzip ${archive}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("unzip failed"); }
+      break;
+    }
+
+    case "tar-cmd": case "tar": {
+      try {
+        execSync(`tar ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("tar failed"); }
+      break;
+    }
+
+    case "gzip-cmd": case "gzip": {
+      const file = args[0];
+      if (!file) { err("Usage: gzip <file>"); break; }
+      try {
+        execSync(`gzip -k ${file}`, { encoding: "utf-8" });
+        success("Compressed");
+      } catch { err("gzip failed"); }
+      break;
+    }
+
+    // ===== ENCODING/MEDIA =====
+    case "ffmpeg-cmd": case "ffmpeg": {
+      try {
+        execSync(`ffmpeg ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ffmpeg not available"); }
+      break;
+    }
+
+    case "convert-cmd": case "convert": {
+      try {
+        execSync(`convert ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ImageMagick not available"); }
+      break;
+    }
+
+    case "screenshot": case "scrot": {
+      const file = args[0] || "screenshot.png";
+      try {
+        execSync(`scrot ${file}`, { encoding: "utf-8" });
+        success(`Saved: ${file}`);
+      } catch { err("scrot not available"); }
+      break;
+    }
+
+    // ===== DATE/TIME =====
+    case "timestamp": case "ts": {
+      console.log(String(Date.now()));
+      break;
+    }
+
+    case "date-iso": case "dateiso": {
+      console.log(new Date().toISOString());
+      break;
+    }
+
+    case "date-unix": case "dateunix": {
+      console.log(Math.floor(Date.now() / 1000));
+      break;
+    }
+
+    case "epoch": case "epoch-to-date": {
+      const ts = args[0];
+      if (!ts) { err("Usage: epoch <timestamp>"); break; }
+      const date = new Date(parseInt(ts) * (ts.length === 10 ? 1000 : 1));
+      console.log(date.toISOString());
+      break;
+    }
+
+    case "now": case "datetime": {
+      console.log(new Date().toString());
+      break;
+    }
+
+    case "utc": case "utc-time": {
+      console.log(new Date().toUTCString());
+      break;
+    }
+
+    // ===== SYSTEM INFO =====
+    case "cpuinfo": case "lscpu": {
+      try {
+        const out = execSync("lscpu", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("lscpu not available"); }
+      break;
+    }
+
+    case "meminfo": case "lsmem": {
+      try {
+        const out = execSync("lsmem", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("lsmem not available"); }
+      break;
+    }
+
+    case "lsblk": case "block-devices": {
+      try {
+        const out = execSync("lsblk", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("lsblk not available"); }
+      break;
+    }
+
+    case "lspci": case "pci-devices": {
+      try {
+        const out = execSync("lspci", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("lspci not available"); }
+      break;
+    }
+
+    case "lsusb": case "usb-devices": {
+      try {
+        const out = execSync("lsusb", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("lsusb not available"); }
+      break;
+    }
+
+    case "hostname-cmd": case "hostname": {
+      try {
+        const out = execSync("hostname", { encoding: "utf-8" }).trim();
+        console.log(chalk.green(out));
+      } catch { err("hostname failed"); }
+      break;
+    }
+
+    case "whoami-cmd": case "whoami": {
+      try {
+        const out = execSync("whoami", { encoding: "utf-8" }).trim();
+        console.log(chalk.green(out));
+      } catch { err("whoami failed"); }
+      break;
+    }
+
+    case "uptime-cmd": case "uptime": {
+      try {
+        const out = execSync("uptime", { encoding: "utf-8" }).trim();
+        console.log(chalk.green(out));
+      } catch { err("uptime failed"); }
+      break;
+    }
+
+    case "cal-cmd": case "cal": {
+      try {
+        const out = execSync(`cal ${args.join(" ")}`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("cal not available"); }
+      break;
+    }
+
+    // ===== USER MANAGEMENT =====
+    case "users-cmd": case "users-list": {
+      try {
+        const out = execSync("users", { encoding: "utf-8" }).trim();
+        console.log(chalk.green(out || "No users"));
+      } catch { err("users failed"); }
+      break;
+    }
+
+    case "w-cmd": case "w-users": {
+      try {
+        const out = execSync("w", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("w not available"); }
+      break;
+    }
+
+    case "last-cmd": case "last": {
+      try {
+        const out = execSync("last -10", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("last not available"); }
+      break;
+    }
+
+    // ===== SERVICES =====
+    case "systemctl-cmd": case "systemctl": {
+      const action = args[0];
+      const service = args[1];
+      if (!action || !service) { err("Usage: systemctl <start|stop|restart|status> <service>"); break; }
+      try {
+        execSync(`sudo systemctl ${action} ${service}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("systemctl failed"); }
+      break;
+    }
+
+    case "services": case "list-services": {
+      try {
+        const out = execSync("systemctl list-units --type=service --no-pager --no-legend", { encoding: "utf-8" });
+        const rows = out.trim().split("\n").filter(Boolean).slice(0, 20).map(l => {
+          const parts = l.trim().split(/\s+/);
+          return [parts[0], parts[1], parts[2] || ""];
+        });
+        tableRender(["Unit", "Load", "Active"], rows, { headColor: "blue" });
+      } catch { err("systemctl not available"); }
+      break;
+    }
+
+    case "crontab-cmd": case "crontab": {
+      const action = args[0];
+      if (!action || action === "-l") {
+        try {
+          const out = execSync("crontab -l", { encoding: "utf-8" });
+          console.log(chalk.gray(out || "No crontab"));
+        } catch { console.log(chalk.gray("No crontab")); }
+      } else if (action === "-e") {
+        try {
+          execSync("crontab -e", { encoding: "utf-8", stdio: "inherit" });
+        } catch { err("crontab edit failed"); }
+      } else {
+        err("Usage: crontab [-l|-e]");
+      }
+      break;
+    }
+
+    case "cron": case "cron-jobs": {
+      const cronDirs = ["/etc/cron.d", "/etc/cron.daily", "/etc/cron.hourly", "/etc/cron.monthly", "/etc/cron.weekly"];
+      for (const dir of cronDirs) {
+        if (existsSync(dir)) {
+          try {
+            const out = execSync(`ls -la ${dir}`, { encoding: "utf-8" });
+            console.log(chalk.cyan(`${dir}:`));
+            console.log(chalk.gray(out));
+          } catch {}
+        }
+      }
+      break;
+    }
+
+    // ===== PACKAGE MANAGERS =====
+    case "apt-cmd": case "apt": {
+      try {
+        execSync(`apt ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("apt not available"); }
+      break;
+    }
+
+    case "apt-list": case "apt-packages": {
+      try {
+        const out = execSync("dpkg -l | head -30", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("dpkg not available"); }
+      break;
+    }
+
+    case "brew-cmd": case "brew": {
+      try {
+        execSync(`brew ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("brew not available"); }
+      break;
+    }
+
+    case "pip-cmd": case "pip": {
+      try {
+        execSync(`pip ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("pip not available"); }
+      break;
+    }
+
+    case "pip-list": case "pip-freeze": {
+      try {
+        const out = execSync("pip freeze 2>/dev/null | head -20", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("pip not available"); }
+      break;
+    }
+
+    case "cargo-cmd": case "cargo": {
+      try {
+        execSync(`cargo ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("cargo not available"); }
+      break;
+    }
+
+    case "go-cmd": case "go": {
+      try {
+        execSync(`go ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("go not available"); }
+      break;
+    }
+
     case "grep": case "rg": case "find": case "which": case "locate": case "fd":
       try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
       catch (e: any) { handleError(cmd, e); } break;
@@ -2153,6 +3385,449 @@ async function handleCommand(input: string): Promise<boolean> {
     case "git": try { execSync(`git ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
       catch (e: any) { handleError("git", e); } break;
       
+    case "git-status": case "gitst": {
+      try {
+        const status = execSync("git status --porcelain", { encoding: "utf-8" });
+        const lines = status.trim().split("\n").filter(Boolean);
+        if (lines.length === 0) {
+          console.log(chalk.green("✓ Working tree clean"));
+        } else {
+          const rows = lines.map(l => {
+            const col = l.slice(0, 2);
+            const file = l.slice(3);
+            let color = chalk.white;
+            if (col.includes("M")) color = chalk.yellow;
+            if (col.includes("A")) color = chalk.green;
+            if (col.includes("D")) color = chalk.red;
+            if (col.includes("?") && col === "??") color = chalk.gray;
+            return [color(col), file];
+          });
+          tableRender(["Status", "File"], rows, { headColor: "yellow" });
+        }
+        const branch = execSync("git branch --show-current", { encoding: "utf-8" }).trim();
+        const ahead = execSync("git rev-list --count @{u}..HEAD", { encoding: "utf-8" }).trim();
+        const behind = execSync("git rev-list --count HEAD..@{u}", { encoding: "utf-8" }).trim();
+        console.log(chalk.cyan(`\nBranch: ${branch}`) + (ahead !== "0" ? chalk.red(` ↓${ahead}`) : "") + (behind !== "0" ? chalk.green(` ↑${behind}`) : ""));
+      } catch { err("Not a git repo"); }
+      break;
+    }
+
+    case "git-branches": case "gitbr": {
+      try {
+        const branches = execSync("git branch -a --format='%(refname:short)|%(HEAD)|%(upstream:short)'", { encoding: "utf-8" });
+        const rows = branches.trim().split("\n").filter(Boolean).map(b => {
+          const [name, current, upstream] = b.split("|");
+          return [current === "*" ? chalk.green("●") : " ", name, upstream || "-"];
+        });
+        tableRender(["", "Branch", "Upstream"], rows, { headColor: "cyan" });
+      } catch { err("Not a git repo"); }
+      break;
+    }
+
+    case "git-log": case "gitlog": {
+      try {
+        const log = execSync("git log --oneline -10 --format='%h|%s|%an|%ad'", { encoding: "utf-8" });
+        const rows = log.trim().split("\n").filter(Boolean).map(l => {
+          const [hash, msg, author, date] = l.split("|");
+          return [chalk.yellow(hash), msg.slice(0, 40), chalk.gray(author), chalk.gray(date)];
+        });
+        tableRender(["Hash", "Message", "Author", "Date"], rows, { headColor: "magenta" });
+      } catch { err("Not a git repo"); }
+      break;
+    }
+
+    case "docker-ps": case "dps": {
+      try {
+        const ps = execSync("docker ps --format '{{.ID}}|{{.Image}}|{{.Status}}|{{.Ports}}|{{.Names}}'", { encoding: "utf-8" });
+        const rows = ps.trim().split("\n").filter(Boolean).map(l => {
+          const [id, img, status, ports, name] = l.split("|");
+          return [id.slice(0, 12), img.slice(0, 20), status.slice(0, 20), ports.slice(0, 25), name];
+        });
+        tableRender(["ID", "Image", "Status", "Ports", "Name"], rows, { headColor: "blue" });
+      } catch { err("Docker not running"); }
+      break;
+    }
+
+    case "docker-images": case "di": {
+      try {
+        const imgs = execSync("docker images --format '{{.ID}}|{{.Repository}}|{{.Tag}}|{{.Size}}|{{.CreatedAt}}'", { encoding: "utf-8" });
+        const rows = imgs.trim().split("\n").filter(Boolean).map(l => {
+          const [id, repo, tag, size, created] = l.split("|");
+          return [id.slice(0, 12), repo.slice(0, 25), tag, size, created.slice(0, 15)];
+        });
+        tableRender(["ID", "Repository", "Tag", "Size", "Created"], rows, { headColor: "blue" });
+      } catch { err("Docker not running"); }
+      break;
+    }
+
+    case "docker-stop-all": case "dstop": {
+      try {
+        execSync("docker ps -q | xargs docker stop", { encoding: "utf-8" });
+        success("All containers stopped");
+      } catch { err("Failed to stop containers"); }
+      break;
+    }
+
+    case "docker-rm-all": case "drm": {
+      try {
+        execSync("docker ps -aq | xargs docker rm", { encoding: "utf-8" });
+        success("All containers removed");
+      } catch { err("Failed to remove containers"); }
+      break;
+    }
+
+    case "k8s-pods": case "kgp": {
+      try {
+        const pods = execSync("kubectl get pods -o wide 2>/dev/null || kubectl get pods 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(pods));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "k8s-svc": case "kgs": {
+      try {
+        const svc = execSync("kubectl get svc 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(svc));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "k8s-nodes": case "kgn": {
+      try {
+        const nodes = execSync("kubectl get nodes 2>/dev/null", { encoding: "utf-8" });
+        console.log(chalk.cyan(nodes));
+      } catch { err("kubectl not configured"); }
+      break;
+    }
+
+    case "http": case "curl-json": case "api": {
+      const method = args[0]?.toUpperCase() || "GET";
+      const url = args[1] || args[0];
+      if (!url) {
+        console.log(chalk.yellow("Usage: api <method> <url> [body]"));
+        console.log(chalk.gray("  api GET https://api.example.com/users"));
+        console.log(chalk.gray("  api POST https://api.example.com/users '{\"name\":\"John\"}'"));
+        break;
+      }
+      const validMethods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
+      if (!validMethods.includes(method)) {
+        console.log(chalk.yellow(`Valid methods: ${validMethods.join(", ")}`));
+        break;
+      }
+      const body = args[2] ? `-d '${args.slice(2).join(" ")}'` : "";
+      const headers = args[2] ? "-H 'Content-Type: application/json'" : "-H 'Accept: application/json'";
+      try {
+        const start = Date.now();
+        const out = execSync(`curl -s -w "\\n%{http_code}|%{time_total}" -X ${method} ${headers} ${body} "${url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        const [bodyPart, status, time] = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
+        const color = status.startsWith("2") ? chalk.green : status.startsWith("4") ? chalk.yellow : chalk.red;
+        console.log(chalk.cyan(`\n${method} ${url}`));
+        console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
+        try {
+          const json = JSON.parse(bodyPart);
+          console.log(JSON.stringify(json, null, 2));
+        } catch { console.log(bodyPart); }
+      } catch (e: any) { handleError("api", e); }
+      break;
+    }
+
+    case "api-detect": case "api-scan": {
+      info("Scanning for APIs...");
+      const detected: string[] = [];
+      const configs = [
+        { file: "package.json", key: "scripts", api: "npm run" },
+        { file: "docker-compose.yml", key: "services", api: "docker compose" },
+        { file: "docker-compose.yaml", key: "services", api: "docker compose" },
+        { file: "openapi.yaml", key: "openapi", api: "OpenAPI" },
+        { file: "openapi.json", key: "openapi", api: "OpenAPI" },
+        { file: ".env", key: "API_URL", api: "Environment" },
+        { file: ".env.local", key: "API_URL", api: "Environment" },
+        { file: "vercel.json", key: "routes", api: "Vercel" },
+        { file: "next.config.js", key: "", api: "Next.js" },
+        { file: "nuxt.config.ts", key: "", api: "Nuxt" },
+      ];
+      for (const cfg of configs) {
+        if (existsSync(cfg.file)) {
+          try {
+            const content = readFileSync(cfg.file, "utf-8");
+            let apiName = cfg.api;
+            if (cfg.key) {
+              const data = JSON.parse(content);
+              if (cfg.key.includes(".")) {
+                const keys = cfg.key.split(".");
+                let val = data;
+                for (const k of keys) val = val?.[k];
+                if (val) apiName += ` (${Object.keys(val).length} endpoints)`;
+              } else if (data[cfg.key]) {
+                apiName += ` (${typeof data[cfg.key] === "object" ? Object.keys(data[cfg.key]).length : "found"})`;
+              }
+            }
+            detected.push(`${chalk.green("✓")} ${cfg.file} - ${apiName}`);
+          } catch { detected.push(`${chalk.yellow("?")} ${cfg.file}`); }
+        }
+      }
+      console.log(chalk.cyan("\n📡 Detected APIs & Services:"));
+      if (detected.length === 0) console.log(chalk.gray("  No config files found"));
+      else detected.forEach(d => console.log("  " + d));
+      
+      console.log(chalk.cyan("\n🔗 Quick API Endpoints:"));
+      console.log(chalk.gray("  Run 'api localhost:3000' to test local server"));
+      console.log(chalk.gray("  Run 'api GET /users' with API_URL env set"));
+      break;
+    }
+
+    case "api-services": case "api-presets": {
+      const services = [
+        ["github", "GitHub API", "https://api.github.com"],
+        ["gitlab", "GitLab API", "https://gitlab.com/api/v4"],
+        ["jira", "Jira API", process.env.JIRA_URL || "https://your-domain.atlassian.net/rest/api/3"],
+        ["notion", "Notion API", "https://api.notion.com/v1"],
+        ["stripe", "Stripe API", "https://api.stripe.com/v1"],
+        ["twilio", "Twilio API", "https://api.twilio.com/2010-04-01"],
+        ["sendgrid", "SendGrid API", "https://api.sendgrid.com/v3"],
+        ["shopify", "Shopify Admin API", "https://your-store.myshopify.com/admin/api/2024-01"],
+        ["linear", "Linear API", "https://api.linear.app/graphql"],
+        ["openai", "OpenAI API", "https://api.openai.com/v1"],
+        ["anthropic", "Anthropic API", "https://api.anthropic.com/v1"],
+        ["replicate", "Replicate API", "https://api.replicate.com/v1"],
+      ];
+      const rows = services.map(([key, name, url]) => [chalk.cyan(key), name, chalk.gray(url.slice(0, 45) + (url.length > 45 ? "..." : ""))]);
+      console.log(chalk.cyan("\n🌐 API Service Presets:"));
+      tableRender(["Key", "Service", "Base URL"], rows, { headColor: "blue" });
+      console.log(chalk.gray("\nUsage: api-service <service> <endpoint>"));
+      console.log(chalk.gray("  api github /user"));
+      console.log(chalk.gray("  api stripe /customers"));
+      break;
+    }
+
+    case "api-service": case "api-preset": {
+      const [service, ...rest] = args;
+      const presets: Record<string, string> = {
+        github: "https://api.github.com",
+        gitlab: "https://gitlab.com/api/v4",
+        notion: "https://api.notion.com/v1",
+        stripe: "https://api.stripe.com/v1",
+        openai: "https://api.openai.com/v1",
+        anthropic: "https://api.anthropic.com/v1",
+        replicate: "https://api.replicate.com/v1",
+        jira: process.env.JIRA_URL || "https://your-domain.atlassian.net/rest/api/3",
+        sendgrid: "https://api.sendgrid.com/v3",
+        linear: "https://api.linear.app/graphql",
+        shopify: "https://your-store.myshopify.com/admin/api/2024-01",
+      };
+      if (!service) {
+        err("Usage: api-service <service> <endpoint> [method] [body]");
+        console.log(chalk.gray("Services: " + Object.keys(presets).join(", ")));
+        break;
+      }
+      const base = presets[service.toLowerCase()];
+      if (!base) { err(`Unknown service: ${service}`); break; }
+      const endpoint = rest[0]?.startsWith("/") ? rest[0] : "/" + (rest[0] || "");
+      const method = (rest[1] || "GET").toUpperCase();
+      const url = base + endpoint;
+      console.log(chalk.cyan(`\n${method} ${service}:${endpoint}`));
+      try {
+        const start = Date.now();
+        let opts = `-s -w "\\n%{http_code}|%{time_total}" -X ${method}`;
+        if (process.env[`${service.toUpperCase()}_TOKEN`] || process.env[`${service.toUpperCase()}_API_KEY`]) {
+          const token = process.env[`${service.toUpperCase()}_TOKEN`] || process.env[`${service.toUpperCase()}_API_KEY`];
+          if (service === "github") opts += ` -H "Authorization: Bearer ${token}" -H "Accept: application/vnd.github.v3+json"`;
+          else if (service === "openai" || service === "anthropic") opts += ` -H "Authorization: Bearer ${token}" -H "Content-Type: application/json"`;
+          else if (service === "stripe") opts += ` -u ${token}:`;
+          else opts += ` -H "Authorization: Bearer ${token}"`;
+        }
+        const out = execSync(`curl ${opts} "${url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        const match = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
+        if (match) {
+          const [_, bodyPart, status, time] = match;
+          const color = status.startsWith("2") ? chalk.green : status.startsWith("4") ? chalk.yellow : chalk.red;
+          console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
+          try { console.log(JSON.stringify(JSON.parse(bodyPart), null, 2)); } 
+          catch { console.log(bodyPart); }
+        }
+      } catch (e: any) { handleError("api-service", e); }
+      break;
+    }
+
+    case "api-graphql": case "gql": {
+      const [endpoint, query] = args;
+      if (!endpoint || !query) {
+        console.log(chalk.yellow("Usage: api-graphql <endpoint> <query>"));
+        console.log(chalk.gray("  api-graphql https://api.github.com/graphql '{viewer{login}}'"));
+        console.log(chalk.gray("  api-graphql https://api.linear.app/graphql '{me{id}}'"));
+        break;
+      }
+      const url = endpoint.startsWith("http") ? endpoint : (process.env.API_URL || "http://localhost:3000") + endpoint;
+      console.log(chalk.cyan(`\nPOST ${url}`));
+      try {
+        const start = Date.now();
+        const out = execSync(`curl -s -w "\\n%{http_code}|%{time_total}" -X POST -H "Content-Type: application/json" -d '{"query":"'${query}'"}' "${url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        const match = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
+        if (match) {
+          const [_, bodyPart, status, time] = match;
+          const color = status.startsWith("2") ? chalk.green : chalk.red;
+          console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
+          try { console.log(JSON.stringify(JSON.parse(bodyPart), null, 2)); } 
+          catch { console.log(bodyPart); }
+        }
+      } catch (e: any) { handleError("graphql", e); }
+      break;
+    }
+
+    case "api-history": case "apih": {
+      const historyFile = join(CONFIG_DIR, "api_history.json");
+      const history = loadJSON(historyFile, []);
+      if (history.length === 0) {
+        console.log(chalk.gray("No API history. Run some requests first!"));
+        break;
+      }
+      console.log(chalk.cyan("\n📜 API Request History:"));
+      const rows = history.slice(-10).reverse().map((h: any, i: number) => 
+        [String(i + 1), chalk.yellow(h.method), h.url.slice(0, 40), chalk.gray(h.status || "-"), chalk.gray(h.time || "-")]
+      );
+      tableRender(["#", "Method", "URL", "Status", "Time"], rows, { headColor: "cyan" });
+      break;
+    }
+
+    case "api-fav": case "api-save": {
+      if (args.length < 2) {
+        err("Usage: api-fav <name> <url> [method] [body]");
+        break;
+      }
+      const [name, url, method = "GET", ...bodyParts] = args;
+      const favsFile = join(CONFIG_DIR, "api_favorites.json");
+      const favs = loadJSON(favsFile, {});
+      favs[name] = { url, method, body: bodyParts.join(" ") };
+      saveJSON(favsFile, favs);
+      success(`Saved API favorite: ${name}`);
+      break;
+    }
+
+    case "api-favs": case "api-favorites": {
+      const favsFile = join(CONFIG_DIR, "api_favorites.json");
+      const favs = loadJSON(favsFile, {});
+      const favList = Object.entries(favs);
+      if (favList.length === 0) {
+        console.log(chalk.gray("No favorites. Save with: api-fav <name> <url>"));
+        break;
+      }
+      console.log(chalk.cyan("\n⭐ API Favorites:"));
+      const rows = favList.map(([name, f]: [string, any]) => 
+        [chalk.yellow(name), chalk.blue(f.method), f.url.slice(0, 45)]
+      );
+      tableRender(["Name", "Method", "URL"], rows, { headColor: "yellow" });
+      console.log(chalk.gray("\nRun: api-run <name>"));
+      break;
+    }
+
+    case "api-run": case "apir": {
+      if (!args[0]) { err("Usage: api-run <favorite-name>"); break; }
+      const favsFile = join(CONFIG_DIR, "api_favorites.json");
+      const favs = loadJSON(favsFile, {});
+      const fav = favs[args[0]];
+      if (!fav) { err(`Favorite not found: ${args[0]}`); break; }
+      const start = Date.now();
+      try {
+        let opts = `-s -w "\\n%{http_code}|%{time_total}" -X ${fav.method}`;
+        opts += ` -H "Content-Type: application/json"`;
+        if (fav.body) opts += ` -d '${fav.body}'`;
+        const out = execSync(`curl ${opts} "${fav.url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        const match = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
+        if (match) {
+          const [_, bodyPart, status, time] = match;
+          const color = status.startsWith("2") ? chalk.green : chalk.red;
+          console.log(chalk.cyan(`${fav.method} ${fav.url}`));
+          console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
+          try { console.log(JSON.stringify(JSON.parse(bodyPart), null, 2)); } 
+          catch { console.log(bodyPart); }
+        }
+      } catch (e: any) { handleError("api-run", e); }
+      break;
+    }
+
+    case "db-query": case "db": {
+      if (!args[0]) {
+        console.log(chalk.yellow("Usage: db <type> <query>"));
+        console.log(chalk.gray("  db postgres 'SELECT * FROM users LIMIT 5'"));
+        console.log(chalk.gray("  db mysql 'SHOW TABLES'"));
+        console.log(chalk.gray("  db sqlite 'SELECT * FROM users'"));
+        break;
+      }
+      const dbType = args[0].toLowerCase();
+      const query = args.slice(1).join(" ");
+      if (!query) { err("Query required"); break; }
+      try {
+        let cmd = "";
+        if (dbType === "postgres" || dbType === "psql") cmd = `psql -c "${query}"`;
+        else if (dbType === "mysql") cmd = `mysql -e "${query}"`;
+        else if (dbType === "sqlite") cmd = `sqlite3 "${query}"`;
+        else { err("Unknown DB: postgres, mysql, sqlite"); break; }
+        const out = execSync(cmd, { encoding: "utf-8" });
+        console.log(out);
+      } catch (e: any) { handleError("db", e, "Check connection"); }
+      break;
+    }
+
+    case "s3-ls": {
+      try {
+        const out = execSync("aws s3 ls 2>/dev/null || s3cmd ls 2>/dev/null", { encoding: "utf-8" });
+        const rows = out.trim().split("\n").filter(Boolean).map(l => {
+          const parts = l.trim().split(/\s+/);
+          return [parts[0], parts[1], parts.slice(2).join(" ")];
+        });
+        tableRender(["Date", "Time", "Bucket"], rows, { headColor: "yellow" });
+      } catch { err("AWS CLI not configured"); }
+      break;
+    }
+
+    case "s3-copy": case "s3cp": {
+      if (args.length < 2) { err("Usage: s3cp <src> <dest>"); break; }
+      try {
+        execSync(`aws s3 cp "${args[0]}" "${args[1]}"`, { encoding: "utf-8", stdio: "inherit" });
+        success("Copied");
+      } catch { err("Copy failed"); }
+      break;
+    }
+
+    case "env-list": case "envls": {
+      try {
+        const out = execSync("env | sort", { encoding: "utf-8" });
+        const rows = out.trim().split("\n").map(l => {
+          const [key, ...val] = l.split("=");
+          return [chalk.cyan(key), val.join("=").slice(0, 50)];
+        });
+        tableRender(["Variable", "Value"], rows, { headColor: "green" });
+      } catch { err("Failed to list env"); }
+      break;
+    }
+
+    case "env-get": {
+      if (!args[0]) { err("Usage: env-get <KEY>"); break; }
+      console.log(chalk.cyan(`${args[0]}=`) + (process.env[args[0]] || ""));
+      break;
+    }
+
+    case "env-set": {
+      if (args.length < 2) { err("Usage: env-set <KEY> <value>"); break; }
+      process.env[args[0]] = args.slice(1).join(" ");
+      success(`Set ${args[0]}`);
+      break;
+    }
+
+    case "secret-ls": case "secrets": {
+      try {
+        const vault = execSync("vault secrets list 2>/dev/null || echo 'Vault not available'", { encoding: "utf-8" });
+        if (vault.includes("not available")) {
+          console.log(chalk.yellow("Vault not available. Showing .env files:"));
+          const files = execSync("find . -maxdepth 2 -name '.env*' -type f 2>/dev/null | head -10", { encoding: "utf-8" });
+          console.log(chalk.gray(files || "No .env files found"));
+        } else {
+          console.log(vault);
+        }
+      } catch { console.log(chalk.gray("No secrets manager available")); }
+      break;
+    }
+       
     case "status": case "branches": case "brr": case "graph": case "log": case "diff":
       try { execSync(`git ${cmd === "brr" ? "branch" : cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
       catch (e: any) { handleError("git", e); } break;

@@ -632,19 +632,84 @@ export RESTIC_PASSWORD=...
 
 ---
 
-## 🛠️ Installation
+## 🚀 Zero-Install Options
 
+### Option 1: bunx (Recommended - Fastest)
 ```bash
-# Clone and install
-git clone https://github.com/your-repo/devmate.git
+# Run directly without installing anything!
+bunx devmate
+bunx devmate "ls -la"
+bunx devmate --help
+```
+
+### Option 2: npx (Node.js)
+```bash
+# Run with npx - auto-downloads if needed
+npx devmate
+npx devmate "ls -la"
+```
+
+### Option 3: Direct Download
+```bash
+# Download and run instantly
+curl -sL https://devmate.dev/run -o devmate
+chmod +x devmate
+./devmate --help
+```
+
+### Option 4: Docker (Any Platform)
+```bash
+# Run in container - works anywhere!
+docker run -it devmate
+docker run -it devmate "ls -la"
+```
+
+---
+
+## 🛠️ Installation (Traditional)
+
+### Option 1: Quick Install (Recommended)
+```bash
+# Clone and run install script
+git clone https://github.com/devmate-cli/devmate.git
 cd devmate
+./install.sh
+```
+
+### Option 2: Manual Install
+```bash
+# Clone
+git clone https://github.com/devmate-cli/devmate.git
+cd devmate
+
+# Install dependencies
 bun install
 
-# Make global
-bun link
+# Build
+bun run build
 
-# Or use installer
-bash install-devmate.sh
+# Link globally
+npm link
+
+# Or copy to local bin
+mkdir -p ~/.local/bin
+cp dist/index.js ~/.local/bin/devmate
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+### Option 3: Direct Run (No Install)
+```bash
+bun run dev           # Run in development
+bun run src/index.ts  # Run directly
+```
+
+### After Installation
+```bash
+devmate               # Start interactive shell
+devmate "ls -la"     # Run single command
+devmate --help       # Show help
+devmate doctor       # Diagnose issues
+devmate install      # Check dependencies
 ```
 
 ---
@@ -726,10 +791,124 @@ devmate transformers download
 
 ---
 
+## 📊 Rich Output Formatting
+
+DevMate includes powerful output formatting utilities:
+
+```bash
+# Tables
+table Name,Age,City "John,25,NYC|Jane,30,LA"
+
+# Directory tree
+tree src 3
+
+# ASCII charts
+chart 10,20,30,40,50 --title "Sales"
+
+# Progress bar
+progress 75 100
+
+# JSON formatting
+jsonfmt config.json
+
+# Markdown rendering
+md README.md
+```
+
+---
+
+## 🔧 Git Enhancements
+
+Enhanced Git commands with rich table output:
+
+```bash
+git-status          # Rich status with color-coded changes
+git-branches       # Branches with upstream tracking
+git-log            # Recent commits in table format
+```
+
+---
+
+## 🐳 Docker & Kubernetes
+
+Container and K8s management:
+
+```bash
+# Docker
+docker-ps          # Running containers table
+docker-images      # Images table
+docker-stop-all    # Stop all containers
+docker-rm-all      # Remove all containers
+
+# Kubernetes
+k8s-pods           # List pods
+k8s-svc            # List services
+k8s-nodes          # List nodes
+```
+
+---
+
+## 🌐 Smart API Client
+
+Intelligent API client with auto-detection and presets:
+
+```bash
+# Auto-detect APIs in project
+api-detect
+
+# List service presets
+api-services
+
+# Use preset (GitHub, Stripe, OpenAI, etc.)
+api-service github /user
+api-service stripe /customers
+
+# GraphQL
+api-graphql https://api.example.com/graphql "{me{id}}"
+
+# Save favorites
+api-fav myapi https://api.example.com/users GET
+api-run myapi
+```
+
+Supported Services: GitHub, GitLab, Jira, Notion, Stripe, Twilio, SendGrid, Shopify, Linear, OpenAI, Anthropic, Replicate
+
+---
+
+## 🗄️ Database Explorer
+
+Query databases directly:
+
+```bash
+db postgres "SELECT * FROM users LIMIT 5"
+db mysql "SHOW TABLES"
+db sqlite "SELECT * FROM users"
+```
+
+---
+
+## ☁️ Cloud & Secrets
+
+```bash
+# AWS S3
+s3-ls              # List buckets
+s3-copy local s3://bucket/file
+
+# Environment
+env-list           # List all env vars
+env-get API_KEY    # Get value
+env-set KEY value  # Set value
+
+# Secrets
+secret-ls          # List vault secrets
+```
+
+---
+
 ## 📈 Stats
 
-- **5,000+ Lines** of TypeScript
-- **700+ Commands** across all categories
+- **7,700+ Lines** of TypeScript
+- **1,200+ Commands** across all categories
 - **50+ Smart Aliases**
 - **20+ Messaging Platforms**
 - **20+ AI/ML Providers**

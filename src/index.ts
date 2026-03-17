@@ -237,6 +237,60 @@ const COMPLETIONS = [
   "systemctl-cmd","systemctl","services","list-services","crontab-cmd","crontab","cron","cron-jobs",
   // Package Managers
   "apt-cmd","apt","apt-list","apt-packages","brew-cmd","brew","pip-cmd","pip","pip-list","pip-freeze","cargo-cmd","cargo","go-cmd","go",
+  // AI/ML
+  "openai-cmd","ollama-cmd","huggingface-cmd","hf-cmd",
+  // Database
+  "mysql-cmd","psql-cmd","sqlite-cmd","mongosh-cmd","mongo-cmd","redis-cmd",
+  // Web/Server
+  "http-server","serve","python-server","pyserver","node-server","nserver","php-server","phpserver","ngrok-cmd","ngrok","localtunnel","lt",
+  // Templates
+  "new","create",
+  // REPLs
+  "node-repl","nodei","python-repl","pythoni","bun-repl","buni","ruby-repl","rubyi","php-repl","phpi",
+  // Watchers
+  "nodemon-cmd","nodemon","watch","watcher",
+  // Git
+  "git-init","ginit","git-clone","gclone","git-undo","gundo","git-clean","gclean","git-amend","gamend","git-stash-pop","gsp","git-cherry-pick","gcp","git-tag","gtag","git-branch","gbranch","git-fetch-all","gfetch","git-rebase-i","grebase",
+  // Docker Compose
+  "dc-up","dcup","dc-down","dcdown","dc-logs","dclogs","dc-restart","dcrestart",
+  // K8s
+  "k8s-apply","kapply","k8s-delete","kdelete","k8s-logs-f","klogsf","k8s-exec","kexec","k8s-port-forward","kpf",
+  // Terraform/Ansible
+  "terraform-cmd","tf","tf-init","tfi","tf-apply","tfa","tf-destroy","tfd","ansible-cmd","ansible","ansible-playbook","apb","ansible-vault","avault",
+  // Editors
+  "vim-cmd","vim","nano-cmd","nano","code-cmd","code","subl-cmd","subl","zed-cmd","zed",
+  // GitHub/GitLab
+  "gh-cmd","gh","gh-pr","gpr","gh-issue","gissue","gh-run","grun","glab-cmd","glab",
+  // Terminal Multiplexers
+  "tmux-cmd","tmux","tmux-new","tmuxn","tmux-ls","tmuxs","tmux-attach","tmuxa","screen-cmd","screen",
+  // Backup/Sync
+  "restic-cmd","restic","rclone-cmd","rclone","rclone-ls","rclsl","rclone-copy","rclonecp","duplicati-cmd","duplicati",
+  // SystemD
+  "systemd-cmd","systemctl","journalctl-cmd","journal","systemd-timer","timers",
+  // Network/SSH
+  "ssh-keygen-cmd","ssh-keygen","ssh-copy-id","sshcpid","sshfs-cmd","sshfs",
+  // Encryption
+  "gpg-encrypt","gpg-e","gpg-decrypt","gpg-d","gpg-key-gen","gpg-gen","age-cmd","age","openssl-cmd","openssl",
+  // Containers
+  "podman-cmd","podman","buildah-cmd","buildah","skopeo-cmd","skopeo","nerdctl-cmd","nerdctl",
+  // CI/CD
+  "jenkins-cmd","jenkins","drone-cmd","drone","circleci-cmd","circleci","travis-cmd","travis",
+  // Registries
+  "skopeo-inspect","skopi","regctl-cmd","regctl",
+  // Package Managers
+  "rpm-cmd","rpm","dpkg-cmd","dpkg","snap-cmd","snap","flatpak-cmd","flatpak",
+  // Code Quality
+  "eslint-cmd","eslint","prettier-cmd","prettier","tsc-cmd","tsc","biome-cmd","biome","ruff-cmd","ruff","mypy-cmd","mypy","pylint-cmd","pylint",
+  // Testing
+  "jest-cmd","jest","vitest-cmd","vitest","pytest-cmd","pytest","mocha-cmd","mocha","playwright-cmd","playwright","cypress-cmd","cypress",
+  // Build Tools
+  "make-cmd","make","cmake-cmd","cmake","gradle-cmd","gradle","maven-cmd","maven","bazel-cmd","bazel","pnpm-cmd","pnpm","yarn-cmd","yarn",
+  // Debugging
+  "lldb-cmd","lldb","gdb-cmd","gdb","delve-cmd","dlv","rubygems-cmd","gem","composer-cmd","composer","pipenv-cmd","pipenv","poetry-cmd","poetry","uv-cmd","uv",
+  // Note Taking
+  "vimwiki-cmd","vimwiki","tiddlywiki-cmd","tiddlywiki","jupyter-cmd","jupyter","labview-cmd","labview",
+  // Container Orchestration
+  "helm-cmd","helm","helm-install","helmi","helm-ls","helmls","k9s-cmd","k9s","skaffold-cmd","skaffold","tilt-cmd","tilt","istio-cmd","istio","linkerd-cmd","linkerd",
   // Basic
   "ls","cd","cat","pwd","mkdir","rm","touch","cp","mv","ln","tree",
   "grep","find","which","locate","rg","fd","bat","exa","eza","lf","yazi",
@@ -3371,6 +3425,2156 @@ async function handleCommand(input: string): Promise<boolean> {
       try {
         execSync(`go ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
       } catch { err("go not available"); }
+      break;
+    }
+
+    // ===== AI/ML COMMANDS =====
+    case "openai-cmd": {
+      const prompt = args.join(" ");
+      if (!prompt) { err("Usage: openai <prompt>"); break; }
+      try {
+        const out = execSync(`echo "${prompt}" | openai`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        console.log(chalk.cyan(out));
+      } catch { err("OpenAI not configured"); }
+      break;
+    }
+
+    case "ollama-cmd": {
+      const prompt = args.join(" ");
+      if (!prompt) { err("Usage: ollama <prompt>"); break; }
+      try {
+        const model = args[0].startsWith(":") ? args[0].slice(1) : "llama2";
+        const out = execSync(`ollama run ${model} "${prompt}"`, { encoding: "utf-8", maxBuffer: 10 * 1024 * 1024 });
+        console.log(chalk.cyan(out));
+      } catch { err("Ollama not running"); }
+      break;
+    }
+
+    case "huggingface-cmd": case "hf-cmd": {
+      const model = args[0];
+      if (!model) { err("Usage: hf <model>"); break; }
+      try {
+        const out = execSync(`huggingface-cli inference --model ${model}`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
+        console.log(chalk.cyan(out));
+      } catch { err("HuggingFace not configured"); }
+      break;
+    }
+
+    // ===== DATABASE COMMANDS =====
+    case "mysql-cmd": {
+      try {
+        execSync(`mysql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("MySQL not available"); }
+      break;
+    }
+
+    case "psql-cmd": {
+      try {
+        execSync(`psql ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("PostgreSQL not available"); }
+      break;
+    }
+
+    case "sqlite-cmd": {
+      const db = args[0];
+      const query = args.slice(1).join(" ");
+      if (!db || !query) { err("Usage: sqlite <database> <query>"); break; }
+      try {
+        const out = execSync(`sqlite3 "${db}" "${query}"`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("Query failed"); }
+      break;
+    }
+
+    case "mongosh-cmd": case "mongo-cmd": {
+      try {
+        execSync(`mongosh ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("MongoDB not available"); }
+      break;
+    }
+
+    case "redis-cmd": {
+      try {
+        execSync(`redis-cli ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Redis not available"); }
+      break;
+    }
+
+    // ===== WEB/SERVER =====
+    case "http-server": case "serve": {
+      const port = args[0] || "3000";
+      const dir = args[1] || ".";
+      try {
+        execSync(`npx serve ${dir} -p ${port}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("serve failed"); }
+      break;
+    }
+
+    case "python-server": case "pyserver": {
+      const port = args[0] || "8000";
+      const dir = args[1] || ".";
+      try {
+        execSync(`cd ${dir} && python3 -m http.server ${port}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Python server failed"); }
+      break;
+    }
+
+    case "node-server": case "nserver": {
+      const script = args[0] || "index.js";
+      try {
+        execSync(`node ${script}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Node server failed"); }
+      break;
+    }
+
+    case "php-server": case "phpserver": {
+      const port = args[0] || "8000";
+      try {
+        execSync(`php -S localhost:${port}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("PHP not available"); }
+      break;
+    }
+
+    case "ngrok-cmd": case "ngrok": {
+      const port = args[0];
+      if (!port) { err("Usage: ngrok <port>"); break; }
+      try {
+        execSync(`ngrok http ${port}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ngrok not configured"); }
+      break;
+    }
+
+    case "localtunnel": case "lt": {
+      const port = args[0] || "3000";
+      try {
+        execSync(`npx localtunnel --port ${port}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("localtunnel failed"); }
+      break;
+    }
+
+    // ===== TEMPLATES/SCAFFOLD =====
+    case "new": case "create": {
+      const type = args[0];
+      const name = args[1];
+      if (!type || !name) {
+        console.log(chalk.cyan("Usage: new <type> <name>"));
+        console.log("Types: react, vue, next, nuxt, express, api, component, hook");
+        break;
+      }
+      try {
+        if (type === "react") {
+          execSync(`npm create vite@latest ${name} -- --template react`, { encoding: "utf-8", stdio: "inherit" });
+        } else if (type === "vue") {
+          execSync(`npm create vite@latest ${name} -- --template vue`, { encoding: "utf-8", stdio: "inherit" });
+        } else if (type === "next") {
+          execSync(`npx create-next-app ${name}`, { encoding: "utf-8", stdio: "inherit" });
+        } else if (type === "nuxt") {
+          execSync(`npx nuxi@latest init ${name}`, { encoding: "utf-8", stdio: "inherit" });
+        } else if (type === "express") {
+          execSync(`npx express-generator ${name}`, { encoding: "utf-8", stdio: "inherit" });
+        } else if (type === "api") {
+          mkdirSync(name);
+          writeFileSync(join(name, "package.json"), JSON.stringify({ name, version: "1.0.0", type: "module", scripts: { dev: "node index.js" }, dependencies: { express: "^4.18.0" } }, null, 2));
+          writeFileSync(join(name, "index.js"), 'import express from "express";\\nconst app = express();\\napp.get("/", (req, res) => res.json({ ok: true }));\\napp.listen(3000, () => console.log("Server on 3000"));\n');
+          success(`Created ${name}/ with basic API structure`);
+        } else if (type === "component") {
+          const comp = name.charAt(0).toUpperCase() + name.slice(1);
+          const code = `export function ${comp}() {\n  return <div>${comp}</div>;\n}\n`;
+          console.log(chalk.gray(code));
+        } else if (type === "hook") {
+          const hookName = name.startsWith("use") ? name : "use" + name.charAt(0).toUpperCase() + name.slice(1);
+          const code = `import { useState, useEffect } from "react";\\n\\nexport function ${hookName}() {\\n  const [state, setState] = useState(null);\\n  useEffect(() => {\\n    // TODO\\n  }, []);\\n  return state;\\n}\n`;
+          console.log(chalk.gray(code));
+        } else {
+          err(`Unknown type: ${type}`);
+        }
+      } catch { err("Creation failed"); }
+      break;
+    }
+
+    // ===== REPLS =====
+    case "node-repl": case "nodei": {
+      try {
+        execSync("node -i", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Node not available"); }
+      break;
+    }
+
+    case "python-repl": case "pythoni": {
+      try {
+        execSync("python3 -i", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Python not available"); }
+      break;
+    }
+
+    case "bun-repl": case "buni": {
+      try {
+        execSync("bun repl", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Bun not available"); }
+      break;
+    }
+
+    case "ruby-repl": case "rubyi": {
+      try {
+        execSync("irb", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Ruby not available"); }
+      break;
+    }
+
+    case "php-repl": case "phpi": {
+      try {
+        execSync("php -a", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("PHP not available"); }
+      break;
+    }
+
+    // ===== FILE WATCHERS =====
+    case "nodemon-cmd": case "nodemon": {
+      const script = args[0] || ".";
+      try {
+        execSync(`nodemon ${script}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("nodemon not installed"); }
+      break;
+    }
+
+    case "watch": case "watcher": {
+      const cmd = args[0];
+      const dir = args[1] || ".";
+      if (!cmd) { err("Usage: watch <command> [dir]"); break; }
+      try {
+        execSync(`watchman watch ${dir} && watchman -p "${cmd}"`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("watchman not installed"); }
+      break;
+    }
+
+    // ===== GIT ENHANCEMENTS =====
+    case "git-init": case "ginit": {
+      const name = args[0];
+      if (!name) { err("Usage: git-init <repo-name>"); break; }
+      try {
+        execSync(`mkdir ${name} && cd ${name} && git init`, { encoding: "utf-8", stdio: "inherit" });
+        success(`Initialized ${name}/`);
+      } catch { err("Init failed"); }
+      break;
+    }
+
+    case "git-clone": case "gclone": {
+      const repo = args[0];
+      const dir = args[1];
+      if (!repo) { err("Usage: git-clone <repo> [dir]"); break; }
+      try {
+        execSync(`git clone ${repo} ${dir || ""}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Cloned!");
+      } catch { err("Clone failed"); }
+      break;
+    }
+
+    case "git-undo": case "gundo": {
+      try {
+        execSync("git reset --soft HEAD~1", { encoding: "utf-8" });
+        success("Undone last commit");
+      } catch { err("Nothing to undo"); }
+      break;
+    }
+
+    case "git-clean": case "gclean": {
+      try {
+        execSync("git clean -fd", { encoding: "utf-8" });
+        success("Cleaned untracked files");
+      } catch { err("Clean failed"); }
+      break;
+    }
+
+    case "git-amend": case "gamend": {
+      const msg = args.join(" ");
+      try {
+        if (msg) {
+          execSync(`git commit --amend -m "${msg}"`, { encoding: "utf-8" });
+          success("Amended commit");
+        } else {
+          execSync("git commit --amend --no-edit", { encoding: "utf-8" });
+          success("Amended last commit");
+        }
+      } catch { err("Amend failed"); }
+      break;
+    }
+
+    case "git-stash-pop": case "gsp": {
+      try {
+        execSync("git stash pop", { encoding: "utf-8" });
+        success("Stash applied");
+      } catch { err("No stash to pop"); }
+      break;
+    }
+
+    case "git-cherry-pick": case "gcp": {
+      const hash = args[0];
+      if (!hash) { err("Usage: gcp <commit-hash>"); break; }
+      try {
+        execSync(`git cherry-pick ${hash}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Cherry-picked!");
+      } catch { err("Pick failed"); }
+      break;
+    }
+
+    case "git-tag": case "gtag": {
+      const tag = args[0];
+      const msg = args[1];
+      if (!tag) { err("Usage: gtag <tag> [message]"); break; }
+      try {
+        execSync(msg ? `git tag -a ${tag} -m "${msg}"` : `git tag ${tag}`, { encoding: "utf-8" });
+        success(`Tagged: ${tag}`);
+      } catch { err("Tag failed"); }
+      break;
+    }
+
+    case "git-branch": case "gbranch": {
+      const name = args[0];
+      const action = args[1] || "-d";
+      if (!name) {
+        try {
+          execSync("git branch -a", { encoding: "utf-8", stdio: "inherit" });
+        } catch { err("Branch list failed"); }
+      } else {
+        try {
+          execSync(`git branch ${action} ${name}`, { encoding: "utf-8" });
+          success(`Branch ${action === "-d" ? "deleted" : "created"}: ${name}`);
+        } catch { err("Branch failed"); }
+      }
+      break;
+    }
+
+    case "git-fetch-all": case "gfetch": {
+      try {
+        execSync("git fetch --all", { encoding: "utf-8" });
+        success("Fetched all remotes");
+      } catch { err("Fetch failed"); }
+      break;
+    }
+
+    case "git-rebase-i": case "grebase": {
+      const branch = args[0] || "HEAD~3";
+      try {
+        execSync(`git rebase -i ${branch}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Rebase failed"); }
+      break;
+    }
+
+    // ===== DOCKER COMPOSE =====
+    case "dc-up": case "dcup": {
+      try {
+        execSync("docker compose up -d", { encoding: "utf-8", stdio: "inherit" });
+        success("Started!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "dc-down": case "dcdown": {
+      try {
+        execSync("docker compose down", { encoding: "utf-8", stdio: "inherit" });
+        success("Stopped!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "dc-logs": case "dclogs": {
+      try {
+        execSync("docker compose logs -f", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Logs failed"); }
+      break;
+    }
+
+    case "dc-restart": case "dcrestart": {
+      try {
+        execSync("docker compose restart", { encoding: "utf-8", stdio: "inherit" });
+        success("Restarted!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    // ===== KUBERNETES =====
+    case "k8s-apply": case "kapply": {
+      const file = args[0];
+      if (!file) { err("Usage: kapply <file.yaml>"); break; }
+      try {
+        execSync(`kubectl apply -f ${file}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Applied!");
+      } catch { err("Apply failed"); }
+      break;
+    }
+
+    case "k8s-delete": case "kdelete": {
+      const type = args[0];
+      const name = args[1];
+      if (!type || !name) { err("Usage: kdelete <pod|svc> <name>"); break; }
+      try {
+        execSync(`kubectl delete ${type} ${name}`, { encoding: "utf-8" });
+        success("Deleted!");
+      } catch { err("Delete failed"); }
+      break;
+    }
+
+    case "k8s-logs-f": case "klogsf": {
+      const pod = args[0];
+      if (!pod) { err("Usage: klogsf <pod>"); break; }
+      try {
+        execSync(`kubectl logs -f ${pod}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Logs failed"); }
+      break;
+    }
+
+    case "k8s-exec": case "kexec": {
+      const pod = args[0];
+      const cmd = args.slice(1).join(" ");
+      if (!pod || !cmd) { err("Usage: kexec <pod> <command>"); break; }
+      try {
+        execSync(`kubectl exec -it ${pod} -- ${cmd}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Exec failed"); }
+      break;
+    }
+
+    case "k8s-port-forward": case "kpf": {
+      const pod = args[0];
+      const localPort = args[1] || "8080";
+      const podPort = args[2] || "80";
+      if (!pod) { err("Usage: kpf <pod> [localPort] [podPort]"); break; }
+      try {
+        execSync(`kubectl port-forward ${pod} ${localPort}:${podPort}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Port forward failed"); }
+      break;
+    }
+
+    // ===== TERRAFORM/ANSIBLE =====
+    case "terraform-cmd": case "tf": {
+      try {
+        execSync(`terraform ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Terraform not available"); }
+      break;
+    }
+
+    case "tf-init": case "tfi": {
+      try {
+        execSync("terraform init", { encoding: "utf-8", stdio: "inherit" });
+        success("Initialized!");
+      } catch { err("Init failed"); }
+      break;
+    }
+
+    case "tf-apply": case "tfa": {
+      try {
+        execSync("terraform apply -auto-approve", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Apply failed"); }
+      break;
+    }
+
+    case "tf-destroy": case "tfd": {
+      try {
+        execSync("terraform destroy -auto-approve", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Destroy failed"); }
+      break;
+    }
+
+    case "ansible-cmd": case "ansible": {
+      try {
+        execSync(`ansible ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Ansible not available"); }
+      break;
+    }
+
+    case "ansible-playbook": case "apb": {
+      const playbook = args[0];
+      if (!playbook) { err("Usage: apb <playbook.yml>"); break; }
+      try {
+        execSync(`ansible-playbook ${playbook}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Playbook failed"); }
+      break;
+    }
+
+    case "ansible-vault": case "avault": {
+      const action = args[0];
+      const file = args[1];
+      if (!action || !file) { err("Usage: avault <encrypt|decrypt|edit> <file>"); break; }
+      try {
+        execSync(`ansible-vault ${action} ${file}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Vault failed"); }
+      break;
+    }
+
+    // ===== EDITORS =====
+    case "vim-cmd": case "vim": {
+      const file = args[0];
+      try {
+        execSync(`vim ${file || ""}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("vim not available"); }
+      break;
+    }
+
+    case "nano-cmd": case "nano": {
+      const file = args[0];
+      try {
+        execSync(`nano ${file || ""}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("nano not available"); }
+      break;
+    }
+
+    case "code-cmd": case "code": {
+      const file = args[0];
+      try {
+        execSync(`code ${file || "."}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("VS Code not available"); }
+      break;
+    }
+
+    case "subl-cmd": case "subl": {
+      const file = args[0];
+      try {
+        execSync(`subl ${file || ""}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Sublime not available"); }
+      break;
+    }
+
+    case "zed-cmd": case "zed": {
+      const file = args[0];
+      try {
+        execSync(`zed ${file || "."}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("zed not available"); }
+      break;
+    }
+
+    // ===== GITHUB/GITLAB =====
+    case "gh-cmd": case "gh": {
+      try {
+        execSync(`gh ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("GitHub CLI not available"); }
+      break;
+    }
+
+    case "gh-pr": case "gpr": {
+      try {
+        const out = execSync("gh pr list --limit 10", { encoding: "utf-8" });
+        const rows = out.trim().split("\n").map(l => {
+          const parts = l.split(/\t/);
+          return [parts[0] || "", parts[1] || "", (parts[2] || "").slice(0, 30)];
+        });
+        tableRender(["#", "Title", "Status"], rows, { headColor: "green" });
+      } catch { err("gh not available"); }
+      break;
+    }
+
+    case "gh-issue": case "gissue": {
+      try {
+        const out = execSync("gh issue list --limit 10", { encoding: "utf-8" });
+        const rows = out.trim().split("\n").map(l => {
+          const parts = l.split(/\t/);
+          return [parts[0] || "", parts[1] || "", (parts[2] || "").slice(0, 30)];
+        });
+        tableRender(["#", "Title", "Labels"], rows, { headColor: "yellow" });
+      } catch { err("gh not available"); }
+      break;
+    }
+
+    case "gh-run": case "grun": {
+      try {
+        const out = execSync("gh run list --limit 10", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("gh not available"); }
+      break;
+    }
+
+    case "glab-cmd": case "glab": {
+      try {
+        execSync(`glab ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("GitLab CLI not available"); }
+      break;
+    }
+
+    // ===== TERMINAL MULTIPLEXERS =====
+    case "tmux-cmd": case "tmux": {
+      try {
+        execSync(`tmux ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("tmux not available"); }
+      break;
+    }
+
+    case "tmux-new": case "tmuxn": {
+      const name = args[0];
+      try {
+        execSync(`tmux new -d -s ${name || "dev"}`, { encoding: "utf-8" });
+        success(`Session: ${name || "dev"}`);
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "tmux-ls": case "tmuxs": {
+      try {
+        const out = execSync("tmux ls", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("No sessions"); }
+      break;
+    }
+
+    case "tmux-attach": case "tmuxa": {
+      const name = args[0] || "dev";
+      try {
+        execSync(`tmux attach -t ${name}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Session not found"); }
+      break;
+    }
+
+    case "screen-cmd": case "screen": {
+      try {
+        execSync(`screen ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("screen not available"); }
+      break;
+    }
+
+    // ===== BACKUP/SYNC =====
+    case "restic-cmd": case "restic": {
+      try {
+        execSync(`restic ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("restic not available"); }
+      break;
+    }
+
+    case "rclone-cmd": case "rclone": {
+      try {
+        execSync(`rclone ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("rclone not available"); }
+      break;
+    }
+
+    case "rclone-ls": case "rclsl": {
+      const remote = args[0];
+      if (!remote) { err("Usage: rclsl <remote:path>"); break; }
+      try {
+        const out = execSync(`rclone lsd ${remote}`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("rclone failed"); }
+      break;
+    }
+
+    case "rclone-copy": case "rclonecp": {
+      const src = args[0];
+      const dst = args[1];
+      if (!src || !dst) { err("Usage: rclonecp <source> <dest>"); break; }
+      try {
+        execSync(`rclone copy ${src} ${dst} -P`, { encoding: "utf-8", stdio: "inherit" });
+        success("Copied!");
+      } catch { err("Copy failed"); }
+      break;
+    }
+
+    case "duplicati-cmd": case "duplicati": {
+      err("Duplicati - use web UI at http://localhost:8200");
+      break;
+    }
+
+    // ===== SYSTEMD =====
+    case "systemd-cmd": case "systemctl": {
+      try {
+        execSync(`systemctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("systemd not available"); }
+      break;
+    }
+
+    case "journalctl-cmd": case "journal": {
+      try {
+        execSync(`journalctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("journalctl not available"); }
+      break;
+    }
+
+    case "systemd-timer": case "timers": {
+      try {
+        const out = execSync("systemctl list-timers --no-pager", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("systemd not available"); }
+      break;
+    }
+
+    // ===== NETWORK PROXY =====
+    case "ssh-keygen-cmd": case "ssh-keygen": {
+      const type = args[0] || "ed25519";
+      const file = args[1] || "~/.ssh/id_" + type;
+      try {
+        execSync(`ssh-keygen -t ${type} -f ${file} -N ""`, { encoding: "utf-8", stdio: "inherit" });
+        success(`Key generated: ${file}`);
+      } catch { err("Keygen failed"); }
+      break;
+    }
+
+    case "ssh-copy-id": case "sshcpid": {
+      const user = args[0];
+      const host = args[1];
+      if (!user || !host) { err("Usage: ssh-copy-id <user@host>"); break; }
+      try {
+        execSync(`ssh-copy-id ${user}@${host}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Key copied!");
+      } catch { err("Copy failed"); }
+      break;
+    }
+
+    case "sshfs-cmd": case "sshfs": {
+      const user = args[0];
+      const host = args[1];
+      const mount = args[2];
+      if (!user || !host || !mount) { err("Usage: sshfs <user@host> <mount-point>"); break; }
+      try {
+        execSync(`sshfs ${user}@${host}: ${mount}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Mounted!");
+      } catch { err("Mount failed"); }
+      break;
+    }
+
+    // ===== ENCRYPTION =====
+    case "gpg-encrypt": case "gpg-e": {
+      const file = args[0];
+      const recipient = args[1];
+      if (!file || !recipient) { err("Usage: gpg-e <file> <recipient-email>"); break; }
+      try {
+        execSync(`gpg -e -r ${recipient} ${file}`, { encoding: "utf-8" });
+        success("Encrypted!");
+      } catch { err("Encrypt failed"); }
+      break;
+    }
+
+    case "gpg-decrypt": case "gpg-d": {
+      const file = args[0];
+      if (!file) { err("Usage: gpg-d <file>"); break; }
+      try {
+        execSync(`gpg -d ${file}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Decrypt failed"); }
+      break;
+    }
+
+    case "gpg-key-gen": case "gpg-gen": {
+      try {
+        execSync("gpg --full-generate-key", { encoding: "utf-8", stdio: "inherit" });
+        success("Key generated!");
+      } catch { err("Keygen failed"); }
+      break;
+    }
+
+    case "age-cmd": case "age": {
+      try {
+        execSync(`age ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("age not available"); }
+      break;
+    }
+
+    case "openssl-cmd": case "openssl": {
+      try {
+        execSync(`openssl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("openssl not available"); }
+      break;
+    }
+
+    // ===== CONTAINERS =====
+    case "podman-cmd": case "podman": {
+      try {
+        execSync(`podman ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("podman not available"); }
+      break;
+    }
+
+    case "buildah-cmd": case "buildah": {
+      try {
+        execSync(`buildah ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("buildah not available"); }
+      break;
+    }
+
+    case "skopeo-cmd": case "skopeo": {
+      try {
+        execSync(`skopeo ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("skopeo not available"); }
+      break;
+    }
+
+    case "nerdctl-cmd": case "nerdctl": {
+      try {
+        execSync(`nerdctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("nerdctl not available"); }
+      break;
+    }
+
+    // ===== CI/CD =====
+    case "jenkins-cmd": case "jenkins": {
+      err("Jenkins - use web UI or CLI");
+      break;
+    }
+
+    case "drone-cmd": case "drone": {
+      try {
+        execSync(`drone ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("drone not available"); }
+      break;
+    }
+
+    case "circleci-cmd": case "circleci": {
+      try {
+        execSync(`circleci ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("circleci not available"); }
+      break;
+    }
+
+    case "travis-cmd": case "travis": {
+      try {
+        execSync(`travis ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("travis not available"); }
+      break;
+    }
+
+    // ===== CONTAINER REGISTRIES =====
+    case "skopeo-inspect": case "skopi": {
+      const img = args[0];
+      if (!img) { err("Usage: skopi <image>"); break; }
+      try {
+        const out = execSync(`skopeo inspect docker://${img}`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("Inspect failed"); }
+      break;
+    }
+
+    case "regctl-cmd": case "regctl": {
+      try {
+        execSync(`regctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("regctl not available"); }
+      break;
+    }
+
+    // ===== PACKAGE BUILD =====
+    case "rpm-cmd": case "rpm": {
+      try {
+        execSync(`rpm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("rpm not available"); }
+      break;
+    }
+
+    case "dpkg-cmd": case "dpkg": {
+      try {
+        execSync(`dpkg ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("dpkg not available"); }
+      break;
+    }
+
+    case "snap-cmd": case "snap": {
+      try {
+        execSync(`snap ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("snap not available"); }
+      break;
+    }
+
+    case "flatpak-cmd": case "flatpak": {
+      try {
+        execSync(`flatpak ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("flatpak not available"); }
+      break;
+    }
+
+    // ===== CODE QUALITY =====
+    case "eslint-cmd": case "eslint": {
+      try {
+        execSync(`eslint ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ESLint not available"); }
+      break;
+    }
+
+    case "prettier-cmd": case "prettier": {
+      try {
+        execSync(`prettier ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Prettier not available"); }
+      break;
+    }
+
+    case "tsc-cmd": case "tsc": {
+      try {
+        execSync(`tsc ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("TypeScript not available"); }
+      break;
+    }
+
+    case "biome-cmd": case "biome": {
+      try {
+        execSync(`biome ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("biome not available"); }
+      break;
+    }
+
+    case "ruff-cmd": case "ruff": {
+      try {
+        execSync(`ruff check ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ruff not available"); }
+      break;
+    }
+
+    case "mypy-cmd": case "mypy": {
+      try {
+        execSync(`mypy ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("mypy not available"); }
+      break;
+    }
+
+    case "pylint-cmd": case "pylint": {
+      try {
+        execSync(`pylint ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("pylint not available"); }
+      break;
+    }
+
+    // ===== TESTING =====
+    case "jest-cmd": case "jest": {
+      try {
+        execSync(`jest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Jest not available"); }
+      break;
+    }
+
+    case "vitest-cmd": case "vitest": {
+      try {
+        execSync(`vitest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("vitest not available"); }
+      break;
+    }
+
+    case "pytest-cmd": case "pytest": {
+      try {
+        execSync(`pytest ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("pytest not available"); }
+      break;
+    }
+
+    case "mocha-cmd": case "mocha": {
+      try {
+        execSync(`mocha ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("mocha not available"); }
+      break;
+    }
+
+    case "playwright-cmd": case "playwright": {
+      try {
+        execSync(`playwright ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Playwright not available"); }
+      break;
+    }
+
+    case "cypress-cmd": case "cypress": {
+      try {
+        execSync(`cypress ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Cypress not available"); }
+      break;
+    }
+
+    // ===== BUILD TOOLS =====
+    case "make-cmd": case "make": {
+      try {
+        execSync(`make ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("make not available"); }
+      break;
+    }
+
+    case "cmake-cmd": case "cmake": {
+      try {
+        execSync(`cmake ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("cmake not available"); }
+      break;
+    }
+
+    case "gradle-cmd": case "gradle": {
+      try {
+        execSync(`gradle ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("gradle not available"); }
+      break;
+    }
+
+    case "maven-cmd": case "maven": {
+      try {
+        execSync(`mvn ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Maven not available"); }
+      break;
+    }
+
+    case "bazel-cmd": case "bazel": {
+      try {
+        execSync(`bazel ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("bazel not available"); }
+      break;
+    }
+
+    case "pnpm-cmd": case "pnpm": {
+      try {
+        execSync(`pnpm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("pnpm not available"); }
+      break;
+    }
+
+    case "yarn-cmd": case "yarn": {
+      try {
+        execSync(`yarn ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("yarn not available"); }
+      break;
+    }
+
+    // ===== DEBUGGING =====
+    case "lldb-cmd": case "lldb": {
+      const file = args[0];
+      try {
+        execSync(`lldb ${file || ""}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("lldb not available"); }
+      break;
+    }
+
+    case "gdb-cmd": case "gdb": {
+      const file = args[0];
+      try {
+        execSync(`gdb ${file || ""}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("gdb not available"); }
+      break;
+    }
+
+    case "delve-cmd": case "dlv": {
+      try {
+        execSync(`dlv ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("delve not available"); }
+      break;
+    }
+
+    case "rubygems-cmd": case "gem": {
+      try {
+        execSync(`gem ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("RubyGems not available"); }
+      break;
+    }
+
+    case "composer-cmd": case "composer": {
+      try {
+        execSync(`composer ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Composer not available"); }
+      break;
+    }
+
+    case "pipenv-cmd": case "pipenv": {
+      try {
+        execSync(`pipenv ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("pipenv not available"); }
+      break;
+    }
+
+    case "poetry-cmd": case "poetry": {
+      try {
+        execSync(`poetry ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("poetry not available"); }
+      break;
+    }
+
+    case "uv-cmd": case "uv": {
+      try {
+        execSync(`uv ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("uv not available"); }
+      break;
+    }
+
+    // ===== NOTE TAKING =====
+    case "vimwiki-cmd": case "vimwiki": {
+      err("VimWiki - use vim with :VimWikiOpen");
+      break;
+    }
+
+    case "t备忘dium-cmd": case "tiddlywiki": {
+      try {
+        execSync(`tiddlywiki ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("TiddlyWiki not available"); }
+      break;
+    }
+
+    case "jupyter-cmd": case "jupyter": {
+      try {
+        execSync(`jupyter notebook`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("jupyter not available"); }
+      break;
+    }
+
+    case "labview-cmd": case "labview": {
+      err("LabVIEW - use GUI");
+      break;
+    }
+
+    // ===== CONTAINER ORCHESTRATION =====
+    case "helm-cmd": case "helm": {
+      try {
+        execSync(`helm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("helm not available"); }
+      break;
+    }
+
+    case "helm-install": case "helmi": {
+      const name = args[0];
+      const chart = args[1];
+      if (!name || !chart) { err("Usage: helmi <release-name> <chart>"); break; }
+      try {
+        execSync(`helm install ${name} ${chart}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Installed!");
+      } catch { err("Install failed"); }
+      break;
+    }
+
+    case "helm-ls": case "helmls": {
+      try {
+        const out = execSync("helm list", { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("helm not available"); }
+      break;
+    }
+
+    case "k9s-cmd": case "k9s": {
+      try {
+        execSync("k9s", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("k9s not available"); }
+      break;
+    }
+
+    case "skaffold-cmd": case "skaffold": {
+      try {
+        execSync(`skaffold ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("skaffold not available"); }
+      break;
+    }
+
+    case "tilt-cmd": case "tilt": {
+      try {
+        execSync(`tilt ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("tilt not available"); }
+      break;
+    }
+
+    case "istio-cmd": case "istio": {
+      try {
+        execSync(`istioctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("istioctl not available"); }
+      break;
+    }
+
+    case "linkerd-cmd": case "linkerd": {
+      try {
+        execSync(`linkerd ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("linkerd not available"); }
+      break;
+    }
+
+    // ===== MESSAGING/NOTIFICATIONS =====
+    case "telegram-send": case "tgs": {
+      const msg = args.join(" ");
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+      const token = process.env.TELEGRAM_BOT_TOKEN;
+      if (!msg) { err("Usage: tgs <message>"); break; }
+      if (!token || !chatId) { err("Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID"); break; }
+      try {
+        execSync(`curl -s -X POST "https://api.telegram.org/bot${token}/sendMessage" -d "chat_id=${chatId}&text=${msg}"`, { encoding: "utf-8" });
+        success("Sent!");
+      } catch { err("Send failed"); }
+      break;
+    }
+
+    case "discord-send": case "ds": {
+      const msg = args.join(" ");
+      const webhook = process.env.DISCORD_WEBHOOK;
+      if (!msg) { err("Usage: ds <message>"); break; }
+      if (!webhook) { err("Set DISCORD_WEBHOOK"); break; }
+      try {
+        execSync(`curl -s -X POST "${webhook}" -H "Content-Type: application/json" -d '{"content":"'${msg}'"}'`, { encoding: "utf-8" });
+        success("Sent!");
+      } catch { err("Send failed"); }
+      break;
+    }
+
+    case "slack-send": case "slacks": {
+      const msg = args.join(" ");
+      const webhook = process.env.SLACK_WEBHOOK;
+      if (!msg) { err("Usage: slacks <message>"); break; }
+      if (!webhook) { err("Set SLACK_WEBHOOK"); break; }
+      try {
+        execSync(`curl -s -X POST "${webhook}" -H "Content-Type: application/json" -d '{"text":"'${msg}'"}'`, { encoding: "utf-8" });
+        success("Sent!");
+      } catch { err("Send failed"); }
+      break;
+    }
+
+    case "sendgrid-send": case "sgs": {
+      const to = args[0];
+      const subject = args[1];
+      const msg = args.slice(2).join(" ");
+      if (!to || !subject || !msg) { err("Usage: sgs <to> <subject> <message>"); break; }
+      const key = process.env.SENDGRID_API_KEY;
+      if (!key) { err("Set SENDGRID_API_KEY"); break; }
+      try {
+        execSync(`curl -s -X POST "https://api.sendgrid.com/v3/mail/send" -H "Authorization: Bearer ${key}" -H "Content-Type: application/json" -d '{"personalizations":[{"to":[{"email":"'${to}'"}]}],"from":{"email":"noreply@localhost"},"subject":"'${subject}'","content":[{"type":"text/plain","value":"'${msg}'"}]}'`, { encoding: "utf-8" });
+        success("Sent!");
+      } catch { err("Send failed"); }
+      break;
+    }
+
+    case "mailgun-send": case "mgs": {
+      const to = args[0];
+      const subject = args[1];
+      const msg = args.slice(2).join(" ");
+      if (!to || !subject || !msg) { err("Usage: mgs <to> <subject> <message>"); break; }
+      const domain = process.env.MAILGUN_DOMAIN;
+      const key = process.env.MAILGUN_API_KEY;
+      if (!domain || !key) { err("Set MAILGUN_DOMAIN and MAILGUN_API_KEY"); break; }
+      try {
+        execSync(`curl -s -X POST "https://api.mailgun.net/v3/${domain}/messages" -u "api:${key}" -d "from=noreply@${domain}&to=${to}&subject=${subject}&text=${msg}"`, { encoding: "utf-8" });
+        success("Sent!");
+      } catch { err("Send failed"); }
+      break;
+    }
+
+    // ===== CLOUD SERVICES =====
+    case "vercel-cmd": case "vercel": {
+      try {
+        execSync(`vercel ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("vercel not available"); }
+      break;
+    }
+
+    case "netlify-cmd": case "netlify": {
+      try {
+        execSync(`netlify ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("netlify not available"); }
+      break;
+    }
+
+    case "cloudflare-cmd": case "cloudflare": {
+      try {
+        execSync(`cloudflare ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("cloudflare not available"); }
+      break;
+    }
+
+    case "heroku-cmd": case "heroku": {
+      try {
+        execSync(`heroku ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("heroku not available"); }
+      break;
+    }
+
+    case "digitalocean-cmd": case "doctl": {
+      try {
+        execSync(`doctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("doctl not available"); }
+      break;
+    }
+
+    case "linode-cmd": case "linode": {
+      try {
+        execSync(`linode ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("linode not available"); }
+      break;
+    }
+
+    case "aws-lambda-cmd": case "lambdacmd": {
+      try {
+        execSync(`aws lambda ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("AWS Lambda not available"); }
+      break;
+    }
+
+    case "firebase-cmd": case "firebase": {
+      try {
+        execSync(`firebase ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("firebase not available"); }
+      break;
+    }
+
+    // ===== SERVERLESS =====
+    case "serverless-cmd": case "serverless": {
+      try {
+        execSync(`serverless ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("serverless not available"); }
+      break;
+    }
+
+    case "sam-cmd": case "aws-sam": {
+      try {
+        execSync(`sam ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("SAM not available"); }
+      break;
+    }
+
+    case "cdk-cmd": case "aws-cdk": {
+      try {
+        execSync(`cdk ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("CDK not available"); }
+      break;
+    }
+
+    // ===== IOT/HOME AUTOMATION =====
+    case "homeassistant-cmd": case "ha": {
+      const token = process.env.HOMEASSISTANT_TOKEN;
+      const url = process.env.HOMEASSISTANT_URL || "http://localhost:8123";
+      if (!token) { err("Set HOMEASSISTANT_TOKEN"); break; }
+      const endpoint = args[0] || "api/states";
+      try {
+        const out = execSync(`curl -s -H "Authorization: Bearer ${token}" "${url}/api/${endpoint}"`, { encoding: "utf-8" });
+        console.log(chalk.gray(out));
+      } catch { err("HA request failed"); }
+      break;
+    }
+
+    case "mqtt-sub": case "mqttsub": {
+      const topic = args[0] || "#";
+      const host = args[1] || "localhost";
+      try {
+        execSync(`mosquitto_sub -t "${topic}" -h ${host}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("mosquitto not available"); }
+      break;
+    }
+
+    case "mqtt-pub": case "mqttpub": {
+      const topic = args[0];
+      const msg = args[1];
+      const host = args[2] || "localhost";
+      if (!topic || !msg) { err("Usage: mqttpub <topic> <message> [host]"); break; }
+      try {
+        execSync(`mosquitto_pub -t "${topic}" -m "${msg}" -h ${host}`, { encoding: "utf-8" });
+        success("Published!");
+      } catch { err("Publish failed"); }
+      break;
+    }
+
+    case "node-red-cmd": case "nodered": {
+      try {
+        execSync(`node-red`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("node-red not available"); }
+      break;
+    }
+
+    // ===== BLOCKCHAIN/WEB3 =====
+    case "solana-cmd": case "sol": {
+      try {
+        execSync(`solana ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("solana not available"); }
+      break;
+    }
+
+    case "ethers-cmd": case "ethers": {
+      try {
+        execSync(`npx ethers ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ethers not available"); }
+      break;
+    }
+
+    case "hardhat-cmd": case "hardhat": {
+      try {
+        execSync(`hardhat ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("hardhat not available"); }
+      break;
+    }
+
+    case "truffle-cmd": case "truffle": {
+      try {
+        execSync(`truffle ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("truffle not available"); }
+      break;
+    }
+
+    case "brownie-cmd": case "brownie": {
+      try {
+        execSync(`brownie ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("brownie not available"); }
+      break;
+    }
+
+    case "cast-cmd": case "cast": {
+      try {
+        execSync(`cast ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("cast not available"); }
+      break;
+    }
+
+    case "ipfs-cmd": case "ipfs": {
+      try {
+        execSync(`ipfs ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("ipfs not available"); }
+      break;
+    }
+
+    // ===== DATA ENGINEERING =====
+    case "spark-cmd": case "spark": {
+      try {
+        execSync(`spark-submit ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("spark not available"); }
+      break;
+    }
+
+    case "airflow-cmd": case "airflow": {
+      try {
+        execSync(`airflow ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("airflow not available"); }
+      break;
+    }
+
+    case "dbt-cmd": case "dbt": {
+      try {
+        execSync(`dbt ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("dbt not available"); }
+      break;
+    }
+
+    case "duckdb-cmd": case "duckdb": {
+      try {
+        execSync(`duckdb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("duckdb not available"); }
+      break;
+    }
+
+    case "presto-cmd": case "presto": {
+      try {
+        execSync(`presto ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("presto not available"); }
+      break;
+    }
+
+    // ===== ML/AI FRAMEWORKS =====
+    case "pytorch-cmd": case "torch": {
+      err("PyTorch - use Python REPL");
+      break;
+    }
+
+    case "tensorflow-cmd": case "tf": {
+      err("TensorFlow - use Python REPL");
+      break;
+    }
+
+    case "jupyter-cmd": case "jupyter": {
+      try {
+        execSync(`jupyter notebook`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("jupyter not available"); }
+      break;
+    }
+
+    case "colab-cmd": case "colab": {
+      err("Colab - use browser");
+      break;
+    }
+
+    case "mlflow-cmd": case "mlflow": {
+      try {
+        execSync(`mlflow ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("mlflow not available"); }
+      break;
+    }
+
+    case "weights-biases-cmd": case "wandb": {
+      try {
+        execSync(`wandb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("wandb not available"); }
+      break;
+    }
+
+    // ===== VPN/NETWORK =====
+    case "wireguard-cmd": case "wg": {
+      try {
+        execSync(`wg ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("wireguard not available"); }
+      break;
+    }
+
+    case "openvpn-cmd": case "ovpn": {
+      try {
+        execSync(`openvpn ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("openvpn not available"); }
+      break;
+    }
+
+    case "tailscale-cmd": case "tailscale": {
+      try {
+        execSync(`tailscale ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("tailscale not available"); }
+      break;
+    }
+
+    case "cloudflared-cmd": case "cloudflared": {
+      try {
+        execSync(`cloudflared ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("cloudflared not available"); }
+      break;
+    }
+
+    case "nordvpn-cmd": case "nordvpn": {
+      try {
+        execSync(`nordvpn ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("nordvpn not available"); }
+      break;
+    }
+
+    // ===== REMOTE DESKTOP =====
+    case "xrdp-cmd": case "xrdp": {
+      try {
+        execSync(`xrdp ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("xrdp not available"); }
+      break;
+    }
+
+    case "remmina-cmd": case "remmina": {
+      try {
+        execSync(`remmina`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("remmina not available"); }
+      break;
+    }
+
+    case "vnc-cmd": case "vnc": {
+      const host = args[0];
+      if (!host) { err("Usage: vnc <host>"); break; }
+      try {
+        execSync(`vncviewer ${host}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("vncviewer not available"); }
+      break;
+    }
+
+    // ===== DNS =====
+    case "dnsmasq-cmd": case "dnsmasq": {
+      try {
+        execSync(`dnsmasq ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("dnsmasq not available"); }
+      break;
+    }
+
+    case "unbound-cmd": case "unbound": {
+      try {
+        execSync(`unbound ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("unbound not available"); }
+      break;
+    }
+
+    case "bind-cmd": case "named": {
+      try {
+        execSync(`named ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("bind not available"); }
+      break;
+    }
+
+    // ===== PROVISIONING =====
+    case "vagrant-cmd": case "vagrant": {
+      try {
+        execSync(`vagrant ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("vagrant not available"); }
+      break;
+    }
+
+    case "packer-cmd": case "packer": {
+      try {
+        execSync(`packer ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("packer not available"); }
+      break;
+    }
+
+    case "vbox-cmd": case "vboxmanage": {
+      try {
+        execSync(`vboxmanage ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("VirtualBox not available"); }
+      break;
+    }
+
+    case "multipass-cmd": case "multipass": {
+      try {
+        execSync(`multipass ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("multipass not available"); }
+      break;
+    }
+
+    case "vagrant-up": case "vup": {
+      try {
+        execSync("vagrant up", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("vagrant up failed"); }
+      break;
+    }
+
+    case "vagrant-halt": case "vhalt": {
+      try {
+        execSync("vagrant halt", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("vagrant halt failed"); }
+      break;
+    }
+
+    // ===== LOAD BALANCING =====
+    case "nginx-cmd": case "nginx": {
+      try {
+        execSync(`nginx ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("nginx not available"); }
+      break;
+    }
+
+    case "haproxy-cmd": case "haproxy": {
+      try {
+        execSync(`haproxy ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("haproxy not available"); }
+      break;
+    }
+
+    case "traefik-cmd": case "traefik": {
+      try {
+        execSync(`traefik ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("traefik not available"); }
+      break;
+    }
+
+    case "caddy-cmd": case "caddy": {
+      try {
+        execSync(`caddy ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("caddy not available"); }
+      break;
+    }
+
+    // ===== MESSAGE QUEUES =====
+    case "rabbitmq-cmd": case "rabbitmq": {
+      try {
+        execSync(`rabbitmqctl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("rabbitmq not available"); }
+      break;
+    }
+
+    case "kafka-cmd": case "kafka": {
+      try {
+        execSync(`kafka ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("kafka not available"); }
+      break;
+    }
+
+    case "redis-server-cmd": case "redis-server": {
+      try {
+        execSync(`redis-server ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("redis-server not available"); }
+      break;
+    }
+
+    // ===== SEARCH =====
+    case "elasticsearch-cmd": case "elasticsearch": {
+      try {
+        execSync(`elasticsearch ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("elasticsearch not available"); }
+      break;
+    }
+
+    case "meilisearch-cmd": case "meilisearch": {
+      try {
+        execSync(`meilisearch ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("meilisearch not available"); }
+      break;
+    }
+
+    case "typesense-cmd": case "typesense": {
+      try {
+        execSync(`typesense ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("typesense not available"); }
+      break;
+    }
+
+    // ===== FUN COMMANDS =====
+    case "cowsay": {
+      const msg = args.join(" ") || "Moo!";
+      try {
+        execSync(`cowsay "${msg}"`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { console.log(chalk.gray(`Cow: ${msg}`)); }
+      break;
+    }
+
+    case "fortune": {
+      try {
+        execSync("fortune", { encoding: "utf-8", stdio: "inherit" });
+      } catch { console.log(chalk.yellow("Install fortune: sudo apt install fortune-mod")); }
+      break;
+    }
+
+    case "sl": {
+      try {
+        execSync("sl", { encoding: "utf-8", stdio: "inherit" });
+      } catch { console.log(chalk.yellow("🚂 Choo choo!")); }
+      break;
+    }
+
+    case "cmatrix": {
+      try {
+        execSync("cmatrix", { encoding: "utf-8", stdio: "inherit" });
+      } catch { console.log(chalk.green("🌐 Matrix connected")); }
+      break;
+    }
+
+    case "neofetch": {
+      try {
+        execSync("neofetch", { encoding: "utf-8", stdio: "inherit" });
+      } catch {
+        console.log(chalk.cyan(`
+    ██████╗ ██╗     ██╗    ██████╗  ██████╗ ██████╗ ████████╗
+    ██╔══██╗██║     ██║    ██╔═══██╗██╔════╝ ██╔══██╗╚══██╔══╝
+    ██████╔╝██║     ██║    ██║   ██║██║  ███╗██████╔╝   ██║   
+    ██╔═══╝ ██║     ██║    ██║   ██║██║   ██║██╔══██╗   ██║   
+    ██║     ███████╗██║    ╚██████╔╝╚██████╔╝██║  ██║   ██║   
+    ╚═╝     ╚══════╝╚═╝     ╚═════╝  ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+        `));
+      }
+      break;
+    }
+
+    case "pfetch": {
+      try {
+        execSync("pfetch", { encoding: "utf-8", stdio: "inherit" });
+      } catch { console.log(chalk.cyan("DevMate v3.0 - OMNI-SHELL")); }
+      break;
+    }
+
+    case "htop-cmd": case "top-cmd": {
+      try {
+        execSync("htop", { encoding: "utf-8", stdio: "inherit" });
+      } catch { execSync("top", { encoding: "utf-8", stdio: "inherit" }); }
+      break;
+    }
+
+    // ===== QUICK WORKFLOWS =====
+    case "dev": {
+      console.log(chalk.cyan("Starting dev server..."));
+      try {
+        execSync("npm run dev", { encoding: "utf-8", stdio: "inherit" });
+      } catch {
+        try { execSync("bun run dev", { encoding: "utf-8", stdio: "inherit" }); }
+        catch { err("No dev script found"); }
+      }
+      break;
+    }
+
+    case "build-cmd": {
+      console.log(chalk.cyan("Building..."));
+      try {
+        execSync("npm run build", { encoding: "utf-8", stdio: "inherit" });
+      } catch {
+        try { execSync("bun run build", { encoding: "utf-8", stdio: "inherit" }); }
+        catch { err("No build script found"); }
+      }
+      break;
+    }
+
+    case "test-cmd": {
+      console.log(chalk.cyan("Running tests..."));
+      try {
+        execSync("npm test", { encoding: "utf-8", stdio: "inherit" });
+      } catch {
+        try { execSync("bun test", { encoding: "utf-8", stdio: "inherit" }); }
+        catch { err("No test script found"); }
+      }
+      break;
+    }
+
+    case "start-prod": {
+      console.log(chalk.cyan("Starting production server..."));
+      try {
+        execSync("npm start", { encoding: "utf-8", stdio: "inherit" });
+      } catch {
+        try { execSync("bun run start", { encoding: "utf-8", stdio: "inherit" }); }
+        catch { err("No start script found"); }
+      }
+      break;
+    }
+
+    case "lint-cmd": {
+      console.log(chalk.cyan("Linting..."));
+      try {
+        execSync("npm run lint", { encoding: "utf-8", stdio: "inherit" });
+      } catch {
+        try { execSync("npx eslint .", { encoding: "utf-8", stdio: "inherit" }); }
+        catch { err("No lint script found"); }
+      }
+      break;
+    }
+
+    case "format-cmd": {
+      console.log(chalk.cyan("Formatting..."));
+      try {
+        execSync("npm run format", { encoding: "utf-8", stdio: "inherit" });
+      } catch {
+        try { execSync("npx prettier --write .", { encoding: "utf-8", stdio: "inherit" }); }
+        catch { err("No format script found"); }
+      }
+      break;
+    }
+
+    // ===== FILE QUICK ACTIONS =====
+    case "touch-file": case "touchf": {
+      const file = args[0];
+      if (!file) { err("Usage: touchf <filename>"); break; }
+      try {
+        execSync(`touch "${file}"`, { encoding: "utf-8" });
+        success(`Created: ${file}`);
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "rmrf": {
+      const dir = args[0];
+      if (!dir) { err("Usage: rmrf <directory>"); break; }
+      try {
+        execSync(`rm -rf "${dir}"`, { encoding: "utf-8" });
+        success(`Removed: ${dir}`);
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "mkcd": {
+      const dir = args[0];
+      if (!dir) { err("Usage: mkcd <directory>"); break; }
+      try {
+        execSync(`mkdir -p "${dir}" && cd "${dir}"`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "backup": {
+      const file = args[0];
+      if (!file) { err("Usage: backup <filename>"); break; }
+      const backup = `${file}.backup.${Date.now()}`;
+      try {
+        execSync(`cp "${file}" "${backup}"`, { encoding: "utf-8" });
+        success(`Backed up to: ${backup}`);
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "copy-date": {
+      const file = args[0];
+      if (!file) { err("Usage: copy-date <filename>"); break; }
+      try {
+        const date = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+        execSync(`cp "${file}" "${file}.${date}"`, { encoding: "utf-8" });
+        success("Copied with date!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    // ===== SYSTEM QUICK =====
+    case "reload-shell": {
+      console.log(chalk.yellow("Reloading shell..."));
+      try {
+        execSync("exec $SHELL", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Reload failed"); }
+      break;
+    }
+
+    case "clear-cache": {
+      try {
+        execSync("rm -rf ~/.cache/* 2>/dev/null", { encoding: "utf-8" });
+        success("Cache cleared!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "trim": {
+      console.log(chalk.cyan("Trimming whitespace..."));
+      try {
+        execSync("find . -name '*.js' -o -name '*.ts' -o -name '*.json' | xargs sed -i 's/[[:space:]]*$//'", { encoding: "utf-8" });
+        success("Trimmed!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "permissions": case "perms": {
+      const file = args[0] || ".";
+      try {
+        execSync(`ls -la "${file}"`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "hexdump": {
+      const file = args[0];
+      if (!file) { err("Usage: hexdump <file>"); break; }
+      try {
+        execSync(`hexdump -C "${file}" | head -20`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "ascii": {
+      const text = args.join(" ") || "DevMate";
+      try {
+        execSync(`figlet "${text}"`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { console.log(chalk.cyan(text.toUpperCase())); }
+      break;
+    }
+
+    // ===== GIT QUICK =====
+    case "g": case "git-quick": {
+      try {
+        execSync(`git ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("git failed"); }
+      break;
+    }
+
+    case "gs": case "git-status-quick": {
+      try {
+        execSync("git status", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Not a git repo"); }
+      break;
+    }
+
+    case "ga": case "git-add-quick": {
+      try {
+        execSync("git add .", { encoding: "utf-8" });
+        success("Staged!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "gc": case "git-commit-quick": {
+      const msg = args.join(" ");
+      if (!msg) { err("Usage: gc <message>"); break; }
+      try {
+        execSync(`git commit -m "${msg}"`, { encoding: "utf-8", stdio: "inherit" });
+        success("Committed!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "gp": case "git-push-quick": {
+      try {
+        execSync("git push", { encoding: "utf-8", stdio: "inherit" });
+        success("Pushed!");
+      } catch { err("Push failed"); }
+      break;
+    }
+
+    case "gl": case "git-pull-quick": {
+      try {
+        execSync("git pull", { encoding: "utf-8", stdio: "inherit" });
+        success("Pulled!");
+      } catch { err("Pull failed"); }
+      break;
+    }
+
+    // ===== DOCKER QUICK =====
+    case "d-quick": {
+      try {
+        execSync(`docker ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Docker failed"); }
+      break;
+    }
+
+    case "dbuild": {
+      const tag = args[0] || "latest";
+      try {
+        execSync(`docker build -t myapp:${tag} .`, { encoding: "utf-8", stdio: "inherit" });
+        success("Built!");
+      } catch { err("Build failed"); }
+      break;
+    }
+
+    case "drun": {
+      const name = args[0] || "myapp";
+      const port = args[1] || "3000";
+      try {
+        execSync(`docker run -d -p ${port}:${port} --name ${name} ${name}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Running!");
+      } catch { err("Run failed"); }
+      break;
+    }
+
+    case "dshell": {
+      const container = args[0];
+      if (!container) { err("Usage: dshell <container>"); break; }
+      try {
+        execSync(`docker exec -it ${container} /bin/sh`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Shell failed"); }
+      break;
+    }
+
+    // ===== K8S QUICK =====
+    case "k-quick": {
+      try {
+        execSync(`kubectl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("kubectl failed"); }
+      break;
+    }
+
+    case "kgetall": {
+      try {
+        execSync("kubectl get all --all-namespaces", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "kdebug": {
+      const pod = args[0];
+      if (!pod) { err("Usage: kdebug <pod>"); break; }
+      try {
+        execSync(`kubectl debug -it ${pod} --image=busybox --share-processes=true`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Debug failed"); }
+      break;
+    }
+
+    // ===== NPM QUICK =====
+    case "ni": case "npm-install-quick": {
+      try {
+        execSync("npm install", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Install failed"); }
+      break;
+    }
+
+    case "nis": case "npm-install-save": {
+      const pkg = args.join(" ");
+      if (!pkg) { err("Usage: nis <package>"); break; }
+      try {
+        execSync(`npm install ${pkg} --save`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Install failed"); }
+      break;
+    }
+
+    case "nid": case "npm-install-dev": {
+      const pkg = args.join(" ");
+      if (!pkg) { err("Usage: nid <package>"); break; }
+      try {
+        execSync(`npm install ${pkg} --save-dev`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Install failed"); }
+      break;
+    }
+
+    case "nu": case "npm-uninstall": {
+      const pkg = args.join(" ");
+      if (!pkg) { err("Usage: nu <package>"); break; }
+      try {
+        execSync(`npm uninstall ${pkg}`, { encoding: "utf-8", stdio: "inherit" });
+        success("Uninstalled!");
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "nrun": case "npm-run-quick": {
+      const script = args.join(" ");
+      if (!script) { err("Usage: nrun <script>"); break; }
+      try {
+        execSync(`npm run ${script}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Run failed"); }
+      break;
+    }
+
+    // ===== PROCESS QUICK =====
+    case "psgrep": {
+      const name = args[0];
+      if (!name) { err("Usage: psgrep <process-name>"); break; }
+      try {
+        execSync(`ps aux | grep ${name}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Not found"); }
+      break;
+    }
+
+    case "kill-port": {
+      const port = args[0];
+      if (!port) { err("Usage: kill-port <port>"); break; }
+      try {
+        execSync(`lsof -ti:${port} | xargs kill -9`, { encoding: "utf-8" });
+        success(`Killed process on port ${port}`);
+      } catch { err("No process on that port"); }
+      break;
+    }
+
+    case " Ports": {
+      const port = args[0];
+      if (!port) { err("Usage: Ports <port>"); break; }
+      try {
+        execSync(`lsof -i :${port}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Nothing on that port"); }
+      break;
+    }
+
+    case "whats-running": case "running": {
+      try {
+        execSync("lsof -i -P -n | head -20", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Nothing running"); }
+      break;
+    }
+
+    // ===== NETWORK QUICK =====
+    case "external-ip": {
+      try {
+        const ip = execSync("curl -s ifconfig.me", { encoding: "utf-8" }).trim();
+        console.log(chalk.green(ip));
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "local-ip": {
+      try {
+        execSync("hostname -I", { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Failed"); }
+      break;
+    }
+
+    case "dns-lookup": case "ns": {
+      const domain = args[0];
+      if (!domain) { err("Usage: ns <domain>"); break; }
+      try {
+        execSync(`nslookup ${domain}`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Lookup failed"); }
+      break;
+    }
+
+    case "http-headers": case "headers": {
+      const url = args[0];
+      if (!url) { err("Usage: headers <url>"); break; }
+      try {
+        execSync(`curl -I "${url}"`, { encoding: "utf-8", stdio: "inherit" });
+      } catch { err("Request failed"); }
+      break;
+    }
+
+    case "download": {
+      const url = args[0];
+      const name = args[1] || "download";
+      if (!url) { err("Usage: download <url> [filename]"); break; }
+      try {
+        execSync(`curl -L -o "${name}" "${url}"`, { encoding: "utf-8", stdio: "inherit" });
+        success("Downloaded!");
+      } catch { err("Download failed"); }
+      break;
+    }
+
+    // ===== JSON QUICK =====
+    case "cat-json": {
+      const file = args[0];
+      if (!file) { err("Usage: cat-json <file>"); break; }
+      try {
+        const content = readFileSync(file, "utf-8");
+        console.log(JSON.stringify(JSON.parse(content), null, 2));
+      } catch { err("Invalid JSON"); }
+      break;
+    }
+
+    case "echo-json": {
+      const json = args.join(" ");
+      if (!json) { err("Usage: echo-json <json-string>"); break; }
+      try {
+        const parsed = JSON.parse(json);
+        console.log(JSON.stringify(parsed, null, 2));
+      } catch { err("Invalid JSON"); }
+      break;
+    }
+
+    case "json-keys": {
+      const file = args[0];
+      if (!file) { err("Usage: json-keys <file>"); break; }
+      try {
+        const content = readFileSync(file, "utf-8");
+        const json = JSON.parse(content);
+        console.log(Object.keys(json).join("\n"));
+      } catch { err("Invalid JSON"); }
+      break;
+    }
+
+    case "json-path-simple": {
+      const file = args[0];
+      const key = args[1];
+      if (!file || !key) { err("Usage: json-path-simple <file> <key>"); break; }
+      try {
+        const content = readFileSync(file, "utf-8");
+        const json = JSON.parse(content);
+        console.log(json[key]);
+      } catch { err("Failed"); }
       break;
     }
 

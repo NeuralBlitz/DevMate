@@ -6,6 +6,8 @@
 
 DevMate is the most comprehensive CLI ever built - connecting 700+ tools, services, and platforms into one unified interface. From messaging apps to cloud infrastructure, from AI models to blockchain, from edge computing to serverless, from security forensics to home automation - it's all here.
 
+**Just 666KB - runs anywhere!**
+
 ---
 
 ## ⭐ Features
@@ -907,8 +909,11 @@ secret-ls          # List vault secrets
 
 ## 📈 Stats
 
-- **7,700+ Lines** of TypeScript
-- **1,200+ Commands** across all categories
+- **11,100+ Lines** of TypeScript
+- **700+ Commands** across all categories
+- **740KB** single-file executable
+- **Zero-install** ready (bunx, npx, curl)
+- **Docker** support for any platform
 - **50+ Smart Aliases**
 - **20+ Messaging Platforms**
 - **20+ AI/ML Providers**

@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  cli:
+    name: Bun CLI build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install root dependencies
+        run: bun install --frozen-lockfile
+      - name: Build CLI
+        run: bun run build
+      - name: Verify built executable
+        run: test -s dist/index.js
+
+  web:
+    name: Vite web build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck and build
+        run: npm run build
+
+  neuralblitz-x3:
+    name: Next.js build and lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: neuralblitz-x3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: neuralblitz-x3/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Production build
+        run: npm run build
+
+  tui:
+    name: Go TUI tests and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: devmate-tui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: devmate-tui/go.mod
+          cache-dependency-path: devmate-tui/go.sum
+      - name: Test
+        run: go test ./...
+      - name: Build
+        run: go build -o /tmp/devmate-tui-ci .
+
+  myapp:
+    name: Express app syntax check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: myapp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: node --check index.js

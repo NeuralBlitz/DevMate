@@ -7,10 +7,10 @@
   "homepage": "https://devmate.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/devmate-cli/devmate.git"
+    "url": "https://github.com/NeuralBlitz/DevMate.git"
   },
   "bugs": {
-    "url": "https://github.com/devmate-cli/devmate/issues"
+    "url": "https://github.com/NeuralBlitz/DevMate/issues"
   },
   "keywords": [
     "cli",

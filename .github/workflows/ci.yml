@@ -72,7 +72,7 @@ jobs:
         working-directory: devmate-tui
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: devmate-tui/go.mod
           cache-dependency-path: devmate-tui/go.sum

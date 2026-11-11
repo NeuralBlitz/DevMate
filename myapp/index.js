@@ -1,1 +1,12 @@
-import express from "express";\nconst app = express();\napp.get("/", (req, res) => res.json({ ok: true }));\napp.listen(3000, () => console.log("Server on 3000"));
+import express from "express";
+
+const app = express();
+
+app.get("/", (_req, res) => {
+  res.json({ ok: true });
+});
+
+const port = Number(process.env.PORT || 3000);
+app.listen(port, () => {
+  console.log(`Server on ${port}`);
+});

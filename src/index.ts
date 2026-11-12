@@ -6,6 +6,7 @@ import { execSync, spawn, spawnSync } from "child_process";
 import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync, statSync, appendFileSync } from "fs";
 import { join, resolve, dirname, basename } from "path";
 import { aliases, resolveAlias } from "./aliases";
+import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
 const CONFIG_DIR = join(HOME, ".devmate");
@@ -172,12 +173,6 @@ function mdRender(markdown: string) {
   console.log(chalk.gray(html.replace(/<[^>]+>/g, '')));
 }
 
-function progressBar(current: number, total: number, width = 30) {
-  const percent = Math.round((current / total) * 100);
-  const filled = Math.round((width * current) / total);
-  const bar = '█'.repeat(filled) + '░'.repeat(width - filled);
-  return `[${bar}] ${percent}%`;
-}
 
 const rl = readline.createInterface({
   input: process.stdin, output: process.stdout, 

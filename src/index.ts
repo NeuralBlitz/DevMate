@@ -2,12 +2,13 @@
 
 import readline from "readline";
 import chalk from "chalk";
-import { execSync, spawn, spawnSync } from "child_process";
+import { execSync, execFileSync, spawn, spawnSync } from "child_process";
 import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync, statSync, appendFileSync } from "fs";
 import { join, resolve, dirname, basename } from "path";
 import { aliases } from "./aliases";
 import { parseCommand } from "./command-parser";
 import { parseProgressArguments } from "./progress-args";
+import { fileInvocation } from "./file-invocation";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -2379,7 +2380,8 @@ async function handleCommand(input: string): Promise<boolean> {
     case "npm-info": case "pkg-info": {
       if (!args[0]) { err("Usage: npm-info <package>"); break; }
       try {
-        const out = execSync(`npm view ${args[0]} --json`, { encoding: "utf-8", maxBuffer: 1024 * 1024 });
+        if (args[0].startsWith("-")) { err("Invalid package name"); break; }
+        const out = execFileSync("npm", ["view", args[0], "--json"], { encoding: "utf-8", maxBuffer: 1024 * 1024 });
         const info = JSON.parse(out);
         console.log(chalk.cyan(`${info.name} v${info.version}`));
         console.log(chalk.gray(info.description || "No description"));
@@ -2412,7 +2414,8 @@ async function handleCommand(input: string): Promise<boolean> {
     case "what": case "which": {
       if (!args[0]) { err("Usage: what <command>"); break; }
       try {
-        const path = execSync(`which ${args[0]}`, { encoding: "utf-8" }).trim();
+        if (args[0].startsWith("-")) { err("Invalid command name"); break; }
+        const path = execFileSync("which", [args[0]], { encoding: "utf-8" }).trim();
         success(`Found: ${path}`);
       } catch { err(`${args[0]} not found`); }
       break;
@@ -2423,45 +2426,78 @@ async function handleCommand(input: string): Promise<boolean> {
       console.log(chalk.gray("Any Shell • Any Command • Any Platform • Any Device"));
       break;
      
-    case "ls": case "ll": case "la": case "l": case "lt": case "llh":
-      try { console.log(execSync(`ls ${cmd.includes("l") ? "-la" : ""} ${args[0] || "."}`, { encoding: "utf-8" })); }
-      catch (e: any) { handleError("ls", e); } break;
+    case "ls": case "ll": case "la": case "l": case "lt": case "llh": {
+      try {
+        const { executable, argv } = fileInvocation(cmd, args);
+        console.log(execFileSync(executable, argv, { encoding: "utf-8" }));
+      } catch (e: any) { handleError("ls", e); }
+      break;
+    }
       
     case "cd": 
       try { process.chdir(args[0] || HOME); success(process.cwd()); } 
       catch (e: any) { handleError("cd", e, "Directory doesn't exist"); } break;
       
-    case "cat": case "head": case "tail": case "less":
+    case "cat": case "head": case "tail": case "less": {
       if (!args[0]) err("Usage: cat <file>");
-      else try { console.log(execSync(`${cmd} "${args[0]}"`, { encoding: "utf-8" })); }
-      catch (e: any) { handleError(cmd, e, "File not found"); } break;
+      else try {
+        const { executable, argv } = fileInvocation(cmd, args);
+        console.log(execFileSync(executable, argv, { encoding: "utf-8" }));
+      } catch (e: any) { handleError(cmd, e, "File not found"); }
+      break;
+    }
       
     case "pwd": console.log(process.cwd()); break;
     
-    case "mkdir": 
+    case "mkdir": {
       if (!args[0]) err("Usage: mkdir <dir>");
-      else try { execSync(`mkdir -p "${args[0]}"`); success(`Created: ${args[0]}`); }
-      catch (e: any) { handleError("mkdir", e); } break;
+      else try {
+        const { executable, argv } = fileInvocation(cmd, args);
+        execFileSync(executable, argv);
+        success(`Created: ${args[0]}`);
+      } catch (e: any) { handleError("mkdir", e); }
+      break;
+    }
       
-    case "rm": case "rmdir":
+    case "rm": case "rmdir": {
       if (!args[0]) err("Usage: rm <file|dir>");
-      else try { execSync(`rm -${cmd === "rmdir" ? "d" : "rf"} "${args[0]}"`); success(`Removed: ${args[0]}`); }
-      catch (e: any) { handleError("rm", e); } break;
+      else try {
+        const { executable, argv } = fileInvocation(cmd, args);
+        execFileSync(executable, argv);
+        success(`Removed: ${args[0]}`);
+      } catch (e: any) { handleError("rm", e); }
+      break;
+    }
       
-    case "touch":
+    case "touch": {
       if (!args[0]) err("Usage: touch <file>");
-      else try { execSync(`touch "${args[0]}"`); success(`Created: ${args[0]}`); }
-      catch (e: any) { handleError("touch", e); } break;
+      else try {
+        const { executable, argv } = fileInvocation(cmd, args);
+        execFileSync(executable, argv);
+        success(`Created: ${args[0]}`);
+      } catch (e: any) { handleError("touch", e); }
+      break;
+    }
       
-    case "cp":
+    case "cp": {
       if (args.length < 2) err("Usage: cp <src> <dest>");
-      else try { execSync(`cp -r "${args[0]}" "${args[1]}"`); success("Copied"); }
-      catch (e: any) { handleError("cp", e); } break;
+      else try {
+        const { executable, argv } = fileInvocation(cmd, args);
+        execFileSync(executable, argv);
+        success("Copied");
+      } catch (e: any) { handleError("cp", e); }
+      break;
+    }
       
-    case "mv":
+    case "mv": {
       if (args.length < 2) err("Usage: mv <src> <dest>");
-      else try { execSync(`mv "${args[0]}" "${args[1]}"`); success("Moved"); }
-      catch (e: any) { handleError("mv", e); } break;
+      else try {
+        const { executable, argv } = fileInvocation(cmd, args);
+        execFileSync(executable, argv);
+        success("Moved");
+      } catch (e: any) { handleError("mv", e); }
+      break;
+    }
       
     case "tree": {
       const tPath = args[0] || '.';

@@ -13,6 +13,7 @@ import { runFileSearch } from "./file-search";
 import { countLinesByExtension, hashFile } from "./file-metrics";
 import { runDevops } from "./devops-invocation";
 import { runCloud, bedrockArguments } from "./cloud-invocation";
+import { runExternalCommand } from "./external-command";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -4485,7 +4486,7 @@ async function handleCommand(input: string): Promise<boolean> {
 
     case "uv-cmd": case "uv": {
       try {
-        execSync(`uv ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runExternalCommand("uv", args);
       } catch { err("uv not available"); }
       break;
     }
@@ -5595,11 +5596,11 @@ async function handleCommand(input: string): Promise<boolean> {
     }
 
     case "grep": case "rg": case "find": case "which": case "locate": case "fd":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); } break;
       
     case "awk": case "sed": case "sort": case "uniq": case "cut": case "tr": case "wc":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); } break;
       
     case "git": try { execSync(`git ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
@@ -6216,7 +6217,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "heroku": case "vercel": case "netlify": case "cloudflare": case "aws-amplify": case "render":
     case "railway": case "fly": case "dokku": case "coolify": case "caprover":
     case "clear": case "cls":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
       
@@ -6283,7 +6284,7 @@ async function handleCommand(input: string): Promise<boolean> {
       break;
     
     case "htop": case "btop": case "bashtop": case "bpytop": case "glances": case "atop": case "btop":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e, `Install: apt install ${cmd}`); }
       break;
     case "lazygit":
@@ -6295,7 +6296,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("lazydocker", e, "Install: apt install lazydocker"); }
       break;
     case "yazi": case "lf": case "ranger": case "vifm":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
     case "eza": case "exa":
@@ -6335,7 +6336,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("dog", e, "Install: cargo install dog"); }
       break;
     case "dust": case "duf": case "ncdu":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
     case "zoxide": case "z":
@@ -6366,11 +6367,11 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("kubectx", e, "Install: brew install kubectx"); }
       break;
     case "kustomize": case "kpt": case "helmfile":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
     case "skaffold": case "tilt": case "devspace":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
     case "postgres": case "psql":
@@ -6417,7 +6418,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("deno", e, "Install: curl -fsSL https://deno.land/install.sh | sh"); }
       break;
     case "uv": case "ruff":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e, `Install: pip install ${cmd}`); }
       break;
     case "airbyte": case "fivetran":
@@ -6443,7 +6444,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("serverless", e, "Install: npm install -g serverless"); }
       break;
     case "sam": case "cdk":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
     case "amplify":
@@ -9854,7 +9855,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("haskell", e); }
       break;
     case "ocaml":
-      try { execSync(`ocaml ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand("ocaml", args); }
       catch (e: any) { handleError("ocaml", e); }
       break;
     case "fsharp": case "fs":
@@ -10522,11 +10523,11 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("erlang", e, "brew install erlang"); }
       break;
     case "haskell": case "ghci": case "cabal": case "stack":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
     case "ocaml": case "opam":
-      try { execSync(`${cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
     case "fsharp": case "fsi":

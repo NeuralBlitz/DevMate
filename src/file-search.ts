@@ -61,13 +61,14 @@ export function fileSearchInvocation(query: FileSearchQuery): FileSearchInvocati
  */
 export function runFileSearch(
   query: FileSearchQuery,
-  options: { maxLines?: number; sortBySize?: boolean } = {},
+  options: { maxLines?: number; sortBySize?: boolean; cwd?: string } = {},
 ): string {
   const { executable, argv } = fileSearchInvocation(query);
   const output = execFileSync(executable, argv, {
     encoding: "utf8",
     maxBuffer: 16 * 1024 * 1024,
     timeout: 20_000,
+    cwd: options.cwd,
   });
   if (options.maxLines === undefined && !options.sortBySize) return output;
   const lines = output.split(/\r?\n/).filter(Boolean);

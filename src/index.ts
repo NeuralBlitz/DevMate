@@ -5,7 +5,9 @@ import chalk from "chalk";
 import { execSync, spawn, spawnSync } from "child_process";
 import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync, statSync, appendFileSync } from "fs";
 import { join, resolve, dirname, basename } from "path";
-import { aliases, resolveAlias } from "./aliases";
+import { aliases } from "./aliases";
+import { parseCommand } from "./command-parser";
+import { parseProgressArguments } from "./progress-args";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -2139,11 +2141,7 @@ async function handleCommand(input: string): Promise<boolean> {
   }
 
   const allAliases = { ...aliases, ...aliasesCustom };
-  const resolved = resolveAlias(raw, aliasesCustom);
-
-  const parts = resolved.split(/\s+/);
-  let cmd = parts[0]?.toLowerCase() || "";
-  let args = parts.slice(1);
+  let { cmd, args } = parseCommand(raw, aliasesCustom);
 
   if (cmd === "--version" || cmd === "-v" || cmd === "version") {
     console.log(chalk.cyan(`DevMate v${getVersion()} - OMNI-SHELL`));
@@ -6096,12 +6094,18 @@ async function handleCommand(input: string): Promise<boolean> {
     }
 
     case "progress": {
-      if (!args[0] || !args[1]) {
-        console.log(chalk.yellow("Usage: progress <current> <total>"));
-        console.log(chalk.gray("  progress 50 100"));
+      const progress = parseProgressArguments(args);
+      if (!progress.ok) {
+        if (args.length !== 2) {
+          console.log(chalk.yellow("Usage: progress <current> <total>"));
+          console.log(chalk.gray("  progress 50 100"));
+        } else {
+          err(`Invalid progress arguments: ${progress.error}`);
+          console.log(chalk.gray("Usage: progress <current> <total>"));
+        }
         break;
       }
-      console.log(progressBar(parseInt(args[0]), parseInt(args[1])));
+      console.log(progressBar(progress.current, progress.total));
       break;
     }
 

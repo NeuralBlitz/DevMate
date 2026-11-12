@@ -4486,7 +4486,7 @@ async function handleCommand(input: string): Promise<boolean> {
 
     case "uv-cmd": case "uv": {
       try {
-        execSync(`uv ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runExternalCommand("uv", args);
       } catch { err("uv not available"); }
       break;
     }
@@ -9855,7 +9855,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("haskell", e); }
       break;
     case "ocaml":
-      try { execSync(`ocaml ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runExternalCommand("ocaml", args); }
       catch (e: any) { handleError("ocaml", e); }
       break;
     case "fsharp": case "fs":

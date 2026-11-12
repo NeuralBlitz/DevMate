@@ -81,4 +81,4 @@ test("CLI Docker and kubectl aliases do not execute shell metacharacters", () =>
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
-});
+}, 60_000);

@@ -7698,7 +7698,7 @@ async function handleCommand(input: string): Promise<boolean> {
       if (!args[0]) err("Usage: bedrock <prompt>");
       else {
         const AWS_REGION = process.env.AWS_REGION || "us-east-1";
-        try { execSync(`aws bedrock-runtime invoke-model --model-id anthropic.claude-3-sonnet-20240229-v1:0 --region ${AWS_REGION} --body '{"messages":[{"role":"user","content":[{"text":"'${args.join(" ")}'"}]}],"max_tokens":2048}' --cli-binary-format raw-in-base64-out`, { encoding: "utf-8", stdio: "inherit" }); }
+        try { runCloud("aws", bedrockArguments(args.join(" "), AWS_REGION)); }
         catch (e: any) { handleError("bedrock", e, "AWS credentials required"); }
       }
       break;

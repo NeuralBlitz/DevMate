@@ -33,7 +33,7 @@ test("hash reads literal filenames and validates algorithms", async () => {
     expect(await hashFile(file)).toBe(expectedSha);
     expect(await hashFile(file, "md5")).toBe(expectedMd5);
     expect(existsSync(join(dir, "marker"))).toBe(false);
-    expect(hashFile(file, "sha256;touch${IFS}marker")).rejects.toThrow(RangeError);
+    await expect(hashFile(file, "sha256;touch${IFS}marker")).rejects.toThrow(RangeError);
     expect(existsSync(join(dir, "marker"))).toBe(false);
   } finally {
     rmSync(dir, { recursive: true, force: true });

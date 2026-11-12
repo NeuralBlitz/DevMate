@@ -35,7 +35,7 @@
     "start": "bun run src/index.ts",
     "install": "./install.sh",
     "link": "bun build src/index.ts --outdir dist --target bun && chmod +x dist/index.js && npm link",
-    "test": "echo 'Run: echo \"help\" | bun run dev'",
+    "test": "bun test src/aliases.test.ts",
     "postpublish": "npm run build"
   },
   "dependencies": {

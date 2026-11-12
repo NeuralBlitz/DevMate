@@ -56,6 +56,15 @@ test("CLI Docker and kubectl aliases do not execute shell metacharacters", () =>
       { input: ["k-logs", payload], tool: "kubectl", tokens: ["logs", "-f", payload] },
       { input: ["k-exec", payload, "echo", "hello"], tool: "kubectl", tokens: ["exec", "-it", payload, "--", "echo", "hello"] },
       { input: ["k-quick", "get", payload], tool: "kubectl", tokens: ["get", payload] },
+      { input: ["d-quick", "ps", payload], tool: "docker", tokens: ["ps", payload] },
+      { input: ["dbuild", payload], tool: "docker", tokens: ["build", "-t", `myapp:${payload}`, "."] },
+      { input: ["drun", payload, "8080"], tool: "docker", tokens: ["run", "-d", "-p", "8080:8080", "--name", payload, payload] },
+      { input: ["dshell", payload], tool: "docker", tokens: ["exec", "-it", payload, "/bin/sh"] },
+      { input: ["kapply", payload], tool: "kubectl", tokens: ["apply", "-f", payload] },
+      { input: ["kdelete", "pod", payload], tool: "kubectl", tokens: ["delete", "pod", payload] },
+      { input: ["klogsf", payload], tool: "kubectl", tokens: ["logs", "-f", payload] },
+      { input: ["kexec", payload, "echo", "hello"], tool: "kubectl", tokens: ["exec", "-it", payload, "--", "echo", "hello"] },
+      { input: ["kpf", payload, "1111", "2222"], tool: "kubectl", tokens: ["port-forward", payload, "1111:2222"] },
     ];
     for (const item of checks) {
       const output = run(...item.input);

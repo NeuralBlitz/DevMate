@@ -12,6 +12,7 @@ import { fileInvocation } from "./file-invocation";
 import { runFileSearch } from "./file-search";
 import { countLinesByExtension, hashFile } from "./file-metrics";
 import { runDevops } from "./devops-invocation";
+import { runCloud, bedrockArguments } from "./cloud-invocation";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -2176,6 +2177,10 @@ async function handleCommand(input: string): Promise<boolean> {
       try { runDevops(cmd, args); }
       catch (e: any) { handleError(cmd, e); }
       break;
+    case "aws": case "gcloud": case "az":
+      try { runCloud(cmd, args); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
     case "extended": case "cheatsheet": case "all": case "help-all": console.log(extendedHelp()); break;
 
     case "install": case "setup": {
@@ -2859,7 +2864,7 @@ async function handleCommand(input: string): Promise<boolean> {
     // ===== CLOUD COMMANDS =====
     case "aws-cmd": {
       try {
-        execSync(`aws ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runCloud("aws", args);
       } catch { err("AWS CLI not configured"); }
       break;
     }
@@ -2881,7 +2886,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const dst = args[1];
       if (!src || !dst) { err("Usage: s3cp <src> <dest>"); break; }
       try {
-        execSync(`aws s3 cp ${src} ${dst}`, { encoding: "utf-8", stdio: "inherit" });
+        runCloud("aws", ["s3", "cp", src, dst]);
         success("Copied");
       } catch { err("Copy failed"); }
       break;
@@ -2892,7 +2897,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const dst = args[1];
       if (!src || !dst) { err("Usage: s3sync <src> <dest>"); break; }
       try {
-        execSync(`aws s3 sync ${src} ${dst}`, { encoding: "utf-8", stdio: "inherit" });
+        runCloud("aws", ["s3", "sync", src, dst]);
         success("Synced");
       } catch { err("Sync failed"); }
       break;
@@ -2900,14 +2905,14 @@ async function handleCommand(input: string): Promise<boolean> {
 
     case "gcloud-cmd": {
       try {
-        execSync(`gcloud ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runCloud("gcloud", args);
       } catch { err("gcloud not configured"); }
       break;
     }
 
     case "az-cmd": {
       try {
-        execSync(`az ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runCloud("az", args);
       } catch { err("Azure CLI not configured"); }
       break;
     }
@@ -4684,7 +4689,7 @@ async function handleCommand(input: string): Promise<boolean> {
 
     case "aws-lambda-cmd": case "lambdacmd": {
       try {
-        execSync(`aws lambda ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runCloud("aws", ["lambda", ...args]);
       } catch { err("AWS Lambda not available"); }
       break;
     }
@@ -5998,7 +6003,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "s3-copy": case "s3cp": {
       if (args.length < 2) { err("Usage: s3cp <src> <dest>"); break; }
       try {
-        execSync(`aws s3 cp "${args[0]}" "${args[1]}"`, { encoding: "utf-8", stdio: "inherit" });
+        runCloud("aws", ["s3", "cp", args[0], args[1]]);
         success("Copied");
       } catch { err("Copy failed"); }
       break;
@@ -6158,7 +6163,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "apt": case "apt-get": case "dnf": case "yum": case "pacman": case "zypper":
     case "brew": case "snap": case "flatpak": case "pkg": case "apk":
     case "helm": case "k9s":
-    case "aws": case "gcloud": case "az": case "terraform": case "pulumi": case "ansible":
+    case "terraform": case "pulumi": case "ansible":
     case "winget": case "scoop": case "choco": case "podman":
     case "convert": case "ffmpeg": case "scrot": case "feh": case "rclone":
     case "chmod": case "chown": case "chgrp":
@@ -6791,14 +6796,14 @@ async function handleCommand(input: string): Promise<boolean> {
     case "k-debug": case "kdbg": try { runDevops("kubectl", ["debug", ...args]); } catch (e: any) { handleError("kubectl debug", e); } break;
       
     // ============ CLOUD CLI ============
-    case "aws-s3": case "s3": try { execSync(`aws s3 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("aws s3", e); } break;
-    case "aws-ec2": case "ec2": try { execSync(`aws ec2 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("aws ec2", e); } break;
-    case "aws-lambda": case "lambda": try { execSync(`aws lambda ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("aws lambda", e); } break;
-    case "gcloud-compute": case "gcompute": try { execSync(`gcloud compute ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("gcloud compute", e); } break;
-    case "gcloud-k8s": case "gk8s": try { execSync(`gcloud container ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("gcloud container", e); } break;
-    case "az-vm": case "azvm": try { execSync(`az vm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("az vm", e); } break;
-    case "az-aks": case "aks": try { execSync(`az aks ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("az aks", e); } break;
-    case "az-func": case "afunc": try { execSync(`az functionapp ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("az functionapp", e); } break;
+    case "aws-s3": case "s3": try { runCloud("aws", ["s3", ...args]); } catch (e: any) { handleError("aws s3", e); } break;
+    case "aws-ec2": case "ec2": try { runCloud("aws", ["ec2", ...args]); } catch (e: any) { handleError("aws ec2", e); } break;
+    case "aws-lambda": case "lambda": try { runCloud("aws", ["lambda", ...args]); } catch (e: any) { handleError("aws lambda", e); } break;
+    case "gcloud-compute": case "gcompute": try { runCloud("gcloud", ["compute", ...args]); } catch (e: any) { handleError("gcloud compute", e); } break;
+    case "gcloud-k8s": case "gk8s": try { runCloud("gcloud", ["container", ...args]); } catch (e: any) { handleError("gcloud container", e); } break;
+    case "az-vm": case "azvm": try { runCloud("az", ["vm", ...args]); } catch (e: any) { handleError("az vm", e); } break;
+    case "az-aks": case "aks": try { runCloud("az", ["aks", ...args]); } catch (e: any) { handleError("az aks", e); } break;
+    case "az-func": case "afunc": try { runCloud("az", ["functionapp", ...args]); } catch (e: any) { handleError("az functionapp", e); } break;
       
     // ============ MONITORING ============
     case "htop": try { execSync("htop", { encoding: "utf-8", stdio: "inherit" }); } catch { handleError("htop", {message: "not found"}, "sudo apt install htop"); } break;
@@ -7515,7 +7520,7 @@ async function handleCommand(input: string): Promise<boolean> {
 
     // ============ GOOGLE ECOSYSTEM ============
     case "gcloud": case "gcp":
-      try { execSync(`gcloud ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("gcloud", args); }
       catch (e: any) { handleError("gcloud", e); }
       break;
     case "vertex": case "vertex-ai":
@@ -7794,21 +7799,21 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("box", e); }
       break;
     case "s3":
-      try { execSync(`aws s3 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["s3", ...args]); }
       catch (e: any) { handleError("s3", e); }
       break;
     case "s3cp":
       if (args.length < 2) err("Usage: s3cp <src> <dst>");
-      else try { execSync(`aws s3 cp ${args[0]} ${args[1]}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runCloud("aws", ["s3", "cp", args[0], args[1]]); }
       catch (e: any) { handleError("s3cp", e); }
       break;
     case "s3ls":
-      try { execSync(`aws s3 ls ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["s3", "ls", ...args]); }
       catch (e: any) { handleError("s3ls", e); }
       break;
     case "s3sync":
       if (args.length < 2) err("Usage: s3sync <src> <dst>");
-      else try { execSync(`aws s3 sync ${args[0]} ${args[1]}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runCloud("aws", ["s3", "sync", args[0], args[1]]); }
       catch (e: any) { handleError("s3sync", e); }
       break;
 
@@ -8211,11 +8216,11 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("vault", e); }
       break;
     case "aws-secrets":
-      try { execSync(`aws secretsmanager ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["secretsmanager", ...args]); }
       catch (e: any) { handleError("aws-secrets", e); }
       break;
     case "gcloud-secrets":
-      try { execSync(`gcloud secrets ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("gcloud", ["secrets", ...args]); }
       catch (e: any) { handleError("gcloud-secrets", e); }
       break;
     case "doppler":
@@ -8296,15 +8301,15 @@ async function handleCommand(input: string): Promise<boolean> {
 
     // ============ SERVERLESS & FUNCTIONS ============
     case "aws-lambda":
-      try { execSync(`aws lambda ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["lambda", ...args]); }
       catch (e: any) { handleError("aws-lambda", e); }
       break;
     case "google-functions": case "gcf":
-      try { execSync(`gcloud functions ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("gcloud", ["functions", ...args]); }
       catch (e: any) { handleError("google-functions", e); }
       break;
     case "azure-functions": case "azfunc":
-      try { execSync(`az func ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("az", ["func", ...args]); }
       catch (e: any) { handleError("azure-functions", e); }
       break;
     case "vercel":
@@ -8621,7 +8626,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("cockroachdb", e); }
       break;
     case "dynamodb":
-      try { execSync(`aws dynamodb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["dynamodb", ...args]); }
       catch (e: any) { handleError("dynamodb", e); }
       break;
     case "neo4j":
@@ -9269,7 +9274,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("apigee", e); }
       break;
     case "aws-apigateway":
-      try { execSync(`aws apigateway ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["apigateway", ...args]); }
       catch (e: any) { handleError("aws-apigateway", e); }
       break;
     case "graphql": case "gql":
@@ -9441,15 +9446,15 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("vault", e); }
       break;
     case "aws-secrets-manager":
-      try { execSync(`aws secretsmanager ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["secretsmanager", ...args]); }
       catch (e: any) { handleError("aws-secrets-manager", e); }
       break;
     case "gcp-secret-manager":
-      try { execSync(`gcloud secrets ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("gcloud", ["secrets", ...args]); }
       catch (e: any) { handleError("gcp-secret-manager", e); }
       break;
     case "azure-key-vault":
-      try { execSync(`az keyvault ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("az", ["keyvault", ...args]); }
       catch (e: any) { handleError("azure-key-vault", e); }
       break;
     case "cyberark":
@@ -9519,7 +9524,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("firebase-auth", e); }
       break;
     case "cognito":
-      try { execSync(`aws cognito-idp ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["cognito-idp", ...args]); }
       catch (e: any) { handleError("cognito", e); }
       break;
     case "pingidentity": case "ping":
@@ -9549,7 +9554,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("akamai", e); }
       break;
     case "cloudfront":
-      try { execSync(`aws cloudfront ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["cloudfront", ...args]); }
       catch (e: any) { handleError("cloudfront", e); }
       break;
     case "bunny":
@@ -9563,7 +9568,7 @@ async function handleCommand(input: string): Promise<boolean> {
 
     // ============ DNS ============
     case "route53": case "r53":
-      try { execSync(`aws route53 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["route53", ...args]); }
       catch (e: any) { handleError("route53", e); }
       break;
     case "dnsmasq":
@@ -9605,15 +9610,15 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("caddy", e); }
       break;
     case "aws-elb":
-      try { execSync(`aws elb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["elb", ...args]); }
       catch (e: any) { handleError("aws-elb", e); }
       break;
     case "aws-alb":
-      try { execSync(`aws alb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["alb", ...args]); }
       catch (e: any) { handleError("aws-alb", e); }
       break;
     case "aws-nlb":
-      try { execSync(`aws nlb ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runCloud("aws", ["nlb", ...args]); }
       catch (e: any) { handleError("aws-nlb", e); }
       break;
 

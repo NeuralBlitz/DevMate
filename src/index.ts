@@ -14,6 +14,7 @@ import { countLinesByExtension, hashFile } from "./file-metrics";
 import { runDevops } from "./devops-invocation";
 import { runCloud, bedrockArguments } from "./cloud-invocation";
 import { runExternalCommand } from "./external-command";
+import { postWebhookJson } from "./webhook-http";
 import { runGit } from "./git-invocation";
 import { progressBar } from "./progress";
 
@@ -4600,7 +4601,7 @@ async function handleCommand(input: string): Promise<boolean> {
       if (!msg) { err("Usage: ds <message>"); break; }
       if (!webhook) { err("Set DISCORD_WEBHOOK"); break; }
       try {
-        execSync(`curl -s -X POST "${webhook}" -H "Content-Type: application/json" -d '{"content":"'${msg}'"}'`, { encoding: "utf-8" });
+        await postWebhookJson(webhook, { content: msg });
         success("Sent!");
       } catch { err("Send failed"); }
       break;
@@ -4612,7 +4613,7 @@ async function handleCommand(input: string): Promise<boolean> {
       if (!msg) { err("Usage: slacks <message>"); break; }
       if (!webhook) { err("Set SLACK_WEBHOOK"); break; }
       try {
-        execSync(`curl -s -X POST "${webhook}" -H "Content-Type: application/json" -d '{"text":"'${msg}'"}'`, { encoding: "utf-8" });
+        await postWebhookJson(webhook, { text: msg });
         success("Sent!");
       } catch { err("Send failed"); }
       break;
@@ -7279,8 +7280,8 @@ async function handleCommand(input: string): Promise<boolean> {
         if (!DISCORD_WEBHOOK) {
           err("Discord not configured", "Set DISCORD_WEBHOOK env var or use -w flag");
         } else {
-          const msg = encodeURIComponent(args.join(" "));
-          try { execSync(`curl -s -X POST -H "Content-Type: application/json" -d '{"content":"'${msg}'"}' "${DISCORD_WEBHOOK}"`, { encoding: "utf-8" }); success("Message sent!"); }
+          const msg = args.join(" ");
+          try { await postWebhookJson(DISCORD_WEBHOOK, { content: msg }); success("Message sent!"); }
           catch (e: any) { handleError("discord", e); }
         }
       }
@@ -7289,8 +7290,8 @@ async function handleCommand(input: string): Promise<boolean> {
       if (!args[0]) err("Usage: discord-webhook <webhook_url> <message>");
       else if (!args[1]) err("Usage: discord-webhook <webhook_url> <message>");
       else {
-        const msg = encodeURIComponent(args.slice(1).join(" "));
-        try { execSync(`curl -s -X POST -H "Content-Type: application/json" -d '{"content":"'${msg}'"}' "${args[0]}"`, { encoding: "utf-8" }); success("Message sent!"); }
+        const msg = args.slice(1).join(" ");
+        try { await postWebhookJson(args[0], { content: msg }); success("Message sent!"); }
         catch (e: any) { handleError("discord-webhook", e); }
       }
       break;
@@ -7325,8 +7326,8 @@ async function handleCommand(input: string): Promise<boolean> {
         if (!SLACK_WEBHOOK) {
           err("Slack not configured", "Set SLACK_WEBHOOK env var");
         } else {
-          const msg = encodeURIComponent(args.join(" "));
-          try { execSync(`curl -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "text=${msg}" "${SLACK_WEBHOOK}"`, { encoding: "utf-8" }); success("Message sent!"); }
+          const msg = args.join(" ");
+          try { await postWebhookJson(SLACK_WEBHOOK, { text: msg }); success("Message sent!"); }
           catch (e: any) { handleError("slack", e); }
         }
       }
@@ -7335,8 +7336,8 @@ async function handleCommand(input: string): Promise<boolean> {
       if (!args[0]) err("Usage: slack-webhook <webhook_url> <message>");
       else if (!args[1]) err("Usage: slack-webhook <webhook_url> <message>");
       else {
-        const msg = encodeURIComponent(args.slice(1).join(" "));
-        try { execSync(`curl -s -X POST -d "text=${msg}" "${args[0]}"`, { encoding: "utf-8" }); success("Message sent!"); }
+        const msg = args.slice(1).join(" ");
+        try { await postWebhookJson(args[0], { text: msg }); success("Message sent!"); }
         catch (e: any) { handleError("slack-webhook", e); }
       }
       break;
@@ -7483,11 +7484,11 @@ async function handleCommand(input: string): Promise<boolean> {
         } else if (service === "discord") {
           const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
           if (!DISCORD_WEBHOOK) err("Set DISCORD_WEBHOOK");
-          else { execSync(`curl -s -X POST -H "Content-Type: application/json" -d '{"content":"'${encodeURIComponent(msg)}'"}' "${DISCORD_WEBHOOK}"`, { encoding: "utf-8" }); success("Sent!"); }
+          else { try { await postWebhookJson(DISCORD_WEBHOOK, { content: msg }); success("Sent!"); } catch { err("Send failed"); } }
         } else if (service === "slack") {
           const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK;
           if (!SLACK_WEBHOOK) err("Set SLACK_WEBHOOK");
-          else { execSync(`curl -s -X POST -d "text=${encodeURIComponent(msg)}" "${SLACK_WEBHOOK}"`, { encoding: "utf-8" }); success("Sent!"); }
+          else { try { await postWebhookJson(SLACK_WEBHOOK, { text: msg }); success("Sent!"); } catch { err("Send failed"); } }
         } else err("Unknown service: telegram, discord, slack, whatsapp");
       }
       break;

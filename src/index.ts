@@ -11,6 +11,7 @@ import { parseProgressArguments } from "./progress-args";
 import { fileInvocation } from "./file-invocation";
 import { runFileSearch } from "./file-search";
 import { countLinesByExtension, hashFile } from "./file-metrics";
+import { runDevops } from "./devops-invocation";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -2171,6 +2172,10 @@ async function handleCommand(input: string): Promise<boolean> {
 
   switch (cmd) {
     case "help": case "?": console.log(help()); break;
+    case "docker": case "kubectl":
+      try { runDevops(cmd, args); }
+      catch (e: any) { handleError(cmd, e); }
+      break;
     case "extended": case "cheatsheet": case "all": case "help-all": console.log(extendedHelp()); break;
 
     case "install": case "setup": {
@@ -2747,7 +2752,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const container = args[0];
       if (!container) { err("Usage: dlogs <container-id>"); break; }
       try {
-        execSync(`docker logs --tail 50 -f ${container}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["logs", "--tail", "50", "-f", container]);
       } catch { err("Container not found"); }
       break;
     }
@@ -2756,21 +2761,21 @@ async function handleCommand(input: string): Promise<boolean> {
       const [container, ...cmdArgs] = args;
       if (!container) { err("Usage: dex <container> <cmd>"); break; }
       try {
-        execSync(`docker exec -it ${container} ${cmdArgs.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["exec", "-it", container, ...cmdArgs]);
       } catch { err("Exec failed"); }
       break;
     }
 
     case "dc": case "dcompose": case "docker-compose-cmd": {
       try {
-        execSync(`docker compose ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["compose", ...args]);
       } catch { err("Docker compose failed"); }
       break;
     }
 
     case "k": case "kubectl-cmd": {
       try {
-        execSync(`kubectl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", args);
       } catch { err("kubectl not configured"); }
       break;
     }
@@ -2812,7 +2817,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const name = args[1];
       if (!resource || !name) { err("Usage: kd <pod|svc> <name>"); break; }
       try {
-        const out = execSync(`kubectl describe ${resource} ${name} 2>/dev/null`, { encoding: "utf-8" });
+        const out = runDevops("kubectl", ["describe", resource, name], true);
         console.log(chalk.cyan(out));
       } catch { err("Not found"); }
       break;
@@ -2822,7 +2827,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const pod = args[0];
       if (!pod) { err("Usage: kl <pod-name>"); break; }
       try {
-        execSync(`kubectl logs -f ${pod} 2>/dev/null`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["logs", "-f", pod]);
       } catch { err("Logs failed"); }
       break;
     }
@@ -2844,7 +2849,7 @@ async function handleCommand(input: string): Promise<boolean> {
         } catch { err("kubectl not configured"); }
       } else {
         try {
-          execSync(`kubectl config set-context --current --namespace=${ns} 2>/dev/null`, { encoding: "utf-8" });
+          runDevops("kubectl", ["config", "set-context", "--current", `--namespace=${ns}`]);
           success(`Switched to namespace: ${ns}`);
         } catch { err("Failed to switch namespace"); }
       }
@@ -3803,7 +3808,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const file = args[0];
       if (!file) { err("Usage: kapply <file.yaml>"); break; }
       try {
-        execSync(`kubectl apply -f ${file}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["apply", "-f", file]);
         success("Applied!");
       } catch { err("Apply failed"); }
       break;
@@ -3814,7 +3819,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const name = args[1];
       if (!type || !name) { err("Usage: kdelete <pod|svc> <name>"); break; }
       try {
-        execSync(`kubectl delete ${type} ${name}`, { encoding: "utf-8" });
+        runDevops("kubectl", ["delete", type, name]);
         success("Deleted!");
       } catch { err("Delete failed"); }
       break;
@@ -3824,7 +3829,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const pod = args[0];
       if (!pod) { err("Usage: klogsf <pod>"); break; }
       try {
-        execSync(`kubectl logs -f ${pod}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["logs", "-f", pod]);
       } catch { err("Logs failed"); }
       break;
     }
@@ -3834,7 +3839,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const cmd = args.slice(1).join(" ");
       if (!pod || !cmd) { err("Usage: kexec <pod> <command>"); break; }
       try {
-        execSync(`kubectl exec -it ${pod} -- ${cmd}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["exec", "-it", pod, "--", ...args.slice(1)]);
       } catch { err("Exec failed"); }
       break;
     }
@@ -3845,7 +3850,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const podPort = args[2] || "80";
       if (!pod) { err("Usage: kpf <pod> [localPort] [podPort]"); break; }
       try {
-        execSync(`kubectl port-forward ${pod} ${localPort}:${podPort}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["port-forward", pod, `${localPort}:${podPort}`]);
       } catch { err("Port forward failed"); }
       break;
     }
@@ -5357,7 +5362,7 @@ async function handleCommand(input: string): Promise<boolean> {
     // ===== DOCKER QUICK =====
     case "d-quick": {
       try {
-        execSync(`docker ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", args);
       } catch { err("Docker failed"); }
       break;
     }
@@ -5365,7 +5370,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "dbuild": {
       const tag = args[0] || "latest";
       try {
-        execSync(`docker build -t myapp:${tag} .`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["build", "-t", `myapp:${tag}`, "."]);
         success("Built!");
       } catch { err("Build failed"); }
       break;
@@ -5375,7 +5380,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const name = args[0] || "myapp";
       const port = args[1] || "3000";
       try {
-        execSync(`docker run -d -p ${port}:${port} --name ${name} ${name}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["run", "-d", "-p", `${port}:${port}`, "--name", name, name]);
         success("Running!");
       } catch { err("Run failed"); }
       break;
@@ -5385,7 +5390,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const container = args[0];
       if (!container) { err("Usage: dshell <container>"); break; }
       try {
-        execSync(`docker exec -it ${container} /bin/sh`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["exec", "-it", container, "/bin/sh"]);
       } catch { err("Shell failed"); }
       break;
     }
@@ -5393,7 +5398,7 @@ async function handleCommand(input: string): Promise<boolean> {
     // ===== K8S QUICK =====
     case "k-quick": {
       try {
-        execSync(`kubectl ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", args);
       } catch { err("kubectl failed"); }
       break;
     }
@@ -5409,7 +5414,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const pod = args[0];
       if (!pod) { err("Usage: kdebug <pod>"); break; }
       try {
-        execSync(`kubectl debug -it ${pod} --image=busybox --share-processes=true`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["debug", "-it", pod, "--image=busybox", "--share-processes=true"]);
       } catch { err("Debug failed"); }
       break;
     }
@@ -6152,7 +6157,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "go": case "cargo": case "rustc":
     case "apt": case "apt-get": case "dnf": case "yum": case "pacman": case "zypper":
     case "brew": case "snap": case "flatpak": case "pkg": case "apk":
-    case "docker": case "kubectl": case "helm": case "k9s":
+    case "helm": case "k9s":
     case "aws": case "gcloud": case "az": case "terraform": case "pulumi": case "ansible":
     case "winget": case "scoop": case "choco": case "podman":
     case "convert": case "ffmpeg": case "scrot": case "feh": case "rclone":
@@ -6744,22 +6749,22 @@ async function handleCommand(input: string): Promise<boolean> {
     // ============ DOCKER ENHANCED ============
     case "docker-build": case "dbuild":
       if (!args[0]) err("Usage: docker-build <image>")
-      else try { execSync(`docker build -t ${args[0]} .`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runDevops("docker", ["build", "-t", args[0], "."]); }
       catch (e: any) { handleError("docker build", e); }
       break;
     case "docker-run": case "drun":
       if (!args[0]) err("Usage: docker-run <image>")
-      else try { execSync(`docker run -it ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runDevops("docker", ["run", "-it", ...args]); }
       catch (e: any) { handleError("docker run", e); }
       break;
     case "docker-logs": case "dlogs":
       if (!args[0]) err("Usage: docker-logs <container>")
-      else try { execSync(`docker logs -f ${args[0]}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runDevops("docker", ["logs", "-f", args[0]]); }
       catch (e: any) { handleError("docker logs", e); }
       break;
     case "docker-exec": case "dexec":
       if (args.length < 2) err("Usage: docker-exec <container> <command>")
-      else try { execSync(`docker exec -it ${args[0]} ${args.slice(1).join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runDevops("docker", ["exec", "-it", args[0], ...args.slice(1)]); }
       catch (e: any) { handleError("docker exec", e); }
       break;
     case "docker-clean": case "dclean":
@@ -6772,18 +6777,18 @@ async function handleCommand(input: string): Promise<boolean> {
       break;
       
     // ============ KUBERNETES ENHANCED ============
-    case "k-get": case "kg": try { execSync(`kubectl get ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl", e); } break;
-    case "k-describe": case "kd": try { execSync(`kubectl describe ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl", e); } break;
-    case "k-logs": case "klog": if (!args[0]) err("Usage: k-logs <pod>"); else try { execSync(`kubectl logs -f ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl logs", e); } break;
-    case "k-exec": case "kexec": if (args.length < 2) err("Usage: k-exec <pod> <cmd>"); else try { execSync(`kubectl exec -it ${args[0]} -- ${args.slice(1).join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl exec", e); } break;
-    case "k-port-forward": case "kpf": if (args.length < 2) err("Usage: k-port-forward <pod> <port>"); else try { execSync(`kubectl port-forward ${args[0]} ${args[1]}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl port-forward", e); } break;
-    case "k-forward": case "kfw": if (args.length < 2) err("Usage: k-forward <service> <port>"); else try { execSync(`kubectl port-forward svc/${args[0]} ${args[1]}:${args[1]}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl forward", e); } break;
+    case "k-get": case "kg": try { runDevops("kubectl", ["get", ...args]); } catch (e: any) { handleError("kubectl", e); } break;
+    case "k-describe": case "kd": try { runDevops("kubectl", ["describe", ...args]); } catch (e: any) { handleError("kubectl", e); } break;
+    case "k-logs": case "klog": if (!args[0]) err("Usage: k-logs <pod>"); else try { runDevops("kubectl", ["logs", "-f", ...args]); } catch (e: any) { handleError("kubectl logs", e); } break;
+    case "k-exec": case "kexec": if (args.length < 2) err("Usage: k-exec <pod> <cmd>"); else try { runDevops("kubectl", ["exec", "-it", args[0], "--", ...args.slice(1)]); } catch (e: any) { handleError("kubectl exec", e); } break;
+    case "k-port-forward": case "kpf": if (args.length < 2) err("Usage: k-port-forward <pod> <port>"); else try { runDevops("kubectl", ["port-forward", args[0], args[1]]); } catch (e: any) { handleError("kubectl port-forward", e); } break;
+    case "k-forward": case "kfw": if (args.length < 2) err("Usage: k-forward <service> <port>"); else try { runDevops("kubectl", ["port-forward", `svc/${args[0]}`, `${args[1]}:${args[1]}`]); } catch (e: any) { handleError("kubectl forward", e); } break;
     case "k-contexts": case "kctxs": try { execSync("kubectl config get-contexts", { encoding: "utf-8" }); } catch (e: any) { handleError("kubectl", e); } break;
     case "k-namespaces": case "kns": try { execSync("kubectl get namespaces", { encoding: "utf-8" }); } catch (e: any) { handleError("kubectl", e); } break;
     case "k-all": case "kall": try { execSync("kubectl get all --all-namespaces", { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl", e); } break;
     case "k-events": case "kev": try { execSync("kubectl get events --sort-by='.lastTimestamp'", { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl", e); } break;
     case "k-top": case "ktop": try { execSync("kubectl top nodes", { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl top", e, "kubectl top requires metrics-server"); } break;
-    case "k-debug": case "kdbg": try { execSync(`kubectl debug ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("kubectl debug", e); } break;
+    case "k-debug": case "kdbg": try { runDevops("kubectl", ["debug", ...args]); } catch (e: any) { handleError("kubectl debug", e); } break;
       
     // ============ CLOUD CLI ============
     case "aws-s3": case "s3": try { execSync(`aws s3 ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); } catch (e: any) { handleError("aws s3", e); } break;
@@ -7173,17 +7178,17 @@ async function handleCommand(input: string): Promise<boolean> {
     // ============ CONTAINER REGISTRIES ============
     case "docker-push": case "dpush":
       if (!args[0]) err("Usage: docker-push <image>");
-      else try { execSync(`docker push ${args[0]}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runDevops("docker", ["push", args[0]]); }
       catch (e: any) { handleError("docker push", e); }
       break;
     case "docker-pull": case "dpull":
       if (!args[0]) err("Usage: docker-pull <image>");
-      else try { execSync(`docker pull ${args[0]}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runDevops("docker", ["pull", args[0]]); }
       catch (e: any) { handleError("docker pull", e); }
       break;
     case "docker-tag": case "dtag":
       if (args.length < 2) err("Usage: docker-tag <source> <target>");
-      else try { execSync(`docker tag ${args[0]} ${args[1]}`, { encoding: "utf-8" }); success("Tagged!"); }
+      else try { runDevops("docker", ["tag", args[0], args[1]]); success("Tagged!"); }
       catch (e: any) { handleError("docker tag", e); }
       break;
     case "docker-image-ls": case "dimages":
@@ -7192,7 +7197,7 @@ async function handleCommand(input: string): Promise<boolean> {
       break;
     case "docker-rmi": case "drmi":
       if (!args[0]) err("Usage: docker-rmi <image>");
-      else try { execSync(`docker rmi ${args[0]}`, { encoding: "utf-8" }); success("Removed image!"); }
+      else try { runDevops("docker", ["rmi", args[0]]); success("Removed image!"); }
       catch (e: any) { handleError("docker rmi", e); }
       break;
     case "docker-prune": case "dprune":
@@ -8269,7 +8274,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("kind", e); }
       break;
     case "docker-swarm": case "dks":
-      try { execSync(`docker swarm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runDevops("docker", ["swarm", ...args]); }
       catch (e: any) { handleError("docker-swarm", e); }
       break;
     case "nomad":

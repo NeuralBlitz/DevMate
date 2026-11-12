@@ -5,28 +5,14 @@ import chalk from "chalk";
 import { execSync, spawn, spawnSync } from "child_process";
 import { readFileSync, existsSync, writeFileSync, mkdirSync, readdirSync, statSync, appendFileSync } from "fs";
 import { join, resolve, dirname, basename } from "path";
+import { aliases, resolveAlias } from "./aliases";
 
 const HOME = process.env.HOME || "/tmp";
 const CONFIG_DIR = join(HOME, ".devmate");
 mkdirSync(CONFIG_DIR, { recursive: true });
 
 const commandHistory: string[] = [];
-const aliases: Record<string, string> = {
-  ll: "ls -la", la: "ls -a", l: "ls -la", llh: "ls -lah", lt: "ls -ltr",
-  g: "git", gs: "git status", ga: "git add", gaa: "git add .", gc: "git commit",
-  gcm: "git commit -m", gp: "git push", gpl: "git pull", gd: "git diff", gdc: "git diff --cached",
-  gco: "git checkout", co: "checkout", br: "branch", brr: "branches", brd: "branch -d",
-  st: "status", sts: "git status -s", lg: "git log --oneline -20",
-  d: "docker", dc: "docker compose", dps: "docker ps", dpa: "docker ps -a",
-  di: "docker images", dex: "docker exec -it", dlog: "docker logs",
-  k: "kubectl", ka: "kubectl get all", kgp: "kubectl get pods", kgs: "kubectl get svc",
-  kgd: "kubectl get deploy", kga: "kubectl get all -A", kdp: "kubectl describe pod",
-  h: "htop", t: "top", i: "htop", v: "vim", n: "nano", e: "vim",
-  q: "exit", x: "exit", qq: "exit", c: "clear", cls: "clear",
-  py: "python", py3: "python3", pipi: "pip install", pips: "pip install -r requirements.txt",
-  npmi: "npm install", npms: "npm install", npmd: "npm run dev", npmb: "npm run build",
-  yai: "yarn add", yad: "yarn add -D", ydev: "yarn dev", ybuild: "yarn build"
-};
+
 
 const OPENCODE_PATH = process.env.OPENCODE_PATH || "/home/runner/workspace/.config/npm/node_global/bin/opencode";
 
@@ -2158,9 +2144,7 @@ async function handleCommand(input: string): Promise<boolean> {
   }
 
   const allAliases = { ...aliases, ...aliasesCustom };
-  let resolved = raw;
-  const firstWord = raw.split(/\s+/)[0].toLowerCase();
-  if (allAliases[firstWord]) resolved = allAliases[firstWord] + raw.slice(firstWord.length);
+  const resolved = resolveAlias(raw, aliasesCustom);
 
   const parts = resolved.split(/\s+/);
   let cmd = parts[0]?.toLowerCase() || "";

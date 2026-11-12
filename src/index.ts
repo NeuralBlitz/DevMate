@@ -15,6 +15,7 @@ import { runDevops } from "./devops-invocation";
 import { runCloud, bedrockArguments } from "./cloud-invocation";
 import { runExternalCommand } from "./external-command";
 import { postWebhookJson } from "./webhook-http";
+import { HTTP_METHODS, HttpClientError, normalizeCliBody, requestHttp } from "./http-client";
 import { runGit } from "./git-invocation";
 import { progressBar } from "./progress";
 
@@ -5725,33 +5726,36 @@ async function handleCommand(input: string): Promise<boolean> {
     }
 
     case "http": case "curl-json": case "api": {
-      const method = args[0]?.toUpperCase() || "GET";
-      const url = args[1] || args[0];
+      const supplied = args[0] || "";
+      const explicitMethod = HTTP_METHODS.includes(supplied.toUpperCase() as any);
+      const method = explicitMethod ? supplied.toUpperCase() : "GET";
+      const url = explicitMethod ? args[1] : supplied;
       if (!url) {
         console.log(chalk.yellow("Usage: api <method> <url> [body]"));
         console.log(chalk.gray("  api GET https://api.example.com/users"));
         console.log(chalk.gray("  api POST https://api.example.com/users '{\"name\":\"John\"}'"));
         break;
       }
-      const validMethods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
-      if (!validMethods.includes(method)) {
-        console.log(chalk.yellow(`Valid methods: ${validMethods.join(", ")}`));
+      if (!explicitMethod && !/^https?:\/\//i.test(url)) {
+        console.log(chalk.yellow(`Valid methods: ${HTTP_METHODS.join(", ")}`));
         break;
       }
-      const body = args[2] ? `-d '${args.slice(2).join(" ")}'` : "";
-      const headers = args[2] ? "-H 'Content-Type: application/json'" : "-H 'Accept: application/json'";
+      const body = explicitMethod
+        ? normalizeCliBody(args.length > 2 ? args.slice(2).join(" ") : undefined)
+        : undefined;
       try {
-        const start = Date.now();
-        const out = execSync(`curl -s -w "\\n%{http_code}|%{time_total}" -X ${method} ${headers} ${body} "${url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
-        const [bodyPart, status, time] = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
-        const color = status.startsWith("2") ? chalk.green : status.startsWith("4") ? chalk.yellow : chalk.red;
-        console.log(chalk.cyan(`\n${method} ${url}`));
-        console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
-        try {
-          const json = JSON.parse(bodyPart);
-          console.log(JSON.stringify(json, null, 2));
-        } catch { console.log(bodyPart); }
-      } catch (e: any) { handleError("api", e); }
+        const result = await requestHttp({ method, url, body });
+        const color = result.status >= 200 && result.status < 300
+          ? chalk.green : result.status >= 400 && result.status < 500
+          ? chalk.yellow : chalk.red;
+        console.log(chalk.cyan(`\n${method} request`));
+        console.log(color(`Status: ${result.status}`) +
+          chalk.gray(` (${(result.elapsedMs / 1000).toFixed(3)}s)`));
+        try { console.log(JSON.stringify(JSON.parse(result.text), null, 2)); }
+        catch { console.log(result.text); }
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "API request failed");
+      }
       break;
     }
 
@@ -5874,27 +5878,31 @@ async function handleCommand(input: string): Promise<boolean> {
     }
 
     case "api-graphql": case "gql": {
-      const [endpoint, query] = args;
+      const endpoint = args[0];
+      const query = normalizeCliBody(args.slice(1).join(" "));
       if (!endpoint || !query) {
         console.log(chalk.yellow("Usage: api-graphql <endpoint> <query>"));
         console.log(chalk.gray("  api-graphql https://api.github.com/graphql '{viewer{login}}'"));
         console.log(chalk.gray("  api-graphql https://api.linear.app/graphql '{me{id}}'"));
         break;
       }
-      const url = endpoint.startsWith("http") ? endpoint : (process.env.API_URL || "http://localhost:3000") + endpoint;
-      console.log(chalk.cyan(`\nPOST ${url}`));
+      const url = endpoint.startsWith("http") ? endpoint
+        : (process.env.API_URL || "http://localhost:3000") + endpoint;
       try {
-        const start = Date.now();
-        const out = execSync(`curl -s -w "\\n%{http_code}|%{time_total}" -X POST -H "Content-Type: application/json" -d '{"query":"'${query}'"}' "${url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
-        const match = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
-        if (match) {
-          const [_, bodyPart, status, time] = match;
-          const color = status.startsWith("2") ? chalk.green : chalk.red;
-          console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
-          try { console.log(JSON.stringify(JSON.parse(bodyPart), null, 2)); } 
-          catch { console.log(bodyPart); }
-        }
-      } catch (e: any) { handleError("graphql", e); }
+        const result = await requestHttp({
+          method: "POST",
+          url,
+          body: JSON.stringify({ query }),
+        });
+        const color = result.status >= 200 && result.status < 300 ? chalk.green : chalk.red;
+        console.log(chalk.cyan("\nPOST GraphQL request"));
+        console.log(color(`Status: ${result.status}`) +
+          chalk.gray(` (${(result.elapsedMs / 1000).toFixed(3)}s)`));
+        try { console.log(JSON.stringify(JSON.parse(result.text), null, 2)); }
+        catch { console.log(result.text); }
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "GraphQL request failed");
+      }
       break;
     }
 

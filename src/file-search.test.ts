@@ -41,8 +41,8 @@ test("recent and size searches reject malformed predicates", () => {
 test("search output can be truncated without invoking a shell", () => {
   const dir = mkdtempSync(join(tmpdir(), "devmate-search-helper-"));
   try {
-    writeFileSync("first-match.txt", "hello");
-    writeFileSync("second-match.txt", "hello");
+    writeFileSync(join(dir, "first-match.txt"), "hello");
+    writeFileSync(join(dir, "second-match.txt"), "hello");
     const result = runFileSearch({ kind: "files", pattern: "match" }, { maxLines: 1, cwd: dir });
     expect(result.split("\n")).toHaveLength(1);
     expect(result).toContain("match");

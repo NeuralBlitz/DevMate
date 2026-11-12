@@ -14,6 +14,7 @@ import { countLinesByExtension, hashFile } from "./file-metrics";
 import { runDevops } from "./devops-invocation";
 import { runCloud, bedrockArguments } from "./cloud-invocation";
 import { runExternalCommand } from "./external-command";
+import { runGit } from "./git-invocation";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -3669,7 +3670,8 @@ async function handleCommand(input: string): Promise<boolean> {
       const name = args[0];
       if (!name) { err("Usage: git-init <repo-name>"); break; }
       try {
-        execSync(`mkdir ${name} && cd ${name} && git init`, { encoding: "utf-8", stdio: "inherit" });
+        mkdirSync(name, { recursive: true });
+        runGit(["init"], { cwd: resolve(name) });
         success(`Initialized ${name}/`);
       } catch { err("Init failed"); }
       break;
@@ -3680,7 +3682,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const dir = args[1];
       if (!repo) { err("Usage: git-clone <repo> [dir]"); break; }
       try {
-        execSync(`git clone ${repo} ${dir || ""}`, { encoding: "utf-8", stdio: "inherit" });
+        runGit(["clone", repo, ...(dir ? [dir] : [])]);
         success("Cloned!");
       } catch { err("Clone failed"); }
       break;
@@ -3706,7 +3708,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const msg = args.join(" ");
       try {
         if (msg) {
-          execSync(`git commit --amend -m "${msg}"`, { encoding: "utf-8" });
+          runGit(["commit", "--amend", "-m", msg], { captureOutput: true });
           success("Amended commit");
         } else {
           execSync("git commit --amend --no-edit", { encoding: "utf-8" });
@@ -3728,7 +3730,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const hash = args[0];
       if (!hash) { err("Usage: gcp <commit-hash>"); break; }
       try {
-        execSync(`git cherry-pick ${hash}`, { encoding: "utf-8", stdio: "inherit" });
+        runGit(["cherry-pick", hash]);
         success("Cherry-picked!");
       } catch { err("Pick failed"); }
       break;
@@ -3739,7 +3741,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const msg = args[1];
       if (!tag) { err("Usage: gtag <tag> [message]"); break; }
       try {
-        execSync(msg ? `git tag -a ${tag} -m "${msg}"` : `git tag ${tag}`, { encoding: "utf-8" });
+        runGit(msg ? ["tag", "-a", tag, "-m", msg] : ["tag", tag], { captureOutput: true });
         success(`Tagged: ${tag}`);
       } catch { err("Tag failed"); }
       break;
@@ -3754,7 +3756,7 @@ async function handleCommand(input: string): Promise<boolean> {
         } catch { err("Branch list failed"); }
       } else {
         try {
-          execSync(`git branch ${action} ${name}`, { encoding: "utf-8" });
+          runGit(["branch", action, name], { captureOutput: true });
           success(`Branch ${action === "-d" ? "deleted" : "created"}: ${name}`);
         } catch { err("Branch failed"); }
       }
@@ -3772,7 +3774,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "git-rebase-i": case "grebase": {
       const branch = args[0] || "HEAD~3";
       try {
-        execSync(`git rebase -i ${branch}`, { encoding: "utf-8", stdio: "inherit" });
+        runGit(["rebase", "-i", branch]);
       } catch { err("Rebase failed"); }
       break;
     }
@@ -5319,7 +5321,7 @@ async function handleCommand(input: string): Promise<boolean> {
     // ===== GIT QUICK =====
     case "g": case "git-quick": {
       try {
-        execSync(`git ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runGit(args);
       } catch { err("git failed"); }
       break;
     }
@@ -5343,7 +5345,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const msg = args.join(" ");
       if (!msg) { err("Usage: gc <message>"); break; }
       try {
-        execSync(`git commit -m "${msg}"`, { encoding: "utf-8", stdio: "inherit" });
+        runGit(["commit", "-m", msg]);
         success("Committed!");
       } catch { err("Failed"); }
       break;
@@ -5603,7 +5605,7 @@ async function handleCommand(input: string): Promise<boolean> {
       try { runExternalCommand(cmd, args); }
       catch (e: any) { handleError(cmd, e); } break;
       
-    case "git": try { execSync(`git ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+    case "git": try { runGit(args); }
       catch (e: any) { handleError("git", e); } break;
       
     case "git-status": case "gitst": {
@@ -6050,12 +6052,12 @@ async function handleCommand(input: string): Promise<boolean> {
     }
        
     case "status": case "branches": case "brr": case "graph": case "log": case "diff":
-      try { execSync(`git ${cmd === "brr" ? "branch" : cmd} ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runGit([cmd === "brr" ? "branch" : cmd, ...args]); }
       catch (e: any) { handleError("git", e); } break;
       
     case "commit": case "gc": case "gcm":
       if (!args[0]) err("Usage: commit <message>");
-      else try { execSync(`git add . && git commit -m "${args.join(" ")}"`, { encoding: "utf-8" }); success("Committed!"); }
+      else try { runGit(["add", "."], { captureOutput: true }); runGit(["commit", "-m", args.join(" ")], { captureOutput: true }); success("Committed!"); }
       catch (e: any) { handleError("git commit", e, "Nothing to commit?"); } break;
       
     case "push": case "gp":
@@ -6068,11 +6070,11 @@ async function handleCommand(input: string): Promise<boolean> {
       
     case "checkout": case "co": case "gco":
       if (!args[0]) err("Usage: checkout <branch>");
-      else try { execSync(`git checkout "${args[0]}"`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runGit(["checkout", args[0]]); }
       catch (e: any) { handleError("git checkout", e, "Branch may not exist"); } break;
       
     case "add": case "ga": case "gaa":
-      try { execSync(`git add ${cmd === "gaa" ? "." : args[0] || "."}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runGit(["add", cmd === "gaa" ? "." : args[0] || "."]); }
       catch (e: any) { handleError("git add", e); } break;
       
     case "ask": case "ai":
@@ -7067,7 +7069,7 @@ async function handleCommand(input: string): Promise<boolean> {
       break;
     case "git-clone": case "gclone":
       if (!args[0]) err("Usage: git-clone <url>");
-      else try { execSync(`git clone ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runGit(["clone", ...args]); }
       catch (e: any) { handleError("git clone", e); }
       break;
     case "git-undo": case "gundo":
@@ -7080,7 +7082,7 @@ async function handleCommand(input: string): Promise<boolean> {
       break;
     case "git-force": case "gforce":
       if (!args[0]) err("Usage: git-force <branch>");
-      else try { execSync(`git reset --hard origin/${args[0]}`); success(`Reset to origin/${args[0]}`); }
+      else try { runGit(["reset", "--hard", `origin/${args[0]}`]); success(`Reset to origin/${args[0]}`); }
       catch (e: any) { handleError("git force", e); }
       break;
     case "git-prune": case "gprune":

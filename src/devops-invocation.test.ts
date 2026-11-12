@@ -65,6 +65,10 @@ test("CLI Docker and kubectl aliases do not execute shell metacharacters", () =>
       { input: ["klogsf", payload], tool: "kubectl", tokens: ["logs", "-f", payload] },
       { input: ["kexec", payload, "echo", "hello"], tool: "kubectl", tokens: ["exec", "-it", payload, "--", "echo", "hello"] },
       { input: ["kpf", payload, "1111", "2222"], tool: "kubectl", tokens: ["port-forward", payload, "1111:2222"] },
+      { input: ["kns", payload], tool: "kubectl", tokens: ["config", "set-context", "--current", `--namespace=${payload}`] },
+      { input: ["kdebug", payload], tool: "kubectl", tokens: ["debug", "-it", payload, "--image=busybox", "--share-processes=true"] },
+      { input: ["docker-push", payload], tool: "docker", tokens: ["push", payload] },
+      { input: ["docker-swarm", "join", payload], tool: "docker", tokens: ["swarm", "join", payload] },
     ];
     for (const item of checks) {
       const output = run(...item.input);

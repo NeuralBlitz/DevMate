@@ -3808,7 +3808,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const file = args[0];
       if (!file) { err("Usage: kapply <file.yaml>"); break; }
       try {
-        execSync(`kubectl apply -f ${file}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["apply", "-f", file]);
         success("Applied!");
       } catch { err("Apply failed"); }
       break;
@@ -3819,7 +3819,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const name = args[1];
       if (!type || !name) { err("Usage: kdelete <pod|svc> <name>"); break; }
       try {
-        execSync(`kubectl delete ${type} ${name}`, { encoding: "utf-8" });
+        runDevops("kubectl", ["delete", type, name]);
         success("Deleted!");
       } catch { err("Delete failed"); }
       break;
@@ -3829,7 +3829,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const pod = args[0];
       if (!pod) { err("Usage: klogsf <pod>"); break; }
       try {
-        execSync(`kubectl logs -f ${pod}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["logs", "-f", pod]);
       } catch { err("Logs failed"); }
       break;
     }
@@ -3839,7 +3839,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const cmd = args.slice(1).join(" ");
       if (!pod || !cmd) { err("Usage: kexec <pod> <command>"); break; }
       try {
-        execSync(`kubectl exec -it ${pod} -- ${cmd}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["exec", "-it", pod, "--", ...args.slice(1)]);
       } catch { err("Exec failed"); }
       break;
     }
@@ -3850,7 +3850,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const podPort = args[2] || "80";
       if (!pod) { err("Usage: kpf <pod> [localPort] [podPort]"); break; }
       try {
-        execSync(`kubectl port-forward ${pod} ${localPort}:${podPort}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["port-forward", pod, `${localPort}:${podPort}`]);
       } catch { err("Port forward failed"); }
       break;
     }
@@ -5362,7 +5362,7 @@ async function handleCommand(input: string): Promise<boolean> {
     // ===== DOCKER QUICK =====
     case "d-quick": {
       try {
-        execSync(`docker ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", args);
       } catch { err("Docker failed"); }
       break;
     }
@@ -5370,7 +5370,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "dbuild": {
       const tag = args[0] || "latest";
       try {
-        execSync(`docker build -t myapp:${tag} .`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["build", "-t", `myapp:${tag}`, "."]);
         success("Built!");
       } catch { err("Build failed"); }
       break;
@@ -5380,7 +5380,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const name = args[0] || "myapp";
       const port = args[1] || "3000";
       try {
-        execSync(`docker run -d -p ${port}:${port} --name ${name} ${name}`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["run", "-d", "-p", `${port}:${port}`, "--name", name, name]);
         success("Running!");
       } catch { err("Run failed"); }
       break;
@@ -5390,7 +5390,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const container = args[0];
       if (!container) { err("Usage: dshell <container>"); break; }
       try {
-        execSync(`docker exec -it ${container} /bin/sh`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("docker", ["exec", "-it", container, "/bin/sh"]);
       } catch { err("Shell failed"); }
       break;
     }

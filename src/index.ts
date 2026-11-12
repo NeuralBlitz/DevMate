@@ -2849,7 +2849,7 @@ async function handleCommand(input: string): Promise<boolean> {
         } catch { err("kubectl not configured"); }
       } else {
         try {
-          execSync(`kubectl config set-context --current --namespace=${ns} 2>/dev/null`, { encoding: "utf-8" });
+          runDevops("kubectl", ["config", "set-context", "--current", `--namespace=${ns}`]);
           success(`Switched to namespace: ${ns}`);
         } catch { err("Failed to switch namespace"); }
       }
@@ -5414,7 +5414,7 @@ async function handleCommand(input: string): Promise<boolean> {
       const pod = args[0];
       if (!pod) { err("Usage: kdebug <pod>"); break; }
       try {
-        execSync(`kubectl debug -it ${pod} --image=busybox --share-processes=true`, { encoding: "utf-8", stdio: "inherit" });
+        runDevops("kubectl", ["debug", "-it", pod, "--image=busybox", "--share-processes=true"]);
       } catch { err("Debug failed"); }
       break;
     }
@@ -7178,7 +7178,7 @@ async function handleCommand(input: string): Promise<boolean> {
     // ============ CONTAINER REGISTRIES ============
     case "docker-push": case "dpush":
       if (!args[0]) err("Usage: docker-push <image>");
-      else try { execSync(`docker push ${args[0]}`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { runDevops("docker", ["push", args[0]]); }
       catch (e: any) { handleError("docker push", e); }
       break;
     case "docker-pull": case "dpull":
@@ -8274,7 +8274,7 @@ async function handleCommand(input: string): Promise<boolean> {
       catch (e: any) { handleError("kind", e); }
       break;
     case "docker-swarm": case "dks":
-      try { execSync(`docker swarm ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
+      try { runDevops("docker", ["swarm", ...args]); }
       catch (e: any) { handleError("docker-swarm", e); }
       break;
     case "nomad":

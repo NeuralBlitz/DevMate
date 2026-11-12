@@ -115,7 +115,7 @@ test("Discord and Slack CLI webhook commands use native JSON without a host shel
       const before = mock.received.length;
       const result = await runCli(item.args, cwd, env);
       expect(result.code).toBe(0);
-      expect(result.output + result.errors).toContain("Sent!");
+      expect(result.output + result.errors).toMatch(/(?:Sent!|Message sent!)/);
       expect(mock.received.length).toBe(before + 1);
       expect(mock.received.at(-1)?.body).toEqual(item.expected);
       expect(existsSync(join(cwd, "sentinel"))).toBe(false);

@@ -40,16 +40,13 @@ test("recent and size searches reject malformed predicates", () => {
 
 test("search output can be truncated without invoking a shell", () => {
   const dir = mkdtempSync(join(tmpdir(), "devmate-search-helper-"));
-  const cwd = process.cwd();
   try {
-    process.chdir(dir);
     writeFileSync("first-match.txt", "hello");
     writeFileSync("second-match.txt", "hello");
-    const result = runFileSearch({ kind: "files", pattern: "match" }, { maxLines: 1 });
+    const result = runFileSearch({ kind: "files", pattern: "match" }, { maxLines: 1, cwd: dir });
     expect(result.split("\n")).toHaveLength(1);
     expect(result).toContain("match");
   } finally {
-    process.chdir(cwd);
     rmSync(dir, { recursive: true, force: true });
   }
 });

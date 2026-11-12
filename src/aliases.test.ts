@@ -13,7 +13,7 @@ test("built-in aliases expand to their intended commands", () => {
 
 test("alias matching ignores command case but preserves arguments", () => {
   expect(resolveAlias("GS --short")).toBe("git status --short");
-  expect(resolveAlias("  npmb  ")).toBe("npmb");
+  expect(resolveAlias("  npmb  ")).toBe("npm run build");
   expect(resolveAlias("git status")).toBe("git status");
 });
 

@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { aliases, resolveAlias } from "./aliases";
@@ -43,4 +43,10 @@ test("CLI version command starts and exits successfully", () => {
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
+});
+
+test("full CLI installation is opt-in, not an npm install lifecycle hook", () => {
+  const pkg = JSON.parse(readFileSync(join(import.meta.dir, "..", "package.json"), "utf8"));
+  expect(pkg.scripts.install).toBeUndefined();
+  expect(pkg.scripts["install:cli"]).toBe("./install.sh");
 });

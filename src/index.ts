@@ -10,6 +10,7 @@ import { parseCommand } from "./command-parser";
 import { parseProgressArguments } from "./progress-args";
 import { fileInvocation } from "./file-invocation";
 import { runFileSearch } from "./file-search";
+import { countLinesByExtension, hashFile } from "./file-metrics";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -2565,9 +2566,7 @@ async function handleCommand(input: string): Promise<boolean> {
     case "count": case "line-count": {
       try {
         const ext = args[0] || "*";
-        const out = execSync(`find . -name "*.${ext}" -type f -exec wc -l {} + 2>/dev/null | tail -1`, { encoding: "utf-8" });
-        const total = out.trim().split("\n").pop() || "";
-        const lines = total.trim().split(/\s+/)[0];
+        const lines = await countLinesByExtension(ext);
         console.log(chalk.green(`Total lines in .${ext} files: ${lines}`));
       } catch { err("Count failed"); }
       break;
@@ -2585,10 +2584,9 @@ async function handleCommand(input: string): Promise<boolean> {
       const algo = args[1] || "sha256";
       if (!file) { err("Usage: hash <file> [algorithm]"); break; }
       try {
-        const out = execSync(`${algo}sum "${file}"`, { encoding: "utf-8" }).trim();
-        const [hash] = out.split(" ");
-        console.log(chalk.green(`${algo.toUpperCase()}: ${hash}`));
-      } catch { err("Hash failed"); }
+        const digest = await hashFile(file, algo);
+        console.log(chalk.green(`${algo.toUpperCase()}: ${digest}`));
+      } catch (e: any) { err(e instanceof RangeError ? e.message : "Hash failed"); }
       break;
     }
 

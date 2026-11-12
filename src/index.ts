@@ -9,6 +9,7 @@ import { aliases } from "./aliases";
 import { parseCommand } from "./command-parser";
 import { parseProgressArguments } from "./progress-args";
 import { fileInvocation } from "./file-invocation";
+import { runFileSearch } from "./file-search";
 import { progressBar } from "./progress";
 
 const HOME = process.env.HOME || "/tmp";
@@ -2509,13 +2510,10 @@ async function handleCommand(input: string): Promise<boolean> {
     case "find-files": case "ff": {
       const pattern = args[0] || "*";
       try {
-        const out = execSync(`find . -name "*${pattern}*" -type f 2>/dev/null | head -20`, { encoding: "utf-8" });
-        const files = out.trim().split("\n").filter(Boolean);
-        if (files.length === 0) {
-          console.log(chalk.gray("No files found"));
-        } else {
-          files.forEach(f => console.log(chalk.gray(f)));
-        }
+        const output = runFileSearch({ kind: "files", pattern }, { maxLines: 20 });
+        const files = output.split("\n").filter(Boolean);
+        if (files.length === 0) console.log(chalk.gray("No files found"));
+        else files.forEach(f => console.log(chalk.gray(f)));
       } catch { err("Find failed"); }
       break;
     }
@@ -2523,13 +2521,10 @@ async function handleCommand(input: string): Promise<boolean> {
     case "find-dirs": case "fd": {
       const pattern = args[0] || "*";
       try {
-        const out = execSync(`find . -name "*${pattern}*" -type d 2>/dev/null | head -20`, { encoding: "utf-8" });
-        const dirs = out.trim().split("\n").filter(Boolean);
-        if (dirs.length === 0) {
-          console.log(chalk.gray("No directories found"));
-        } else {
-          dirs.forEach(d => console.log(chalk.blue(d)));
-        }
+        const output = runFileSearch({ kind: "directories", pattern }, { maxLines: 20 });
+        const dirs = output.split("\n").filter(Boolean);
+        if (dirs.length === 0) console.log(chalk.gray("No directories found"));
+        else dirs.forEach(d => console.log(chalk.blue(d)));
       } catch { err("Find failed"); }
       break;
     }
@@ -2537,20 +2532,20 @@ async function handleCommand(input: string): Promise<boolean> {
     case "recent": case "recent-files": {
       const days = args[0] || "7";
       try {
-        const out = execSync(`find . -type f -mtime -${days} -ls 2>/dev/null | head -20`, { encoding: "utf-8" });
+        const output = runFileSearch({ kind: "recent", days }, { maxLines: 20 });
         console.log(chalk.cyan(`Files modified in last ${days} days:`));
-        console.log(chalk.gray(out));
-      } catch { err("Find failed"); }
+        console.log(chalk.gray(output));
+      } catch (e: any) { err(e instanceof RangeError ? e.message : "Find failed"); }
       break;
     }
 
     case "size": case "big-files": {
       const limit = args[0] || "1M";
       try {
-        const out = execSync(`find . -type f -size +${limit} -ls 2>/dev/null | sort -k7 -r | head -15`, { encoding: "utf-8" });
+        const output = runFileSearch({ kind: "size", limit }, { maxLines: 15, sortBySize: true });
         console.log(chalk.cyan(`Files larger than ${limit}:`));
-        console.log(chalk.gray(out));
-      } catch { err("Find failed"); }
+        console.log(chalk.gray(output));
+      } catch (e: any) { err(e instanceof RangeError ? e.message : "Find failed"); }
       break;
     }
 
@@ -7210,12 +7205,12 @@ async function handleCommand(input: string): Promise<boolean> {
     // ============ SEARCH ENHANCED ============
     case "search": case "find-content":
       if (args.length < 1) err("Usage: search <pattern>");
-      else try { execSync(`grep -rn "${args.join(" ")}" . --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx" --include="*.py" --include="*.go"`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { process.stdout.write(runFileSearch({ kind: "content", pattern: args.join(" ") })); }
       catch (e: any) { handleError("search", e); }
       break;
     case "find-ext": case "finde":
       if (args.length < 2) err("Usage: find-ext <ext> <name>");
-      else try { execSync(`find . -name "*${args[1]}*.${args[0]}"`, { encoding: "utf-8", stdio: "inherit" }); }
+      else try { process.stdout.write(runFileSearch({ kind: "extension", extension: args[0], name: args[1] })); }
       catch (e: any) { handleError("find-ext", e); }
       break;
     case "find-big": case "findbig":

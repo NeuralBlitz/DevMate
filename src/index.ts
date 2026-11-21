@@ -15,6 +15,7 @@ import { runDevops } from "./devops-invocation";
 import { runCloud, bedrockArguments } from "./cloud-invocation";
 import { runExternalCommand } from "./external-command";
 import { postWebhookJson } from "./webhook-http";
+import { callTelegramBot, sendTelegramDocument, sendTelegramMessage, TelegramRequestError } from "./telegram-http";
 import { HTTP_METHODS, HttpClientError, normalizeCliBody, requestHttp } from "./http-client";
 import { API_SERVICE_BASES, buildApiServiceRequest } from "./api-service-http";
 import { runGit } from "./git-invocation";
@@ -7221,44 +7222,48 @@ async function handleCommand(input: string): Promise<boolean> {
       break;
 
     // ============ MESSAGING & SOCIAL ============
-    case "telegram":
-      if (!args[0]) err("Usage: telegram <message> or telegram -f <file> or telegram -s <chat_id> <message>");
-      else {
-        const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-        const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-        if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-          err("Telegram not configured", "Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars");
-        } else {
-          const msg = encodeURIComponent(args.join(" "));
-          try { execSync(`curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${msg}"`, { encoding: "utf-8" }); success("Message sent!"); }
-          catch (e: any) { handleError("telegram", e); }
+    case "telegram": {
+      if (!args[0]) { err("Usage: telegram <message>"); break; }
+      const token = process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+      if (!token || !chatId) {
+        err("Telegram not configured", "Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars");
+        break;
+      }
+      try { await sendTelegramMessage(token, chatId, args.join(" ")); success("Message sent!"); }
+      catch (e: any) { err(e instanceof TelegramRequestError ? e.message : "Telegram request failed"); }
+      break;
+    }
+    case "telegram-file": case "telegramf": {
+      if (!args[0]) { err("Usage: telegram-file <file>"); break; }
+      const token = process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+      if (!token || !chatId) {
+        err("Telegram not configured", "Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars");
+        break;
+      }
+      try { await sendTelegramDocument(token, chatId, args.join(" ")); success("File sent!"); }
+      catch (e: any) { err(e instanceof TelegramRequestError ? e.message : "Telegram document request failed"); }
+      break;
+    }
+    case "telegram-bot": case "tgb": {
+      if (!args[0]) { err("Usage: telegram-bot <method> [JSON body]"); break; }
+      const token = process.env.TELEGRAM_BOT_TOKEN;
+      if (!token) { err("Set TELEGRAM_BOT_TOKEN env var"); break; }
+      try {
+        const raw = normalizeCliBody(args.slice(1).join(" "));
+        const payload = raw ? JSON.parse(raw) : {};
+        if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+          throw new TelegramRequestError("Telegram method body must be a JSON object");
         }
+        const result = await callTelegramBot(token, args[0], payload);
+        console.log(JSON.stringify(result, null, 2));
+      } catch (e: any) {
+        err(e instanceof TelegramRequestError ? e.message :
+          e instanceof SyntaxError ? "Telegram method body must be valid JSON" : "Telegram request failed");
       }
       break;
-    case "telegram-file": case "telegramf":
-      if (!args[0]) err("Usage: telegram-file <file>");
-      else {
-        const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-        const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-        if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-          err("Telegram not configured", "Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars");
-        } else {
-          try { execSync(`curl -s -F document=@"${args[0]}" "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument?chat_id=${TELEGRAM_CHAT_ID}"`, { encoding: "utf-8" }); success("File sent!"); }
-          catch (e: any) { handleError("telegram-file", e); }
-        }
-      }
-      break;
-    case "telegram-bot": case "tgb":
-      if (!args[0]) err("Usage: telegram-bot <command> [args]");
-      else {
-        const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-        if (!TELEGRAM_BOT_TOKEN) { err("Set TELEGRAM_BOT_TOKEN env var"); }
-        else {
-          try { execSync(`curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/${args.join("_")}"`, { encoding: "utf-8", stdio: "inherit" }); }
-          catch (e: any) { handleError("telegram-bot", e); }
-        }
-      }
-      break;
+    }
     case "discord": case "discord-msg":
       if (!args[0]) err("Usage: discord <message> or discord -w <webhook_url> <message>");
       else {

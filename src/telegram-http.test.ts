@@ -113,4 +113,7 @@ test("CLI Telegram dispatchers no longer use interpolated curl shells", () => {
   expect(telegramCases).toContain("callTelegramBot");
   expect(telegramCases).not.toContain("execSync(");
   expect(telegramCases).not.toContain("curl");
+  expect(source).not.toContain("api.telegram.org");
+  expect(source).toContain("await sendTelegramMessage(token, chatId, msg)");
+  expect(source).toContain("await sendTelegramMessage(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg)");
 });

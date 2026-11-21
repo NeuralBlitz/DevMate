@@ -16,6 +16,7 @@ import { runCloud, bedrockArguments } from "./cloud-invocation";
 import { runExternalCommand } from "./external-command";
 import { postWebhookJson } from "./webhook-http";
 import { HTTP_METHODS, HttpClientError, normalizeCliBody, requestHttp } from "./http-client";
+import { API_SERVICE_BASES, buildApiServiceRequest } from "./api-service-http";
 import { runGit } from "./git-invocation";
 import { progressBar } from "./progress";
 
@@ -5830,50 +5831,27 @@ async function handleCommand(input: string): Promise<boolean> {
 
     case "api-service": case "api-preset": {
       const [service, ...rest] = args;
-      const presets: Record<string, string> = {
-        github: "https://api.github.com",
-        gitlab: "https://gitlab.com/api/v4",
-        notion: "https://api.notion.com/v1",
-        stripe: "https://api.stripe.com/v1",
-        openai: "https://api.openai.com/v1",
-        anthropic: "https://api.anthropic.com/v1",
-        replicate: "https://api.replicate.com/v1",
-        jira: process.env.JIRA_URL || "https://your-domain.atlassian.net/rest/api/3",
-        sendgrid: "https://api.sendgrid.com/v3",
-        linear: "https://api.linear.app/graphql",
-        shopify: "https://your-store.myshopify.com/admin/api/2024-01",
-      };
       if (!service) {
         err("Usage: api-service <service> <endpoint> [method] [body]");
-        console.log(chalk.gray("Services: " + Object.keys(presets).join(", ")));
+        console.log(chalk.gray("Services: " + Object.keys(API_SERVICE_BASES).join(", ")));
         break;
       }
-      const base = presets[service.toLowerCase()];
-      if (!base) { err(`Unknown service: ${service}`); break; }
-      const endpoint = rest[0]?.startsWith("/") ? rest[0] : "/" + (rest[0] || "");
-      const method = (rest[1] || "GET").toUpperCase();
-      const url = base + endpoint;
-      console.log(chalk.cyan(`\n${method} ${service}:${endpoint}`));
       try {
-        const start = Date.now();
-        let opts = `-s -w "\\n%{http_code}|%{time_total}" -X ${method}`;
-        if (process.env[`${service.toUpperCase()}_TOKEN`] || process.env[`${service.toUpperCase()}_API_KEY`]) {
-          const token = process.env[`${service.toUpperCase()}_TOKEN`] || process.env[`${service.toUpperCase()}_API_KEY`];
-          if (service === "github") opts += ` -H "Authorization: Bearer ${token}" -H "Accept: application/vnd.github.v3+json"`;
-          else if (service === "openai" || service === "anthropic") opts += ` -H "Authorization: Bearer ${token}" -H "Content-Type: application/json"`;
-          else if (service === "stripe") opts += ` -u ${token}:`;
-          else opts += ` -H "Authorization: Bearer ${token}"`;
-        }
-        const out = execSync(`curl ${opts} "${url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
-        const match = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
-        if (match) {
-          const [_, bodyPart, status, time] = match;
-          const color = status.startsWith("2") ? chalk.green : status.startsWith("4") ? chalk.yellow : chalk.red;
-          console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
-          try { console.log(JSON.stringify(JSON.parse(bodyPart), null, 2)); } 
-          catch { console.log(bodyPart); }
-        }
-      } catch (e: any) { handleError("api-service", e); }
+        const request = buildApiServiceRequest(
+          service, rest[0] || "", rest[1] || "GET", rest.slice(2).join(" ") || undefined,
+        );
+        const result = await requestHttp(request);
+        const color = result.status >= 200 && result.status < 300 ? chalk.green
+          : result.status >= 400 && result.status < 500 ? chalk.yellow : chalk.red;
+        // Do not print query strings: they may carry bearer tokens or credentials.
+        console.log(chalk.cyan(`\n${request.method} ${service.toLowerCase()} API service`));
+        console.log(color(`Status: ${result.status}`) +
+          chalk.gray(` (${(result.elapsedMs / 1000).toFixed(3)}s)`));
+        try { console.log(JSON.stringify(JSON.parse(result.text), null, 2)); }
+        catch { console.log(result.text); }
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "API service request failed");
+      }
       break;
     }
 
@@ -5954,26 +5932,26 @@ async function handleCommand(input: string): Promise<boolean> {
 
     case "api-run": case "apir": {
       if (!args[0]) { err("Usage: api-run <favorite-name>"); break; }
-      const favsFile = join(CONFIG_DIR, "api_favorites.json");
-      const favs = loadJSON(favsFile, {});
+      const favs = loadJSON(join(CONFIG_DIR, "api_favorites.json"), {});
       const fav = favs[args[0]];
-      if (!fav) { err(`Favorite not found: ${args[0]}`); break; }
-      const start = Date.now();
+      if (!fav || typeof fav !== "object") { err("Favorite not found"); break; }
       try {
-        let opts = `-s -w "\\n%{http_code}|%{time_total}" -X ${fav.method}`;
-        opts += ` -H "Content-Type: application/json"`;
-        if (fav.body) opts += ` -d '${fav.body}'`;
-        const out = execSync(`curl ${opts} "${fav.url}"`, { encoding: "utf-8", maxBuffer: 5 * 1024 * 1024 });
-        const match = out.match(/([\s\S]*)\n(\d+)\|(.+)$/);
-        if (match) {
-          const [_, bodyPart, status, time] = match;
-          const color = status.startsWith("2") ? chalk.green : chalk.red;
-          console.log(chalk.cyan(`${fav.method} ${fav.url}`));
-          console.log(color(`Status: ${status}`) + chalk.gray(` (${parseFloat(time).toFixed(3)}s)`));
-          try { console.log(JSON.stringify(JSON.parse(bodyPart), null, 2)); } 
-          catch { console.log(bodyPart); }
-        }
-      } catch (e: any) { handleError("api-run", e); }
+        const result = await requestHttp({
+          method: typeof fav.method === "string" ? fav.method : "GET",
+          url: typeof fav.url === "string" ? fav.url : "",
+          body: typeof fav.body === "string" && fav.body.length > 0
+            ? normalizeCliBody(fav.body) : undefined,
+        });
+        const color = result.status >= 200 && result.status < 300 ? chalk.green : chalk.red;
+        // Saved favorite URLs may contain secrets in the query string.
+        console.log(chalk.cyan(`API favorite: ${args[0]}`));
+        console.log(color(`Status: ${result.status}`) +
+          chalk.gray(` (${(result.elapsedMs / 1000).toFixed(3)}s)`));
+        try { console.log(JSON.stringify(JSON.parse(result.text), null, 2)); }
+        catch { console.log(result.text); }
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "Saved API request failed");
+      }
       break;
     }
 

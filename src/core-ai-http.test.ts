@@ -47,7 +47,7 @@ test("core AI provider requests preserve literal prompts and credential headers"
     for (const provider of providers) {
       const options = buildCoreAiRequest(provider, prompt, env);
       expect(options.method).toBe("POST");
-      expect(options.url).toStartWith("https://");
+      expect(options.url.startsWith("https://")).toBe(true);
       expect(options.url).not.toContain("test");
       const body = JSON.parse(options.body);
       const text = provider === "gemini"

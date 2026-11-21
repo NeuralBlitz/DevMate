@@ -4592,7 +4592,7 @@ async function handleCommand(input: string): Promise<boolean> {
       if (!msg) { err("Usage: tgs <message>"); break; }
       if (!token || !chatId) { err("Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID"); break; }
       try {
-        execSync(`curl -s -X POST "https://api.telegram.org/bot${token}/sendMessage" -d "chat_id=${chatId}&text=${msg}"`, { encoding: "utf-8" });
+        await sendTelegramMessage(token, chatId, msg);
         success("Sent!");
       } catch { err("Send failed"); }
       break;
@@ -7471,7 +7471,7 @@ async function handleCommand(input: string): Promise<boolean> {
           const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
           const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
           if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) err("Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID");
-          else { execSync(`curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(msg)}"`, { encoding: "utf-8" }); success("Sent!"); }
+          else { try { await sendTelegramMessage(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, msg); success("Sent!"); } catch { err("Send failed"); } }
         } else if (service === "discord") {
           const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
           if (!DISCORD_WEBHOOK) err("Set DISCORD_WEBHOOK");

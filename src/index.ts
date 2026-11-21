@@ -17,6 +17,7 @@ import { runExternalCommand } from "./external-command";
 import { postWebhookJson } from "./webhook-http";
 import { callTelegramBot, sendTelegramDocument, sendTelegramMessage, TelegramRequestError } from "./telegram-http";
 import { HTTP_METHODS, HttpClientError, normalizeCliBody, requestHttp } from "./http-client";
+import { requestCoreAi } from "./core-ai-http";
 import { API_SERVICE_BASES, buildApiServiceRequest } from "./api-service-http";
 import { runGit } from "./git-invocation";
 import { progressBar } from "./progress";
@@ -59,6 +60,19 @@ function err(msg: string, hint?: string) {
 function success(msg: string) { console.log(chalk.green(`✓ ${msg}`)); }
 function info(msg: string) { console.log(chalk.cyan(`ℹ ${msg}`)); }
 function warn(msg: string) { console.log(chalk.yellow(`⚠ ${msg}`)); }
+
+function printCoreAiResult(provider: string, result: {status: number; elapsedMs: number; text: string}) {
+  const ok = result.status >= 200 && result.status < 300;
+  console.log((ok ? chalk.green : chalk.red)(`HTTP ${result.status}`) +
+    chalk.gray(` (${(result.elapsedMs / 1000).toFixed(3)}s)`));
+  if (!ok) {
+    err(`${provider} request failed (HTTP ${result.status})`);
+    return;
+  }
+  try { console.log(JSON.stringify(JSON.parse(result.text), null, 2)); }
+  catch { console.log(result.text); }
+}
+
 
 function handleError(cmd: string, e: any, suggestion?: string) {
   const msg = (e.message || "").toLowerCase();
@@ -7539,15 +7553,15 @@ async function handleCommand(input: string): Promise<boolean> {
       try { execSync(`dart ${args.join(" ")}`, { encoding: "utf-8", stdio: "inherit" }); }
       catch (e: any) { handleError("dart", e); }
       break;
-    case "gemini": case "google-ai":
-      const GEMINI_KEY = process.env.GEMINI_API_KEY;
-      if (!GEMINI_KEY) { err("Set GEMINI_API_KEY env var"); }
-      else if (!args[0]) err("Usage: gemini <prompt>");
-      else {
-        try { execSync(`curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_KEY}" -H "Content-Type: application/json" -X POST -d '{"contents":[{"parts":[{"text":"'${args.join(" ")}'"}]}]}'`, { encoding: "utf-8", stdio: "inherit" }); }
-        catch (e: any) { handleError("gemini", e); }
+    case "gemini": case "google-ai": {
+      if (!args[0]) { err("Usage: gemini <prompt>"); break; }
+      try {
+        printCoreAiResult("Gemini", await requestCoreAi("gemini", args.join(" ")));
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "Gemini request failed");
       }
       break;
+    }
     case "google-auth": case "gauth":
       try { execSync("gcloud auth login", { encoding: "utf-8", stdio: "inherit" }); }
       catch (e: any) { handleError("gcloud auth", e); }
@@ -7566,28 +7580,34 @@ async function handleCommand(input: string): Promise<boolean> {
       break;
 
     // ============ AI/ML PLATFORMS ============
-    case "openai": case "chatgpt":
-      const OPENAI_KEY = process.env.OPENAI_API_KEY;
-      if (!OPENAI_KEY) { err("Set OPENAI_API_KEY env var"); }
-      else if (!args[0]) err("Usage: openai <prompt>");
-      else {
-        try { execSync(`curl -s "https://api.openai.com/v1/chat/completions" -H "Authorization: Bearer ${OPENAI_KEY}" -H "Content-Type: application/json" -d '{"model":"gpt-4","messages":[{"role":"user","content":"'${args.join(" ")}'"}],"max_tokens":2048}'`, { encoding: "utf-8", stdio: "inherit" }); }
-        catch (e: any) { handleError("openai", e); }
+    case "openai": case "chatgpt": {
+      if (!args[0]) { err("Usage: openai <prompt>"); break; }
+      try {
+        printCoreAiResult("OpenAI", await requestCoreAi("openai", args.join(" ")));
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "OpenAI request failed");
       }
       break;
-    case "claude": case "anthropic":
-      const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-      if (!ANTHROPIC_KEY) { err("Set ANTHROPIC_API_KEY env var"); }
-      else if (!args[0]) err("Usage: claude <prompt>");
-      else {
-        try { execSync(`curl -s "https://api.anthropic.com/v1/messages" -H "x-api-key: ${ANTHROPIC_KEY}" -H "anthropic-version: 2023-06-01" -H "Content-Type: application/json" -d '{"model":"claude-3-opus-20240229","max_tokens":2048,"messages":[{"role":"user","content":"'${args.join(" ")}'"}]}'`, { encoding: "utf-8", stdio: "inherit" }); }
-        catch (e: any) { handleError("claude", e); }
+    }
+    case "claude": case "anthropic": {
+      if (!args[0]) { err("Usage: claude <prompt>"); break; }
+      try {
+        printCoreAiResult("Anthropic", await requestCoreAi("anthropic", args.join(" ")));
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "Anthropic request failed");
       }
       break;
-    case "anthropic-api":
-      try { execSync(`curl -s "https://api.anthropic.com/v1/messages" -H "x-api-key: ${process.env.ANTHROPIC_API_KEY}" -H "anthropic-version: 2023-06-01" -H "Content-Type: application/json" -d '${JSON.stringify({ model: "claude-3-sonnet-20240229", max_tokens: 1024, messages: [{ role: "user", content: args.join(" ") }] })}'`, { encoding: "utf-8", stdio: "inherit" }); }
-      catch (e: any) { handleError("anthropic", e); }
+    }
+    case "anthropic-api": {
+      if (!args[0]) { err("Usage: anthropic-api <prompt>"); break; }
+      try {
+        const result = await requestCoreAi("anthropic", args.join(" "), process.env, 1024);
+        printCoreAiResult("Anthropic", result);
+      } catch (e: any) {
+        err(e instanceof HttpClientError ? e.message : "Anthropic request failed");
+      }
       break;
+    }
     case "huggingface": case "hf":
       const HF_TOKEN = process.env.HF_TOKEN;
       if (!args[0]) err("Usage: huggingface <model> or hf inference <prompt>");
